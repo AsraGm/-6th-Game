@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: WAVE 01
+  m_EditorClassIdentifier: Assembly-CSharp::WaveConfiguration
+  waveName: Wave 1
+  waveDuration: 20
+  spawnEvents:
+  - spawnTime: 0
+    enemyType: 0
+    spawnPosition: {x: -5, y: 0, z: 0}
+    spawnAsInnocent: 0
+    overrideBehavior: 1
+    movementPattern: 0
+    customSpeed: 2
+  - spawnTime: 0.5
+    enemyType: 4
+    spawnPosition: {x: 10, y: 0, z: -2}
+    spawnAsInnocent: 1
+    overrideBehavior: 1
+    movementPattern: 3
+    customSpeed: 3
+  totalEnemies: 1
+  totalInnocents: 1
+  spawnRate: 0.1
