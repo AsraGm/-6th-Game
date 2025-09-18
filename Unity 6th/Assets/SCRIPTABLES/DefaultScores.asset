@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: ENEMYS VALUE
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyMoneyValues
-  normalEnemyValue: 10
-  fastEnemyValue: 15
-  jumperEnemyValue: 20
-  valuableEnemyValue: 50
+  m_Script: {fileID: 11500000, guid: ebf5486f7890fe14a9cdb3a9bcc1a1fc, type: 3}
+  m_Name: DefaultScores
+  m_EditorClassIdentifier: 
+  normalEnemyScore: 10
+  fastEnemyScore: 15
+  jumperEnemyScore: 20
+  valuableEnemyScore: 50
   innocentPenalty: -25

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 49cc93d793eedf847a6eeaf9082e1f1e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - shootingCamera: {instanceID: 0}
+  - firePoint: {instanceID: 0}
+  - bulletPrefab: {fileID: 9163442320148204173, guid: cfed65ad21d54b94dbffc0ec36b48dc7, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

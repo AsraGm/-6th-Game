@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 5842233769854944869}
   - component: {fileID: 2548363620949935002}
   - component: {fileID: 7937050723225649115}
-  - component: {fileID: 6184712795710859702}
-  m_Layer: 0
+  - component: {fileID: 1607610723663557446}
+  m_Layer: 6
   m_Name: Enemy NORMAL
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &6184712795710859702
+--- !u!114 &1607610723663557446
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,14 +144,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7437913946537063531}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92bc6f927d99a684ca666b27f8f71483, type: 3}
+  m_Script: {fileID: 11500000, guid: 6dad2677b265e6d45bbc1abe80ff6dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementPattern: 0
-  baseSpeed: 3
-  speedVariation: 0.7
-  zigzagAmplitude: 2
-  zigzagFrequency: 3
-  circularRadius: 2
-  erraticChangeInterval: 0.8
-  useTransformCaching: 1
+  enemyType: 0
+  themeID: default
+  hitParticles: {fileID: 0}
+  hitSound: {fileID: 0}
