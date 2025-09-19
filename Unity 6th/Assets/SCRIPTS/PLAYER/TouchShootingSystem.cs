@@ -113,34 +113,24 @@ public class TouchShootingSystem : MonoBehaviour
 
     void ProcessShot(Vector2 screenPosition)
     {
-        if (!canShoot || Time.time - lastShotTime < fireRate)
-            return;
+        Debug.Log($"SCREEN TOUCH: {screenPosition}");
+        Debug.Log($"SCREEN CENTER: {new Vector2(Screen.width / 2, Screen.height / 2)}");
+        // Raycast directo desde cámara
+        Ray ray = shootingCamera.ScreenPointToRay(screenPosition);
+        RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, targetLayer);
 
-        if (IsInDeadZone(screenPosition))
-            return;
-
-        // Convertir toque a mundo
-        Vector3 worldPos = shootingCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10f));
-        worldPos.z = firePoint.position.z; // Mantener Z del firePoint
-
-        // Dirección DIRECTA hacia donde tocaste
-        Vector3 direction = (worldPos - firePoint.position).normalized;
-
-        // AQUÍ ESTÁ EL FIX: Solo usar X e Y para movimiento 2D recto
-        Vector2 direction2D = new Vector2(direction.x, direction.y).normalized;
-
-        // Raycast
-        RaycastHit2D hit = Physics2D.Raycast(firePoint.position, direction2D, Mathf.Infinity, targetLayer);
-
-        // Disparar con dirección 2D pura
-        ShootBullet(direction2D, worldPos);
-
-        if (useHapticFeedback)
-            TriggerHapticFeedback();
-
-        lastShotTime = Time.time;
-
-        Debug.Log($"Disparo hacia: {direction2D}");
+        if (hit.collider != null)
+        {
+            // Disparar directamente hacia el punto exacto donde hiciste hit
+            Vector3 targetPoint = hit.point;
+            Vector3 direction = (targetPoint - firePoint.position).normalized;
+            ShootBullet(direction, targetPoint);
+        }
+        else
+        {
+            // Fallback: disparar hacia adelante
+            ShootBullet(Vector3.forward, firePoint.position + Vector3.forward * 10);
+        }
     }
 
     bool IsInDeadZone(Vector2 screenPos)
