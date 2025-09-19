@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using ShootingRange;
 
+// INSTRUCCIÓN A1: Sistema de disparo táctil optimizado para móvil - VERSIÓN TOUCH DIRECTO
+// Características: Touch directo a enemigos, bala visual, pool de proyectiles
+
 public class TouchShootingSystem : MonoBehaviour
 {
     [Header("Configuración de Disparo")]
@@ -12,10 +15,10 @@ public class TouchShootingSystem : MonoBehaviour
     [Tooltip("Capas que detecta el raycast. Pon aquí las capas de tus objetivos/enemigos. 'Everything' detecta todo")]
     public LayerMask targetLayer = -1;
 
-    [Tooltip("Velocidad de la bala en unidades por segundo. Más alto = balas más rápidas")]
+    [Tooltip("Velocidad de la bala VISUAL en unidades por segundo. Más alto = balas más rápidas")]
     public float bulletSpeed = 15f;
 
-    [Tooltip("Tiempo en segundos antes de que la bala se auto-destruya")]
+    [Tooltip("Tiempo en segundos antes de que la bala visual se auto-destruya")]
     public float bulletLifetime = 3f;
 
     [Header("Referencias IMPORTANTES")]
@@ -39,7 +42,11 @@ public class TouchShootingSystem : MonoBehaviour
     [Tooltip("Duración de la vibración en segundos (actualmente no se usa)")]
     public float vibrationDuration = 0.1f;
 
-    // Sistema de Pool para balas
+    [Header("Touch Directo")]
+    [Tooltip("Usar touch directo: toca enemigo = hit inmediato + bala visual")]
+    public bool useDirectTouch = true;
+
+    // Sistema de Pool para balas VISUALES
     private Queue<GameObject> bulletPool = new Queue<GameObject>();
     private List<GameObject> activeBullets = new List<GameObject>();
 
@@ -70,25 +77,7 @@ public class TouchShootingSystem : MonoBehaviour
         UpdateActiveBullets();
     }
 
-    // Inicializar pool de balas
-    void InitializeBulletPool()
-    {
-        for (int i = 0; i < poolSize; i++)
-        {
-            GameObject bullet = Instantiate(bulletPrefab);
-            bullet.SetActive(false);
-            bulletPool.Enqueue(bullet);
-
-            // Asegurar que tenga los componentes necesarios
-            if (bullet.GetComponent<Rigidbody2D>() == null)
-                bullet.AddComponent<Rigidbody2D>();
-
-            if (bullet.GetComponent<BulletBehavior>() == null)
-                bullet.AddComponent<BulletBehavior>();
-        }
-    }
-
-    // Manejo de input táctil
+    // Manejo de input táctil - VERSIÓN TOUCH DIRECTO
     void HandleTouchInput()
     {
         // Para móvil - Touch input
@@ -98,7 +87,7 @@ public class TouchShootingSystem : MonoBehaviour
 
             if (touch.phase == TouchPhase.Began)
             {
-                ProcessShot(touch.position);
+                ProcessDirectTouch(touch.position);
             }
         }
 
@@ -106,73 +95,153 @@ public class TouchShootingSystem : MonoBehaviour
 #if UNITY_EDITOR
         if (Input.GetMouseButtonDown(0))
         {
-            ProcessShot(Input.mousePosition);
+            ProcessDirectTouch(Input.mousePosition);
         }
 #endif
     }
 
-    void ProcessShot(Vector2 screenPosition)
+    // NUEVO: Procesamiento de touch directo
+    void ProcessDirectTouch(Vector2 screenPosition)
     {
-        Debug.Log($"SCREEN TOUCH: {screenPosition}");
-        Debug.Log($"SCREEN CENTER: {new Vector2(Screen.width / 2, Screen.height / 2)}");
-        // Raycast directo desde cámara
-        Ray ray = shootingCamera.ScreenPointToRay(screenPosition);
-        RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, targetLayer);
+        // Verificar rate limiting
+        if (!canShoot || Time.time - lastShotTime < fireRate)
+            return;
 
-        if (hit.collider != null)
+        // Verificar deadzone (opcional)
+        if (IsInDeadZone(screenPosition))
+            return;
+
+        Debug.Log($"Touch directo en: {screenPosition}");
+
+        if (useDirectTouch)
         {
-            // Disparar directamente hacia el punto exacto donde hiciste hit
-            Vector3 targetPoint = hit.point;
-            Vector3 direction = (targetPoint - firePoint.position).normalized;
-            ShootBullet(direction, targetPoint);
+            // MÉTODO DIRECTO: Raycast desde cámara hacia donde tocaste
+            Ray ray = shootingCamera.ScreenPointToRay(screenPosition);
+            RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, targetLayer);
+
+            if (hit.collider != null)
+            {
+                Debug.Log($"Touch directo HIT: {hit.collider.name} en {hit.point}");
+
+                // PROCESAR HIT INMEDIATAMENTE
+                TargetDetectionSystem detector = FindObjectOfType<TargetDetectionSystem>();
+                if (detector != null)
+                {
+                    detector.ProcessBulletHit(hit.collider.gameObject, hit.point);
+                }
+                else
+                {
+                    Debug.Log($"Touch directo impactó: {hit.collider.name}");
+                }
+
+                // CREAR BALA VISUAL que vuele hacia el punto de impacto
+                CreateVisualBullet(firePoint.position, hit.point);
+
+                // Feedback táctil
+                if (useHapticFeedback)
+                    TriggerHapticFeedback();
+
+                lastShotTime = Time.time;
+            }
+            else
+            {
+                Debug.Log("Touch directo: No se detectó objetivo");
+
+                // FALLBACK: Crear bala hacia donde tocaste (sin hit)
+                Vector3 worldPos = shootingCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10f));
+                worldPos.z = 0;
+                CreateVisualBullet(firePoint.position, worldPos);
+
+                if (useHapticFeedback)
+                    TriggerHapticFeedback();
+
+                lastShotTime = Time.time;
+            }
         }
         else
         {
-            // Fallback: disparar hacia adelante
-            ShootBullet(Vector3.forward, firePoint.position + Vector3.forward * 10);
+            // MÉTODO ANTERIOR (por si quieres probarlo)
+            ProcessShot(screenPosition);
         }
     }
 
-    bool IsInDeadZone(Vector2 screenPos)
-    {
-        Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
-        float deadZonePixels = deadZone * Screen.height; // Basado en altura de pantalla
-
-        return Vector2.Distance(screenPos, screenCenter) < deadZonePixels;
-    }
-
-    void ShootBullet(Vector2 direction, Vector3 targetPosition)
+    // NUEVO: Crear bala puramente visual
+    void CreateVisualBullet(Vector3 startPos, Vector3 targetPos)
     {
         GameObject bullet = GetPooledBullet();
 
         if (bullet != null)
         {
-            // Posición inicial
-            bullet.transform.position = firePoint.position;
+            bullet.transform.position = startPos;
             bullet.SetActive(true);
 
-            // Configurar Rigidbody2D
-            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            if (rb == null)
-            {
-                rb = bullet.AddComponent<Rigidbody2D>();
-                rb.freezeRotation = true;
-            }
+            // Calcular dirección hacia el target
+            Vector3 direction = (targetPos - startPos).normalized;
 
-            // MOVIMIENTO RECTO EN 2D - Sin componente Z
-            rb.linearVelocity = direction * bulletSpeed;
-
-            // Configurar comportamiento SIN movimiento en Z
+            // Configurar comportamiento visual
             BulletBehavior bulletBehavior = bullet.GetComponent<BulletBehavior>();
             if (bulletBehavior == null)
             {
                 bulletBehavior = bullet.AddComponent<BulletBehavior>();
             }
-            // ELIMINAR el parámetro Z speed
-            bulletBehavior.Initialize(this, bulletLifetime, 0f); // 0f = sin movimiento Z
+
+            // Inicializar como bala visual
+            bulletBehavior.InitializeVisual(this, bulletLifetime, direction, bulletSpeed, targetPos);
 
             activeBullets.Add(bullet);
+
+            Debug.Log($"Bala visual creada: {startPos} -> {targetPos}, Dir: {direction}");
         }
+    }
+
+    // Método anterior (mantener para compatibilidad)
+    void ProcessShot(Vector2 screenPosition)
+    {
+        Debug.Log("Usando método de disparo anterior");
+
+        // Tu código anterior aquí si necesitas fallback
+        Vector3 worldPos = shootingCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10f));
+        worldPos.z = 0;
+
+        Vector3 direction = (worldPos - firePoint.position).normalized;
+
+        CreateVisualBullet(firePoint.position, worldPos);
+
+        if (useHapticFeedback)
+            TriggerHapticFeedback();
+
+        lastShotTime = Time.time;
+    }
+
+    // Inicializar pool de balas VISUALES
+    void InitializeBulletPool()
+    {
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject bullet = Instantiate(bulletPrefab);
+            bullet.SetActive(false);
+            bulletPool.Enqueue(bullet);
+
+            // Solo BulletBehavior para balas visuales
+            if (bullet.GetComponent<BulletBehavior>() == null)
+                bullet.AddComponent<BulletBehavior>();
+
+            // Remover Rigidbody2D si existe (balas visuales no necesitan física)
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                DestroyImmediate(rb);
+            }
+        }
+    }
+
+    // Verificar si está en zona muerta
+    bool IsInDeadZone(Vector2 screenPos)
+    {
+        Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+        float deadZonePixels = deadZone * Screen.height;
+
+        return Vector2.Distance(screenPos, screenCenter) < deadZonePixels;
     }
 
     // Obtener bala del pool
@@ -183,15 +252,17 @@ public class TouchShootingSystem : MonoBehaviour
             return bulletPool.Dequeue();
         }
 
-        // Si no hay balas en pool, crear una nueva
+        // Crear nueva bala visual
         GameObject newBullet = Instantiate(bulletPrefab);
-        if (newBullet.GetComponent<Rigidbody2D>() == null)
-        {
-            Rigidbody2D rb = newBullet.AddComponent<Rigidbody2D>();
-            rb.freezeRotation = true;
-        }
         if (newBullet.GetComponent<BulletBehavior>() == null)
             newBullet.AddComponent<BulletBehavior>();
+
+        // Remover física
+        Rigidbody2D rb = newBullet.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            DestroyImmediate(rb);
+        }
 
         return newBullet;
     }
@@ -200,8 +271,6 @@ public class TouchShootingSystem : MonoBehaviour
     public void ReturnBulletToPool(GameObject bullet)
     {
         bullet.SetActive(false);
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        if (rb != null) rb.linearVelocity = Vector2.zero;
         activeBullets.Remove(bullet);
         bulletPool.Enqueue(bullet);
     }
@@ -224,7 +293,6 @@ public class TouchShootingSystem : MonoBehaviour
 #if UNITY_ANDROID && !UNITY_EDITOR
         Handheld.Vibrate();
 #elif UNITY_IOS && !UNITY_EDITOR
-        // Para iOS necesitarías un plugin específico
         Handheld.Vibrate();
 #endif
     }
@@ -248,74 +316,98 @@ public class TouchShootingSystem : MonoBehaviour
     }
 }
 
-// COMPONENTE AUXILIAR: Comportamiento de bala
+// COMPONENTE AUXILIAR: Comportamiento de bala VISUAL
 public class BulletBehavior : MonoBehaviour
 {
     private TouchShootingSystem parentSystem;
     private float lifetime;
     private float timeAlive;
-    private float zSpeed; 
+    private Vector3 direction;
+    private float speed;
+    private Vector3 targetPosition;
+    private bool isVisualOnly = false;
 
-    public void Initialize(TouchShootingSystem parent, float life, float speedZ = 0f)
+    // NUEVO: Inicialización para balas visuales
+    public void InitializeVisual(TouchShootingSystem parent, float life, Vector3 dir, float bulletSpeed, Vector3 target)
     {
         parentSystem = parent;
         lifetime = life;
         timeAlive = 0f;
-        zSpeed = speedZ;
+        direction = dir.normalized;
+        speed = bulletSpeed;
+        targetPosition = target;
+        isVisualOnly = true;
+
+        Debug.Log($"Bala visual inicializada hacia: {target}");
     }
 
     void Update()
     {
         timeAlive += Time.deltaTime;
 
-        // Movimiento en Z para parallax
-        if (zSpeed != 0f)
+        if (isVisualOnly)
         {
-            transform.Translate(0, 0, zSpeed * Time.deltaTime, Space.World);
-        }
+            // Movimiento visual simple hacia el target
+            transform.Translate(direction * speed * Time.deltaTime, Space.World);
 
-        // Destruir por tiempo
-        if (timeAlive >= lifetime)
-        {
-            ReturnToPool();
-        }
-    }
-
-        void OnTriggerEnter2D(Collider2D other)
-        {
-        // NUEVA FUNCIONALIDAD: Conectar con sistema de detección
-        TargetDetectionSystem detector = FindObjectOfType<TargetDetectionSystem>();
-        if (detector != null)
-        {
-            detector.ProcessBulletHit(other.gameObject, transform.position);
+            // Verificar si llegó cerca del target o se acabó el tiempo
+            if (Vector3.Distance(transform.position, targetPosition) < 0.5f || timeAlive >= lifetime)
+            {
+                ReturnToPool();
+            }
         }
         else
         {
-            Debug.Log($"Bala impactó: {other.name} (TargetDetectionSystem no encontrado)");
-        }
-        //Aquí puedes agregar lógica de colisión con objetivos
-        Debug.Log($"Bala impactó: {other.name}");
-
-            // Opcional: Agregar efectos de impacto aquí
-
-            ReturnToPool();
-        }
-
-        void ReturnToPool()
-        {
-            if (parentSystem != null)
+            // Método anterior para compatibilidad
+            if (timeAlive >= lifetime)
             {
-                parentSystem.ReturnBulletToPool(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
+                ReturnToPool();
             }
         }
+    }
 
-        void OnBecameInvisible()
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        // Solo para balas no visuales (fallback)
+        if (!isVisualOnly)
         {
-            // Devolver al pool si sale de pantalla
-            ReturnToPool();
+            TargetDetectionSystem detector = FindObjectOfType<TargetDetectionSystem>();
+            if (detector != null)
+            {
+                detector.ProcessBulletHit(other.gameObject, transform.position);
+            }
+
+            Debug.Log($"Bala impactó: {other.name}");
         }
+
+        ReturnToPool();
+    }
+
+    void ReturnToPool()
+    {
+        if (parentSystem != null)
+        {
+            parentSystem.ReturnBulletToPool(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void OnBecameInvisible()
+    {
+        ReturnToPool();
+    }
+
+    // Método legacy para compatibilidad
+    public void Initialize(TouchShootingSystem parent, float life, float speedZ = 0f)
+    {
+        parentSystem = parent;
+        lifetime = life;
+        timeAlive = 0f;
+        direction = Vector3.forward;
+        speed = 10f;
+        isVisualOnly = false;
+    }
 }

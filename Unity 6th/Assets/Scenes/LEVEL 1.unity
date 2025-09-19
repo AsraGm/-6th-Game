@@ -1386,7 +1386,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 192
-  bulletSpeed: 20
+  bulletSpeed: 250
   bulletLifetime: 0.5
   shootingCamera: {fileID: 1782025381}
   firePoint: {fileID: 975565005}
@@ -1394,6 +1394,7 @@ MonoBehaviour:
   poolSize: 50
   useHapticFeedback: 1
   vibrationDuration: 0.1
+  useDirectTouch: 1
   fireRate: 0.2
 --- !u!4 &1680621337
 Transform:
@@ -1945,7 +1946,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moneyConfig: {fileID: 11400000, guid: 6aa647372e5565144b88a912a06ca913, type: 2}
-  moneyDisplay: {fileID: 0}
+  moneyDisplay: {fileID: 1496362353}
   currentMoney: 0
   sessionEarnings: 0
   totalEarningsAllTime: 0
