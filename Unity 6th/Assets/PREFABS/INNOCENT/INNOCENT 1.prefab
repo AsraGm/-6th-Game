@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5842233769854944869}
   - component: {fileID: 2548363620949935002}
   - component: {fileID: 7937050723225649115}
+  - component: {fileID: 5434375371585479554}
   m_Layer: 7
   m_Name: INNOCENT 1
   m_TagString: Innocent
@@ -26,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7437913946537063531}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 4, z: 2}
   m_ConstrainProportionsScale: 0
@@ -134,3 +135,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &5434375371585479554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7437913946537063531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dad2677b265e6d45bbc1abe80ff6dbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyType: 4
+  themeID: Innocent
+  hitParticles: {fileID: 0}
+  hitSound: {fileID: 0}

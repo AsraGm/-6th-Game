@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 66522775}
   - component: {fileID: 66522774}
   m_Layer: 5
-  m_Name: MINUS MONEY
+  m_Name: ChangeIndicatorText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: +0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -203,8 +203,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -255,6 +255,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 66522772}
   m_CullTransparentMesh: 1
+--- !u!1001 &83933683
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5842233769854944869, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 5842233769854944869, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5842233769854944869, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 86.86914
+      objectReference: {fileID: 0}
+    - target: {fileID: 5842233769854944869, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5842233769854944869, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5842233769854944869, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5842233769854944869, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5842233769854944869, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5842233769854944869, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5842233769854944869, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7437913946537063531, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
+      propertyPath: m_Name
+      value: INNOCENT 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
 --- !u!1 &113371644
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,6 +342,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 238022568}
+  - {fileID: 1928683250}
+  - {fileID: 1680621337}
+  - {fileID: 1156919733}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &190043646
@@ -393,7 +453,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   scoreConfig: {fileID: 11400000, guid: ddd330c4d2ba5cb45b3fa5a23b37f848, type: 2}
-  scoreSystem: {fileID: 0}
+  scoreSystem: {fileID: 1156919734}
   useComponentCache: 1
   totalHits: 0
   innocentHits: 0
@@ -607,7 +667,7 @@ GameObject:
   - component: {fileID: 485053496}
   - component: {fileID: 485053495}
   m_Layer: 5
-  m_Name: MONEY
+  m_Name: MoneyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -652,7 +712,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: $0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -818,7 +878,7 @@ Transform:
   m_GameObject: {fileID: 975565004}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.3, z: 85.5}
+  m_LocalPosition: {x: 0, y: -1.3, z: 76.96}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1061,12 +1121,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1156919732}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.4477751, y: -2.5650818, z: 81.53827}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 113371645}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1156919734
 MonoBehaviour:
@@ -1085,6 +1145,54 @@ MonoBehaviour:
   totalEnemiesHit: 0
   innocentsHit: 0
   accuracy: 0
+--- !u!1 &1185751856
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1185751858}
+  - component: {fileID: 1185751857}
+  m_Layer: 0
+  m_Name: MONEY Integration
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1185751857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1185751856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ba6be88b450ff64683f70f4e51343fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moneySystem: {fileID: 1928683251}
+  targetDetectionSystem: {fileID: 238022569}
+  scoreSystem: {fileID: 1156919734}
+  autoConnect: 1
+--- !u!4 &1185751858
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1185751856}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4477751, y: -2.5650818, z: 81.53827}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1243536023
 GameObject:
   m_ObjectHideFlags: 0
@@ -1134,6 +1242,62 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1496362352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1496362354}
+  - component: {fileID: 1496362353}
+  m_Layer: 0
+  m_Name: MONEY Display
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1496362353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1496362352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59a788880c1219d4587df298b1a5bf4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMoneyText: {fileID: 485053495}
+  changeIndicatorText: {fileID: 66522774}
+  backgroundImage: {fileID: 1894995052}
+  gainColor: {r: 0, g: 1, b: 0, a: 1}
+  lossColor: {r: 1, g: 0, b: 0, a: 1}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  counterAnimationDuration: 0.8
+  changeIndicatorDuration: 1.5
+  useScaleEffect: 1
+  maxScale: 1.2
+  moneyPrefix: $
+  useThousandSeparators: 1
+--- !u!4 &1496362354
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1496362352}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4477751, y: -2.5650818, z: 81.53827}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1680621335
 GameObject:
   m_ObjectHideFlags: 0
@@ -1166,7 +1330,7 @@ MonoBehaviour:
   deadZone: 0
   targetLayer:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 192
   bulletSpeed: 20
   bulletLifetime: 0.5
   shootingCamera: {fileID: 1782025381}
@@ -1184,12 +1348,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1680621335}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.7369504, y: 0.5958666, z: 87.197586}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.7108247, y: 3.1609485, z: 5.659317}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 113371645}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1775012218
 GameObject:
@@ -1677,6 +1841,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1894995050}
   m_CullTransparentMesh: 1
+--- !u!1 &1928683249
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1928683250}
+  - component: {fileID: 1928683251}
+  m_Layer: 0
+  m_Name: MONEY SYSTEM
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1928683250
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1928683249}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 113371645}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1928683251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1928683249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 046d79b1bdb544c419cc16a847336c40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moneyConfig: {fileID: 11400000, guid: 6aa647372e5565144b88a912a06ca913, type: 2}
+  moneyDisplay: {fileID: 0}
+  currentMoney: 0
+  sessionEarnings: 0
+  totalEarningsAllTime: 0
+  totalSpent: 0
 --- !u!1001 &1947337859
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1826,13 +2040,14 @@ SceneRoots:
   - {fileID: 522711051}
   - {fileID: 113371645}
   - {fileID: 1814913441}
-  - {fileID: 379137884}
-  - {fileID: 274928728}
-  - {fileID: 2042398209}
   - {fileID: 1243536025}
-  - {fileID: 1680621337}
+  - {fileID: 379137884}
+  - {fileID: 2042398209}
+  - {fileID: 1185751858}
+  - {fileID: 274928728}
   - {fileID: 975565005}
-  - {fileID: 1156919733}
   - {fileID: 190043646}
   - {fileID: 1947337859}
   - {fileID: 1880172338}
+  - {fileID: 1496362354}
+  - {fileID: 83933683}

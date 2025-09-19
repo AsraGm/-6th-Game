@@ -1,5 +1,4 @@
 using UnityEngine;
-using DG.Tweening;
 
 // ARCHIVO: MoneySystem.cs
 // Sistema principal de economía y dinero en tiempo real

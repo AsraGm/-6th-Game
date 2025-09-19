@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using ShootingRange;
 
-// INSTRUCCIÓN A1: Sistema de disparo táctil optimizado para móvil
-// Características: Input touch, raycast, feedback táctil, pool de balas sprite
-
 public class TouchShootingSystem : MonoBehaviour
 {
     [Header("Configuración de Disparo")]
@@ -114,45 +111,38 @@ public class TouchShootingSystem : MonoBehaviour
 #endif
     }
 
-    // Procesar disparo
     void ProcessShot(Vector2 screenPosition)
     {
-        // Verificar rate limiting
         if (!canShoot || Time.time - lastShotTime < fireRate)
             return;
 
-        // Verificar deadzone (opcional - evita disparos en bordes)
         if (IsInDeadZone(screenPosition))
             return;
 
-        // Para shooting range con parallax: la bala va hacia Z positivo (profundidad)
-        Vector3 worldPosition = shootingCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, shootingCamera.nearClipPlane));
+        // Convertir toque a mundo
+        Vector3 worldPos = shootingCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10f));
+        worldPos.z = firePoint.position.z; // Mantener Z del firePoint
 
-        // Calcular dirección: principalmente Z hacia adelante, ligeros ajustes en X e Y
-        Vector3 direction = new Vector3(
-            (worldPosition.x - firePoint.position.x) * 0.3f, // Componente lateral reducida
-            (worldPosition.y - firePoint.position.y) * 0.3f, // Componente vertical reducida  
-            1f // Principalmente hacia adelante en Z (profundidad)
-        ).normalized;
+        // Dirección DIRECTA hacia donde tocaste
+        Vector3 direction = (worldPos - firePoint.position).normalized;
 
-        // Para 2D con movimiento en Z, usamos transform.Translate en lugar de Rigidbody
-        // Raycast en 2D para compatibilidad
-        RaycastHit2D hit = Physics2D.Raycast(firePoint.position, new Vector2(direction.x, direction.y), Mathf.Infinity, targetLayer);
+        // AQUÍ ESTÁ EL FIX: Solo usar X e Y para movimiento 2D recto
+        Vector2 direction2D = new Vector2(direction.x, direction.y).normalized;
 
-        // Disparar bala sprite
-        ShootBullet(direction, worldPosition);
+        // Raycast
+        RaycastHit2D hit = Physics2D.Raycast(firePoint.position, direction2D, Mathf.Infinity, targetLayer);
 
-        // Feedback táctil
+        // Disparar con dirección 2D pura
+        ShootBullet(direction2D, worldPos);
+
         if (useHapticFeedback)
             TriggerHapticFeedback();
 
         lastShotTime = Time.time;
 
-        Debug.Log($"Touch en pantalla: {screenPosition}, Dirección 3D: {direction}");
-        Debug.DrawRay(firePoint.position, direction * 10f, Color.red, 2f);
+        Debug.Log($"Disparo hacia: {direction2D}");
     }
 
-    // Verificar si está en zona muerta
     bool IsInDeadZone(Vector2 screenPos)
     {
         Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
@@ -161,37 +151,35 @@ public class TouchShootingSystem : MonoBehaviour
         return Vector2.Distance(screenPos, screenCenter) < deadZonePixels;
     }
 
-    // Disparar bala sprite usando pool
-    void ShootBullet(Vector3 direction, Vector3 targetPosition)
+    void ShootBullet(Vector2 direction, Vector3 targetPosition)
     {
         GameObject bullet = GetPooledBullet();
 
         if (bullet != null)
         {
-            // Configurar posición inicial
+            // Posición inicial
             bullet.transform.position = firePoint.position;
-
-            // NO rotar la bala, mantener rotación original
             bullet.SetActive(true);
 
-            // Para movimiento en Z con componentes 2D, usamos un enfoque híbrido
+            // Configurar Rigidbody2D
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
             if (rb == null)
             {
                 rb = bullet.AddComponent<Rigidbody2D>();
-                rb.freezeRotation = true; // No rotar mientras vuela
+                rb.freezeRotation = true;
             }
 
-            // Movimiento 2D (X, Y)
-            rb.linearVelocity = new Vector2(direction.x, direction.y) * bulletSpeed;
+            // MOVIMIENTO RECTO EN 2D - Sin componente Z
+            rb.linearVelocity = direction * bulletSpeed;
 
-            // Configurar comportamiento con movimiento Z
+            // Configurar comportamiento SIN movimiento en Z
             BulletBehavior bulletBehavior = bullet.GetComponent<BulletBehavior>();
             if (bulletBehavior == null)
             {
                 bulletBehavior = bullet.AddComponent<BulletBehavior>();
             }
-            bulletBehavior.Initialize(this, bulletLifetime, direction.z * bulletSpeed);
+            // ELIMINAR el parámetro Z speed
+            bulletBehavior.Initialize(this, bulletLifetime, 0f); // 0f = sin movimiento Z
 
             activeBullets.Add(bullet);
         }
@@ -276,7 +264,7 @@ public class BulletBehavior : MonoBehaviour
     private TouchShootingSystem parentSystem;
     private float lifetime;
     private float timeAlive;
-    private float zSpeed; // Velocidad en el eje Z
+    private float zSpeed; 
 
     public void Initialize(TouchShootingSystem parent, float life, float speedZ = 0f)
     {

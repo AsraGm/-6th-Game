@@ -102,7 +102,12 @@ namespace ShootingRange
             {
                 scoreSystem.AddScore(scoreValue, objectType, enemyType);
             }
-            
+
+            MoneySystem moneySystem = FindObjectOfType<MoneySystem>();
+            if (moneySystem != null)
+            {
+                moneySystem.AddMoneyForEnemy(enemyType);
+            }
             // PLACEHOLDER: Conexión con sistema de temas (Lista C2)
             ProcessThemeEffects(hitObject, shootable.GetThemeID(), enemyType);
             
