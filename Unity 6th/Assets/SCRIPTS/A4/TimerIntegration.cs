@@ -11,8 +11,8 @@ namespace ShootingRange
         [Tooltip("ARRASTRA AQUÍ tu TimerDisplay")]
         public TimerDisplay timerDisplay;
 
-        //[Tooltip("ARRASTRA AQUÍ tu WaveSystem (Lista B3) - opcional")]
-        //public WaveSystem waveSystem;
+        [Tooltip("ARRASTRA AQUÍ tu WaveSystem (Lista B3) - ¡YA IMPLEMENTADO!")]
+        public WaveSystem waveSystem; // ¡DESCOMENTADO!
 
         [Tooltip("ARRASTRA AQUÍ tu MoneySystem")]
         public MoneySystem moneySystem;
@@ -64,10 +64,11 @@ namespace ShootingRange
                 timerDisplay = FindObjectOfType<TimerDisplay>();
             }
 
-            //if (waveSystem == null)
-            //{
-            //    waveSystem = FindObjectOfType<WaveSystem>();
-            //}
+            // ¡DESCOMENTADO Y FUNCIONAL!
+            if (waveSystem == null)
+            {
+                waveSystem = FindObjectOfType<WaveSystem>();
+            }
 
             if (moneySystem == null)
             {
@@ -84,11 +85,12 @@ namespace ShootingRange
                 levelTimer.StartTimer();
             }
 
-            // CONEXIÓN CON WAVE SYSTEM (Lista B3)
-            //if (waveSystem != null)
-            //{
-            //    waveSystem.StartWaves();
-            //}
+            // ¡CONEXIÓN CON WAVE SYSTEM ACTIVA! (Lista B3)
+            if (waveSystem != null)
+            {
+                waveSystem.StartWaves();
+                Debug.Log("TimerIntegration: Wave System iniciado");
+            }
 
             Debug.Log("Nivel iniciado");
         }
@@ -100,11 +102,12 @@ namespace ShootingRange
                 levelTimer.PauseTimer();
             }
 
-            // Pausar wave system si existe
-            //if (waveSystem != null)
-            //{
-            //    waveSystem.PauseWaves();
-            //}
+            // ¡PAUSAR WAVE SYSTEM FUNCIONAL!
+            if (waveSystem != null)
+            {
+                waveSystem.PauseWaves();
+                Debug.Log("TimerIntegration: Wave System pausado");
+            }
 
             Debug.Log("Nivel pausado");
         }
@@ -116,11 +119,12 @@ namespace ShootingRange
                 levelTimer.ResumeTimer();
             }
 
-            // Resumir wave system si existe
-            //if (waveSystem != null)
-            //{
-            //    waveSystem.ResumeWaves();
-            //}
+            // ¡RESUMIR WAVE SYSTEM FUNCIONAL!
+            if (waveSystem != null)
+            {
+                waveSystem.ResumeWaves();
+                Debug.Log("TimerIntegration: Wave System resumido");
+            }
 
             Debug.Log("Nivel resumido");
         }
@@ -133,11 +137,12 @@ namespace ShootingRange
                 levelTimer.ResetTimer();
             }
 
-            // Reset wave system
-            //if (waveSystem != null)
-            //{
-            //    waveSystem.ResetWaves();
-            //}
+            // ¡RESET WAVE SYSTEM FUNCIONAL!
+            if (waveSystem != null)
+            {
+                waveSystem.ResetWaves();
+                Debug.Log("TimerIntegration: Wave System reseteado");
+            }
 
             // Reset money de sesión (opcional)
             if (moneySystem != null)
@@ -159,6 +164,12 @@ namespace ShootingRange
 
             // Aquí puedes agregar lógica adicional al iniciar
             // Por ejemplo: ocultar menús, activar UI de juego, etc.
+
+            // Asegurar que wave system esté sincronizado
+            if (waveSystem != null && !waveSystem.IsSystemActive())
+            {
+                waveSystem.StartWaves();
+            }
         }
 
         void HandleWarning30()
@@ -185,11 +196,12 @@ namespace ShootingRange
 
             // DETENER TODOS LOS SISTEMAS
 
-            // 1. Detener wave system (Lista B3)
-            //if (waveSystem != null)
-            //{
-            //    waveSystem.StopWaveSystem();
-            //}
+            // 1. ¡DETENER WAVE SYSTEM FUNCIONAL! (Lista B3)
+            if (waveSystem != null)
+            {
+                waveSystem.StopWaveSystem();
+                Debug.Log("TimerIntegration: Wave System detenido por tiempo agotado");
+            }
 
             // 2. Detener sistema de disparo
             TouchShootingSystem shootingSystem = FindObjectOfType<TouchShootingSystem>();
@@ -219,7 +231,7 @@ namespace ShootingRange
                 Debug.Log($"Dinero total: ${totalMoney}");
             }
 
-            // CONEXIÓN FUTURA CON SCORE SYSTEM
+            // CONEXIÓN CON SCORE SYSTEM
             ScoreSystem scoreSystem = FindObjectOfType<ScoreSystem>();
             if (scoreSystem != null)
             {
@@ -228,6 +240,23 @@ namespace ShootingRange
 
                 Debug.Log($"Puntuación final: {finalScore}");
                 Debug.Log($"Precisión: {accuracy:F1}%");
+            }
+
+            // INFORMACIÓN DE WAVE SYSTEM
+            if (waveSystem != null)
+            {
+                int currentWave = waveSystem.GetCurrentWaveIndex();
+                int totalWaves = waveSystem.GetTotalWaveCount();
+
+                Debug.Log($"Oleadas completadas: {currentWave}/{totalWaves}");
+
+                // Bonus por oleadas completadas
+                if (currentWave >= totalWaves && moneySystem != null)
+                {
+                    int waveBonus = totalWaves * 25; // 25 por oleada completada
+                    moneySystem.AddMoney(waveBonus, true);
+                    Debug.Log($"Bonus por oleadas completadas: +{waveBonus}");
+                }
             }
 
             // PLACEHOLDER: Guardar estadísticas del nivel (Lista G)
@@ -245,9 +274,13 @@ namespace ShootingRange
             //     resultsScreen.ShowResults();
             // }
 
-            // Por ahora, solo log
+            // Por ahora, solo log con información completa
             Debug.Log("NIVEL COMPLETADO");
             Debug.Log("=================");
+            if (waveSystem != null)
+            {
+                Debug.Log($"Oleadas completadas: {waveSystem.GetCurrentWaveIndex()}/{waveSystem.GetTotalWaveCount()}");
+            }
             Debug.Log("Presiona R para reiniciar el nivel");
         }
 
@@ -273,6 +306,13 @@ namespace ShootingRange
         public void OnBackToMenuClicked()
         {
             Debug.Log("Volviendo al menú principal");
+
+            // Detener wave system antes de cambiar de escena
+            if (waveSystem != null)
+            {
+                waveSystem.StopWaveSystem();
+            }
+
             // CONEXIÓN FUTURA: Scene management
             // SceneManager.LoadScene("MainMenu");
         }
@@ -297,6 +337,28 @@ namespace ShootingRange
             return levelTimer != null && levelTimer.IsRunning;
         }
 
+        // NUEVOS MÉTODOS PARA WAVE SYSTEM INTEGRATION
+
+        public bool AreWavesActive()
+        {
+            return waveSystem != null && waveSystem.IsSystemActive();
+        }
+
+        public int GetCurrentWaveInfo()
+        {
+            return waveSystem != null ? waveSystem.GetCurrentWaveIndex() + 1 : 0;
+        }
+
+        public int GetTotalWaves()
+        {
+            return waveSystem != null ? waveSystem.GetTotalWaveCount() : 0;
+        }
+
+        public int GetActiveEnemyCount()
+        {
+            return waveSystem != null ? waveSystem.GetActiveEnemyCount() : 0;
+        }
+
         // INPUT PARA TESTING
         void Update()
         {
@@ -317,10 +379,29 @@ namespace ShootingRange
 
             if (Input.GetKeyDown(KeyCode.T))
             {
-                // Test: agregar 10 segundos al timer
+                // Test: agregar 30 segundos al timer
                 if (levelTimer != null)
                 {
                     levelTimer.DebugAdd30Seconds();
+                }
+            }
+
+            // NUEVOS CONTROLES PARA WAVE SYSTEM
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                // Test: información de waves
+                if (waveSystem != null)
+                {
+                    Debug.Log($"Wave Info: {GetCurrentWaveInfo()}/{GetTotalWaves()} | Activos: {GetActiveEnemyCount()} | Running: {AreWavesActive()}");
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                // Test: forzar siguiente wave
+                if (waveSystem != null)
+                {
+                    waveSystem.DebugNextWave();
                 }
             }
 #endif
