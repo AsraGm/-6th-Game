@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2548363620949935002}
   - component: {fileID: 7937050723225649115}
   - component: {fileID: 5434375371585479554}
+  - component: {fileID: 8527494795976447931}
+  - component: {fileID: 2462855675014381857}
   m_Layer: 7
   m_Name: INNOCENT 1
   m_TagString: Innocent
@@ -54,6 +56,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -75,6 +79,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -151,3 +156,44 @@ MonoBehaviour:
   themeID: Innocent
   hitParticles: {fileID: 0}
   hitSound: {fileID: 0}
+--- !u!114 &8527494795976447931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7437913946537063531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aaa9bcb36d69ee4f924456494af6fd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.EnemyMovementPatterns
+  currentPattern: 0
+  baseSpeed: 7
+  speedVariation: 1
+  amplitude: 2
+  frequency: 0.5
+  initialDirection: {x: 1, y: 0}
+  changePatternsInFlight: 0
+  patternChangeInterval: 1
+  keepInBounds: 1
+  screenMargin: 1.18
+--- !u!114 &2462855675014381857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7437913946537063531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f0def89cc735644083a9996a0d299ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.DynamicEnemySystem
+  adaptBehaviorOverTime: 1
+  behaviorChangeInterval: 5
+  enemyConfigurations:
+  - enemyType: 4
+    preferredPatterns: 00000000
+    speedMultiplier: 1
+    aggressiveness: 0.1

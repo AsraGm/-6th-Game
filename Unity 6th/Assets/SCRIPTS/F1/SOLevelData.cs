@@ -23,7 +23,7 @@ namespace ShootingRange
         
         public float baseSpawnRate = 2f; // enemigos por segundo
         public int maxEnemiesAtOnce = 10;
-        
+
         [Header("Level Difficulty")]
         [Range(0.5f, 3f)]
         public float difficultyMultiplier = 1f;
