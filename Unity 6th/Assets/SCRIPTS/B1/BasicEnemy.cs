@@ -1,18 +1,15 @@
 using UnityEngine;
 
-// ARCHIVO: BasicEnemy.cs - ACTUALIZADO PARA WAVE SYSTEM B3
-// Ejemplo de implementación de enemigo básico con conexión al WaveSystem
-
 namespace ShootingRange
 {
     public class BasicEnemy : MonoBehaviour, IShootable, IPoolable
     {
-        [Header("Configuración del Enemigo")]
-        [Tooltip("Tipo de este enemigo (afecta puntuación)")]
+        [Header("ConfiguraciÃ³n del Enemigo")]
+        [Tooltip("Tipo de este enemigo (afecta puntuaciÃ³n)")]
         public EnemyType enemyType = EnemyType.Normal;
 
-        [Header("Configuración de Tema")]
-        [Tooltip("ID del tema para efectos visuales (CONEXIÓN CON LISTA C2)")]
+        [Header("ConfiguraciÃ³n de Tema")]
+        [Tooltip("ID del tema para efectos visuales (CONEXIÃ“N CON LISTA C2)")]
         public string themeID = "default";
 
         [Header("Pool Settings")]
@@ -20,16 +17,13 @@ namespace ShootingRange
         public bool IsActiveInPool { get; set; } = false;
 
         [Header("Efectos Visuales")]
-        [Tooltip("Partículas que se reproducen al ser disparado")]
+        [Tooltip("PartÃ­culas que se reproducen al ser disparado")]
         public ParticleSystem hitParticles;
 
         [Tooltip("Sonido que se reproduce al ser disparado")]
         public AudioClip hitSound;
 
         private AudioSource audioSource;
-
-        // NUEVA CONEXIÓN CON WAVE SYSTEM
-        private WaveSystem waveSystem;
 
         void Start()
         {
@@ -47,15 +41,9 @@ namespace ShootingRange
             {
                 col.isTrigger = true;
             }
-
-            // CONECTAR CON WAVE SYSTEM
-            if (waveSystem == null)
-            {
-                waveSystem = FindObjectOfType<WaveSystem>();
-            }
         }
 
-        // Implementación de IShootable
+        // ImplementaciÃ³n de IShootable
         public void OnHit(ObjectType objectType, int scoreValue)
         {
             Debug.Log($"{name} ({enemyType}) fue disparado! Puntos: {scoreValue}");
@@ -63,7 +51,7 @@ namespace ShootingRange
             // Reproducir efectos visuales
             PlayHitEffects();
 
-            // PLACEHOLDER: Efectos específicos según tema (CONEXIÓN CON LISTA C2)
+            // PLACEHOLDER: Efectos especÃ­ficos segÃºn tema (CONEXIÃ“N CON LISTA C2)
             PlayThemeSpecificEffects();
 
             // Retornar al pool o destruir
@@ -77,10 +65,10 @@ namespace ShootingRange
 
         public string GetThemeID()
         {
-            return themeID; // CONEXIÓN CON LISTA C2
+            return themeID; // CONEXIÃ“N CON LISTA C2
         }
 
-        // Implementación de IPoolable (CONEXIÓN CON LISTA B1)
+        // ImplementaciÃ³n de IPoolable (CONEXIÃ“N CON LISTA B1)
         public void OnSpawnFromPool()
         {
             IsActiveInPool = true;
@@ -101,28 +89,20 @@ namespace ShootingRange
 
         void ResetEnemyState()
         {
-            // Restaurar escala normal
+            // Resetear cualquier animaciÃ³n, posiciÃ³n, etc.
             transform.localScale = Vector3.one;
 
-            // Restaurar color si tiene SpriteRenderer
+            // Resetear componentes visuales
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
             if (sr != null)
             {
-                sr.color = Color.white; // Solo restaurar a blanco por defecto
-            }
-
-            // Verificar collider
-            Collider2D col = GetComponent<Collider2D>();
-            if (col != null)
-            {
-                col.enabled = true;
-                col.isTrigger = true;
+                sr.color = Color.white;
             }
         }
 
         void CleanupEnemyState()
         {
-            // Detener partículas si están reproduciéndose
+            // Detener partÃ­culas si estÃ¡n reproduciÃ©ndose
             if (hitParticles != null && hitParticles.isPlaying)
             {
                 hitParticles.Stop();
@@ -137,7 +117,7 @@ namespace ShootingRange
 
         void PlayHitEffects()
         {
-            // Reproducir partículas
+            // Reproducir partÃ­culas
             if (hitParticles != null)
             {
                 hitParticles.Play();
@@ -167,11 +147,11 @@ namespace ShootingRange
 
         void PlayThemeSpecificEffects()
         {
-            // PLACEHOLDER: Efectos específicos por tema (CONEXIÓN CON LISTA C2)
-            // Aquí se aplicarán diferentes efectos según el tema activo
+            // PLACEHOLDER: Efectos especÃ­ficos por tema (CONEXIÃ“N CON LISTA C2)
+            // AquÃ­ se aplicarÃ¡n diferentes efectos segÃºn el tema activo
             // Por ejemplo:
             // - Tema Western: polvo y sonido de campana
-            // - Tema Sci-Fi: chispas eléctricas y sonido láser
+            // - Tema Sci-Fi: chispas elÃ©ctricas y sonido lÃ¡ser
             // - Tema Medieval: sangre y sonido de metal
 
             Debug.Log($"Aplicando efectos del tema: {themeID}");
@@ -179,40 +159,15 @@ namespace ShootingRange
 
         void HandleDestruction()
         {
-            // NUEVA CONEXIÓN CON WAVE SYSTEM B3
-            // Notificar al WaveSystem que este enemigo ha sido eliminado
-            if (waveSystem != null)
+            // Si usa pooling, retornar al pool despuÃ©s de un pequeÃ±o delay
+            if (GetComponent<IPoolable>() != null)
             {
-                // Usar invoke para dar tiempo a que se reproduzcan los efectos
-                Invoke(nameof(ReturnToWaveSystemPool), 0.5f);
+                Invoke(nameof(ReturnToPoolDelayed), 0.5f);
             }
             else
             {
-                // Fallback anterior: Si usa pooling básico, retornar al pool después de un pequeño delay
-                if (GetComponent<IPoolable>() != null)
-                {
-                    Invoke(nameof(ReturnToPoolDelayed), 0.5f);
-                }
-                else
-                {
-                    // Destruir después de un delay para que se vean los efectos
-                    Destroy(gameObject, 0.5f);
-                }
-            }
-        }
-
-        // NUEVO: Método para retornar al pool del WaveSystem
-        void ReturnToWaveSystemPool()
-        {
-            if (waveSystem != null)
-            {
-                waveSystem.ReturnEnemyToPool(gameObject);
-                Debug.Log($"Enemigo {enemyType} retornado al WaveSystem pool");
-            }
-            else
-            {
-                // Fallback
-                ReturnToPoolDelayed();
+                // Destruir despuÃ©s de un delay para que se vean los efectos
+                Destroy(gameObject, 0.5f);
             }
         }
 
@@ -221,70 +176,11 @@ namespace ShootingRange
             OnReturnToPool();
         }
 
-        // Método para configurar el enemigo desde el sistema de spawn
+        // MÃ©todo para configurar el enemigo desde el sistema de spawn
         public void ConfigureEnemy(EnemyType type, string theme)
         {
             enemyType = type;
             themeID = theme;
-        }
-
-        // NUEVO: Método para configurar referencia al WaveSystem
-        public void SetWaveSystem(WaveSystem system)
-        {
-            waveSystem = system;
-        }
-
-        // NUEVO: Método para auto-destruirse después de cierto tiempo (prevenir enemigos eternos)
-        public void StartLifetimeCountdown(float lifetime = 30f)
-        {
-            Invoke(nameof(ForceReturnToPool), lifetime);
-        }
-
-        void ForceReturnToPool()
-        {
-            Debug.Log($"Enemigo {enemyType} auto-destruido por tiempo de vida excedido");
-            ReturnToWaveSystemPool();
-        }
-
-        // EVENTOS PARA DETECCIÓN AUTOMÁTICA DE SALIDA DE PANTALLA
-        void OnBecameInvisible()
-        {
-            // Si el enemigo sale completamente de la pantalla, retornarlo al pool
-            // Esto ayuda a limpiar enemigos que se perdieron
-            if (IsActiveInPool)
-            {
-                Debug.Log($"Enemigo {enemyType} salió de pantalla - retornando al pool");
-                Invoke(nameof(ForceReturnToPool), 1f); // Small delay to avoid false positives
-            }
-        }
-
-        // MÉTODO DE DEBUG PARA WAVE SYSTEM
-        [ContextMenu("Force Return to Wave Pool")]
-        public void DebugForceReturnToPool()
-        {
-            ReturnToWaveSystemPool();
-        }
-
-        [ContextMenu("Test Hit Effect")]
-        public void DebugTestHit()
-        {
-            OnHit(ObjectType.Enemy, 10);
-        }
-
-        // Información para debugging
-        void OnDrawGizmos()
-        {
-            // Mostrar información del enemigo en Scene View
-            if (IsActiveInPool)
-            {
-                Gizmos.color = Color.green;
-                Gizmos.DrawWireSphere(transform.position, 0.5f);
-
-#if UNITY_EDITOR
-                UnityEditor.Handles.Label(transform.position + Vector3.up * 0.7f,
-                    $"{enemyType}\nActive: {IsActiveInPool}");
-#endif
-            }
         }
     }
 }

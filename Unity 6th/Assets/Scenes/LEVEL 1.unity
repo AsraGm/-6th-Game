@@ -1069,7 +1069,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.TimerIntegration
   levelTimer: {fileID: 1062320888}
   timerDisplay: {fileID: 176036753}
-  waveSystem: {fileID: 1549975714}
   moneySystem: {fileID: 1928683251}
   autoStartTimer: 1
   startDelay: 1
@@ -1767,7 +1766,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1549975715}
-  - component: {fileID: 1549975714}
   - component: {fileID: 1549975716}
   m_Layer: 0
   m_Name: WAVE SYSTEM
@@ -1776,33 +1774,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1549975714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1549975713}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bac43130b7916494cb78b9d144775a1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.WaveSystem
-  levelWaves:
-  - {fileID: 11400000, guid: d5eb94a7adb5c39469543a92b7f61572, type: 2}
-  loadWavesFromLevelManager: 0
-  spawnPointsSystem: {fileID: 1603516133}
-  enemyPrefabs:
-  - enemyType: 0
-    prefab: {fileID: 7437913946537063531, guid: b29f533555baa33458ca323493fb9012, type: 3}
-    displayName: Normal
-  enemyParent: {fileID: 274928728}
-  poolSizePerType: 20
-  maxTotalPoolSize: 200
-  currentWaveIndex: 0
-  isSystemActive: 0
-  isWaveRunning: 0
-  activeEnemyCount: 0
 --- !u!4 &1549975715
 Transform:
   m_ObjectHideFlags: 0
@@ -1827,16 +1798,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1549975713}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 135f64521e177be449bb154800ab25ca, type: 3}
+  m_Script: {fileID: 11500000, guid: bac43130b7916494cb78b9d144775a1b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.WaveIntegration
-  waveSystem: {fileID: 1549975714}
-  timerIntegration: {fileID: 845719411}
-  moneySystem: {fileID: 1928683251}
-  scoreSystem: {fileID: 1156919734}
-  autoConnect: 1
-  waveCompletionBonus: 50
-  waveCompletionScore: 100
+  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.WaveSystem
+  waveConfig: {fileID: 11400000, guid: 113ab5a3dabba444d88817ced0f0c3da, type: 2}
+  levelTimer: {fileID: 1062320888}
+  spawnPointsSystem: {fileID: 1603516133}
+  enemyPrefab: {fileID: 0}
+  enemyAppearTime: 1.5
+  enemyDisappearTime: 1
+  timeBetweenWaves: 2
+  appearRotationSpeed: 360
+  disappearRotationSpeed: 540
+  currentWaveIndex: 0
+  isWaveActive: 0
+  isSystemRunning: 0
+  currentWaveEnemies: []
+  enemyPool: []
+  waveStartTime: 0
 --- !u!1 &1603516132
 GameObject:
   m_ObjectHideFlags: 0
