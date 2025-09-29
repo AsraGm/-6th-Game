@@ -2,140 +2,153 @@ using UnityEngine;
 using System.Collections.Generic;
 
 // ARCHIVO: WaveData.cs
-// ScriptableObject para configurar oleadas fijas pre-diseñadas (B3)
+// ScriptableObject para configurar oleadas individuales (B3)
 
 namespace ShootingRange
 {
     [System.Serializable]
-    public class WaveSpawnConfig
+    public struct EnemySpawnInfo
     {
         [Header("Configuración de Spawn")]
         [Tooltip("Tipo de enemigo a spawnear")]
-        public EnemyType enemyType = EnemyType.Normal;
+        public EnemyType enemyType;
         
-        [Tooltip("Cantidad total de este tipo de enemigo en esta wave")]
-        [Range(1, 50)]
-        public int totalCount = 5;
+        [Tooltip("Cantidad de enemigos de este tipo")]
+        [Range(1, 20)]
+        public int quantity;
         
-        [Tooltip("Cada cuántos segundos aparece uno de este tipo")]
-        [Range(0.5f, 10f)]
-        public float spawnInterval = 2f;
+        [Tooltip("Delay entre spawns individuales (segundos)")]
+        [Range(0.1f, 5f)]
+        public float spawnDelay;
         
-        [Tooltip("Retraso antes de empezar a spawnear este tipo (desde inicio de wave)")]
-        [Range(0f, 30f)]
-        public float startDelay = 0f;
-        
-        // Variables de control interno
-        [System.NonSerialized]
-        public int spawnedCount = 0;
-        
-        [System.NonSerialized]
-        public float lastSpawnTime = 0f;
-        
-        [System.NonSerialized]
-        public bool hasStarted = false;
-        
-        public bool IsComplete => spawnedCount >= totalCount;
-        public bool ShouldSpawn(float waveTime) 
-        {
-            if (!hasStarted && waveTime >= startDelay)
-            {
-                hasStarted = true;
-                lastSpawnTime = waveTime;
-                return true;
-            }
-            
-            return hasStarted && !IsComplete && (waveTime - lastSpawnTime) >= spawnInterval;
-        }
-        
-        public void ResetConfig()
-        {
-            spawnedCount = 0;
-            lastSpawnTime = 0f;
-            hasStarted = false;
-        }
+        [Header("Configuración Visual")]
+        [Tooltip("Tiempo antes de rotar a 0 grados (efecto cartón feria)")]
+        [Range(0.5f, 3f)]
+        public float rotationDelay;
     }
-    
+
     [CreateAssetMenu(fileName = "WaveData", menuName = "Shooting Range/Wave Data")]
     public class WaveData : ScriptableObject
     {
-        [Header("Información de la Wave")]
-        [Tooltip("Nombre identificativo de esta wave")]
+        [Header("Información de Oleada")]
+        [Tooltip("Nombre identificativo de la oleada")]
         public string waveName = "Wave 1";
         
-        [Tooltip("Duración máxima de esta wave en segundos")]
-        [Range(10f, 120f)]
-        public float waveDuration = 30f;
+        [Tooltip("Duración total de esta oleada (segundos)")]
+        [Range(5f, 60f)]
+        public float waveDuration = 15f;
         
-        [Header("Configuración de Spawns")]
-        [Tooltip("Lista de tipos de enemigos y sus configuraciones de spawn")]
-        public List<WaveSpawnConfig> spawnConfigs = new List<WaveSpawnConfig>();
+        [Tooltip("Tiempo de warning antes del final (para rotar enemigos)")]
+        [Range(1f, 5f)]
+        public float warningTime = 3f;
         
-        [Header("Configuración Especial")]
-        [Tooltip("Esta es la wave final del nivel")]
-        public bool isFinalWave = false;
+        [Header("Configuración de Enemigos")]
+        [Tooltip("Enemigos que aparecerán en esta oleada")]
+        public EnemySpawnInfo[] enemiesToSpawn;
         
-        [Tooltip("Multiplicador de dificultad para esta wave")]
-        [Range(0.5f, 3f)]
-        public float difficultyMultiplier = 1f;
+        [Header("Configuración de Spawn")]
+        [Tooltip("Delay inicial antes de comenzar a spawnear")]
+        [Range(0f, 3f)]
+        public float initialDelay = 0.5f;
         
-        [Tooltip("Mensaje que aparece cuando inicia esta wave")]
-        public string startMessage = "";
+        [Tooltip("Spawnear enemigos en orden secuencial o aleatorio")]
+        public bool spawnInRandomOrder = false;
+        
+        [Header("Debug Info")]
+        [Tooltip("Información calculada automáticamente")]
+        [SerializeField] private int totalEnemies = 0;
+        [SerializeField] private float estimatedSpawnTime = 0f;
         
         // Métodos de utilidad
-        public int GetTotalEnemies()
+        public int GetTotalEnemyCount()
         {
             int total = 0;
-            foreach (var config in spawnConfigs)
+            if (enemiesToSpawn != null)
             {
-                total += config.totalCount;
+                foreach (var spawnInfo in enemiesToSpawn)
+                {
+                    total += spawnInfo.quantity;
+                }
             }
             return total;
         }
         
-        public bool IsWaveComplete()
+        public float GetEstimatedSpawnTime()
         {
-            foreach (var config in spawnConfigs)
+            float totalTime = initialDelay;
+            if (enemiesToSpawn != null)
             {
-                if (!config.IsComplete)
-                    return false;
-            }
-            return true;
-        }
-        
-        public void ResetWave()
-        {
-            foreach (var config in spawnConfigs)
-            {
-                config.ResetConfig();
-            }
-        }
-        
-        public List<EnemyType> GetAllEnemyTypes()
-        {
-            List<EnemyType> types = new List<EnemyType>();
-            foreach (var config in spawnConfigs)
-            {
-                if (!types.Contains(config.enemyType))
+                foreach (var spawnInfo in enemiesToSpawn)
                 {
-                    types.Add(config.enemyType);
+                    totalTime += spawnInfo.quantity * spawnInfo.spawnDelay;
                 }
             }
-            return types;
+            return totalTime;
         }
         
-        // Validación en editor
+        public bool IsValidWave()
+        {
+            return enemiesToSpawn != null && 
+                   enemiesToSpawn.Length > 0 && 
+                   GetTotalEnemyCount() > 0 &&
+                   waveDuration > 0f;
+        }
+        
+        public List<EnemyType> GetUniqueEnemyTypes()
+        {
+            List<EnemyType> uniqueTypes = new List<EnemyType>();
+            if (enemiesToSpawn != null)
+            {
+                foreach (var spawnInfo in enemiesToSpawn)
+                {
+                    if (!uniqueTypes.Contains(spawnInfo.enemyType))
+                    {
+                        uniqueTypes.Add(spawnInfo.enemyType);
+                    }
+                }
+            }
+            return uniqueTypes;
+        }
+        
+        // Validación automática en el editor
         void OnValidate()
         {
-            if (spawnConfigs == null)
-                spawnConfigs = new List<WaveSpawnConfig>();
-                
-            foreach (var config in spawnConfigs)
+            // Actualizar información de debug
+            totalEnemies = GetTotalEnemyCount();
+            estimatedSpawnTime = GetEstimatedSpawnTime();
+            
+            // Validar que warning time no sea mayor que wave duration
+            if (warningTime >= waveDuration)
             {
-                if (config.totalCount <= 0)
-                    config.totalCount = 1;
-                if (config.spawnInterval <= 0)
-                    config.spawnInterval = 1f;
+                warningTime = waveDuration - 1f;
+            }
+            
+            // Validar delays
+            if (enemiesToSpawn != null)
+            {
+                for (int i = 0; i < enemiesToSpawn.Length; i++)
+                {
+                    if (enemiesToSpawn[i].spawnDelay <= 0)
+                    {
+                        enemiesToSpawn[i].spawnDelay = 0.1f;
+                    }
+                    
+                    if (enemiesToSpawn[i].quantity <= 0)
+                    {
+                        enemiesToSpawn[i].quantity = 1;
+                    }
+                    
+                    if (enemiesToSpawn[i].rotationDelay <= 0)
+                    {
+                        enemiesToSpawn[i].rotationDelay = 1f;
+                    }
+                }
+            }
+            
+            // Warning si el tiempo estimado es mayor que la duración
+            if (estimatedSpawnTime > waveDuration)
+            {
+                Debug.LogWarning($"Wave '{waveName}': Tiempo estimado de spawn ({estimatedSpawnTime:F1}s) es mayor que la duración de oleada ({waveDuration}s)");
             }
         }
     }

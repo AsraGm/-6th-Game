@@ -357,6 +357,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 170654852}
+  - component: {fileID: 170654853}
   m_Layer: 0
   m_Name: WAVE SYSTEM
   m_TagString: Untagged
@@ -379,6 +380,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &170654853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170654850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bac43130b7916494cb78b9d144775a1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.WaveSystem
+  levelConfig: {fileID: 11400000, guid: 8d8e7625f3592c34cbdd44fb0ba499b8, type: 2}
+  spawnPointsSystem: {fileID: 1603516133}
+  isRunning: 0
+  isPaused: 0
+  currentWaveIndex: 0
+  currentWave: {fileID: 11400000, guid: db9c19aaf6110fb40b3218de52a499dc, type: 2}
+  currentWaveTimeRemaining: 0
+  isInWarningPeriod: 0
+  totalEnemiesSpawned: 0
+  activeEnemies:
+  - {fileID: 7437913946537063531, guid: b29f533555baa33458ca323493fb9012, type: 3}
+  - {fileID: 7437913946537063531, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
 --- !u!1 &176036752
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,37 +572,6 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 100}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &290619933
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 290619935}
-  m_Layer: 0
-  m_Name: POOL MANAGER
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &290619935
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 290619933}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1131,7 +1125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.TimerIntegration
   levelTimer: {fileID: 1062320888}
   timerDisplay: {fileID: 176036753}
-  waveSystem: {fileID: 0}
+  waveSystem: {fileID: 170654853}
   moneySystem: {fileID: 1928683251}
   autoStartTimer: 1
   startDelay: 1
@@ -1855,7 +1849,6 @@ MonoBehaviour:
     routePoints:
     - {fileID: 1898856726}
     - {fileID: 1783708283}
-    - {fileID: 1783708283}
     preferredPattern: 0
     routeSpeed: 3
     randomVariation: 0
@@ -1880,7 +1873,9 @@ Transform:
   m_LocalPosition: {x: -1.3957051, y: 7.196912, z: -81.53827}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1898856726}
+  - {fileID: 1783708283}
   m_Father: {fileID: 113371645}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1615294553
@@ -2272,12 +2267,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1783708282}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.8, y: -1.99, z: 86.39}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 9.747931, y: -6.62183, z: 86.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1603516134}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1814913438
 GameObject:
@@ -2459,12 +2454,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1898856725}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.89, y: -1.99, z: 86.39}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -9.94207, y: -6.62183, z: 86.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1603516134}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1928683249
 GameObject:
@@ -2568,6 +2563,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy NORMAL
       objectReference: {fileID: 0}
+    - target: {fileID: 7937050723225649115, guid: b29f533555baa33458ca323493fb9012, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2607,7 +2606,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 0.9996569, b: 0.75, a: 1}
-  m_Intensity: 1
+  m_Intensity: 1.3
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
   m_ApplyToSortingLayers: 00000000
@@ -2674,7 +2673,4 @@ SceneRoots:
   - {fileID: 975565005}
   - {fileID: 1947337859}
   - {fileID: 83933683}
-  - {fileID: 1898856726}
-  - {fileID: 1783708283}
-  - {fileID: 290619935}
   - {fileID: 170654852}

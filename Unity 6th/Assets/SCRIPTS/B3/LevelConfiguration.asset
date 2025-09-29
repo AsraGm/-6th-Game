@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b576cb39d7ec6454daf969a99695afa7, type: 3}
+  m_Name: LevelConfiguration
+  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.LevelConfiguration
+  levelName: Level 1
+  levelNumber: 1
+  waves:
+  - {fileID: 11400000, guid: db9c19aaf6110fb40b3218de52a499dc, type: 2}
+  - {fileID: 11400000, guid: 2e3fbc6ee8899bf408bb0dc36bfbd894, type: 2}
+  waveTransitionDelay: 1
+  showWaveTransitionMessages: 1
+  enemyPrefabs:
+  - enemyType: 0
+    prefab: {fileID: 7437913946537063531, guid: b29f533555baa33458ca323493fb9012, type: 3}
+  - enemyType: 4
+    prefab: {fileID: 7437913946537063531, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
+  totalWaves: 2
+  totalEnemies: 9
+  estimatedDuration: 32
+  enemyTypesUsed:
+  - Normal
+  - Innocent
