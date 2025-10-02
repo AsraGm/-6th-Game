@@ -169,8 +169,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.EnemyMovementPatterns
   currentPattern: 0
-  baseSpeed: 7
-  speedVariation: 1
+  baseSpeed: 5
+  speedVariation: 0.2
   amplitude: 2
   frequency: 0.5
   initialDirection: {x: 1, y: 0}
@@ -195,5 +195,5 @@ MonoBehaviour:
   enemyConfigurations:
   - enemyType: 0
     preferredPatterns: 00000000
-    speedMultiplier: 1
+    speedMultiplier: 0.1
     aggressiveness: 0.1

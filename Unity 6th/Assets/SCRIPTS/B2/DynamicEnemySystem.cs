@@ -19,7 +19,6 @@ namespace ShootingRange
         public bool adaptBehaviorOverTime = true;
         
         [Tooltip("Tiempo antes de cambios de comportamiento (segundos)")]
-        [Range(2f, 10f)]
         public float behaviorChangeInterval = 5f;
         
         [Header("Configuración por Tipo de Enemigo")]
@@ -37,9 +36,7 @@ namespace ShootingRange
         {
             public EnemyType enemyType;
             public MovementPattern[] preferredPatterns;
-            [Range(1f, 10f)]
             public float speedMultiplier = 1f;
-            [Range(0f, 2f)]
             public float aggressiveness = 1f;
         }
         
