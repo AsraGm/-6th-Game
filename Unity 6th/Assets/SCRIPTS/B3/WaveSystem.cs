@@ -51,7 +51,19 @@ namespace ShootingRange
         public float CurrentWaveTimeRemaining => currentWaveTimeRemaining;
         public int GetTotalEnemiesSpawned() => totalEnemiesSpawned;
         public int GetActiveEnemyCount() => activeEnemies.Count;
-        
+
+
+        [System.Serializable]
+        public struct EnemySpawnPointMapping
+        {
+            public EnemyType enemyType;
+            public Transform[] spawnPoints; // Transforms de la ESCENA
+        }
+
+        [Header("Spawn Points Configuration")]
+        [Tooltip("Puntos de spawn por tipo de enemigo - arrastra GameObjects de la escena")]
+        public EnemySpawnPointMapping[] enemySpawnPoints;
+
         void Start()
         {
             InitializeWaveSystem();
@@ -248,7 +260,7 @@ namespace ShootingRange
             }
             
             // Obtener posición de spawn
-            Vector3 spawnPosition = GetSpawnPosition();
+            Vector3 spawnPosition = GetSpawnPosition(spawnInfo.enemyType);
             
             // INSTANCIACIÓN DIRECTA - GARANTIZA MÚLTIPLES ENEMIGOS
             GameObject enemy = Instantiate(prefab, spawnPosition, Quaternion.identity);
@@ -307,7 +319,7 @@ namespace ShootingRange
                 enemy.transform.rotation = targetRotation;
             }
         }
-        
+
         void ConfigureSpawnedEnemy(GameObject enemy, EnemySpawnInfo spawnInfo)
         {
             // Configurar BasicEnemy si existe
@@ -316,29 +328,37 @@ namespace ShootingRange
             {
                 basicEnemy.ConfigureEnemy(spawnInfo.enemyType, "default");
             }
-            
-            // Configurar DynamicEnemySystem si existe
-            DynamicEnemySystem dynamicEnemy = enemy.GetComponent<DynamicEnemySystem>();
-            if (dynamicEnemy != null && spawnPointsSystem != null)
-            { 
-                SpawnData spawnData = spawnPointsSystem.GetSpawnDataForEnemyType(spawnInfo.enemyType);
-                if (spawnData != null)
+
+            // NO inicializar DynamicEnemySystem - respetar configuración del prefab
+            // Solo asegurar que el movimiento esté en Linear
+            EnemyMovementPatterns movement = enemy.GetComponent<EnemyMovementPatterns>();
+            if (movement != null)
+            {
+                movement.SetPattern(MovementPattern.Linear);
+                movement.changePatternsInFlight = false;
+            }
+        }
+
+        Vector3 GetSpawnPosition(EnemyType enemyType)
+        {
+            // 1. Buscar en WaveSystem (local a la escena)
+            if (enemySpawnPoints != null && enemySpawnPoints.Length > 0)
+            {
+                // Buscar spawn points específicos para este tipo de enemigo
+                foreach (var mapping in enemySpawnPoints)
                 {
-                    dynamicEnemy.InitializeDynamicEnemy(spawnData, spawnInfo.enemyType); 
-                    // FORZAR PATRÓN LINEAR para que siga las rutas correctamente
-                    EnemyMovementPatterns movement = enemy.GetComponent<EnemyMovementPatterns>();
-                    if (movement != null)
+                    if (mapping.enemyType == enemyType &&
+                        mapping.spawnPoints != null &&
+                        mapping.spawnPoints.Length > 0)
                     {
-                        movement.SetPattern(MovementPattern.Linear);
-                        movement.changePatternsInFlight = false; // No cambiar patrón en vuelo
+                        int randomIndex = Random.Range(0, mapping.spawnPoints.Length);
+                        Debug.Log($"Usando spawn point custom para {enemyType}: {mapping.spawnPoints[randomIndex].position}");
+                        return mapping.spawnPoints[randomIndex].position;
                     }
                 }
             }
-        }
-        
-        Vector3 GetSpawnPosition()
-        { 
-            // 2. Busca SpawnPointsSystem (DEBERÍA USARSE AQUÍ)
+
+            // 2. Fallback a SpawnPointsSystem
             if (spawnPointsSystem != null)
             {
                 Debug.Log("SpawnPointsSystem encontrado, obteniendo spawn data...");
@@ -348,21 +368,13 @@ namespace ShootingRange
                     Debug.Log($"Spawn data obtenido: {spawnData.spawnPosition}");
                     return spawnData.spawnPosition;
                 }
-                else
-                {
-                    Debug.LogWarning("SpawnData es NULL - cayendo a fallback");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("SpawnPointsSystem es NULL");
             }
 
-            // Fallback: bordes de pantalla
+            // 3. Fallback final: bordes de pantalla
             Debug.Log("Usando fallback de bordes de pantalla");
             return GetRandomScreenEdgePosition();
         }
-        
+
         Vector3 GetRandomScreenEdgePosition()
         {
             Camera cam = Camera.main;
