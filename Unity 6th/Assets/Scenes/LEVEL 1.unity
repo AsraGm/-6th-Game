@@ -1261,54 +1261,6 @@ Transform:
   - {fileID: 2848769239008778682}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &687066494
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 687066496}
-  - component: {fileID: 687066495}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &687066495
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 687066494}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 629e86be0fb59924aa20b417d87af05f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ThemeTestButtons
-  policeTheme: {fileID: 11400000, guid: 9dc4a751945f12a4d874f6fb8c3ba7b8, type: 2}
-  spaceTheme: {fileID: 11400000, guid: 03de97de0e7d335458966dad3f9cbf4f, type: 2}
-  robotTheme: {fileID: 11400000, guid: 1f58b6d02f084f74683518dd306df45f, type: 2}
-  terrorTheme: {fileID: 11400000, guid: 4835db1e14b4d8b45abdd71df0721db3, type: 2}
---- !u!4 &687066496
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 687066494}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.11746, y: -2.36949, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &742243481
 GameObject:
   m_ObjectHideFlags: 0
@@ -3042,4 +2994,3 @@ SceneRoots:
   - {fileID: 274928728}
   - {fileID: 975565005}
   - {fileID: 1379039152}
-  - {fileID: 687066496}
