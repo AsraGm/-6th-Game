@@ -77,7 +77,7 @@ namespace ShootingRange
                     },
                     new EnemyTypeConfig
                     {
-                        enemyType = EnemyType.Fast,
+                        enemyType = EnemyType.ZigZag,
                         preferredPatterns = new[] { MovementPattern.Linear, MovementPattern.Erratic },
                         speedMultiplier = 1.5f,
                         aggressiveness = 1.3f

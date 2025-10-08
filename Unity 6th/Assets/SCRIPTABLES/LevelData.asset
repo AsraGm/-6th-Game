@@ -15,7 +15,7 @@ MonoBehaviour:
   levelNumber: 0
   levelName: Level #01
   levelDuration: 60
-  allowedSpawnTypes: 000000000100000004000000
+  allowedSpawnTypes: 0000000001000000040000000200000003000000
   baseSpawnRate: 2
   maxEnemiesAtOnce: 10
   difficultyMultiplier: 1.5

@@ -439,10 +439,24 @@ namespace ShootingRange
         {
             if (enemy == null) yield break;
 
+            BasicEnemy basicEnemy = enemy.GetComponent<BasicEnemy>();
+
+            // Si es Jumper, usar su método específico
+            if (basicEnemy != null && basicEnemy.GetEnemyType() == EnemyType.Jumper)
+            {
+                EnemyMovementPatterns movement = enemy.GetComponent<EnemyMovementPatterns>();
+                if (movement != null)
+                {
+                    movement.RotateToWarning();
+                }
+                yield break;
+            }
+
+            // Para los demás enemigos, rotación normal en X
             Quaternion startRotation = enemy.transform.rotation;
             Quaternion targetRotation = Quaternion.Euler(90, 0, 0);
 
-            float duration = 0.3f;
+            float duration = 0.1f;
             float elapsedTime = 0f;
 
             while (elapsedTime < duration && enemy != null)

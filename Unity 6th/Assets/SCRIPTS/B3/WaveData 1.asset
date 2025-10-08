@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca3d4a3609fbd18499a59d545d171035, type: 3}
   m_Name: WaveData 1
   m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.WaveData
-  waveName: '#01'
+  waveName: '#02'
   waveDuration: 15
   warningTime: 3
   enemiesToSpawn:
@@ -20,7 +20,7 @@ MonoBehaviour:
     quantity: 1
     spawnDelay: 0.1
     rotationDelay: 1
-  - enemyType: 4
+  - enemyType: 5
     quantity: 3
     spawnDelay: 0.1
     rotationDelay: 1

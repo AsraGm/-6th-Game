@@ -16,7 +16,8 @@ namespace ShootingRange
     public enum EnemyType
     {
         Normal,     // Enemigo estándar
-        Fast,       // Enemigo rápido
+        Static,     // Enemigo estático
+        ZigZag,       // Enemigo rápido
         Jumper,     // Enemigo que salta
         Valuable,   // Enemigo de alto valor
         Innocent    // Civil (no disparar)

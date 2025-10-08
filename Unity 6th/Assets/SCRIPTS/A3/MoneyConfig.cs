@@ -11,9 +11,12 @@ namespace ShootingRange
         [Header("Dinero por Tipo de Enemigo")]
         [Tooltip("Dinero que da un enemigo normal al ser eliminado")]
         public int normalEnemyMoney = 5;
+
+        [Tooltip("Dinero que da un enemigo statico al ser eliminado")]
+        public int staticEnemyMoney = 5;
         
         [Tooltip("Dinero que da un enemigo rápido al ser eliminado")]
-        public int fastEnemyMoney = 8;
+        public int zigZagEnemyMoney = 8;
         
         [Tooltip("Dinero que da un enemigo saltador al ser eliminado")]
         public int jumperEnemyMoney = 10;
@@ -43,8 +46,11 @@ namespace ShootingRange
                 case EnemyType.Normal:
                     baseMoney = normalEnemyMoney;
                     break;
-                case EnemyType.Fast:
-                    baseMoney = fastEnemyMoney;
+                case EnemyType.Static:
+                    baseMoney = staticEnemyMoney;
+                    break;
+                case EnemyType.ZigZag:
+                    baseMoney = zigZagEnemyMoney;
                     break;
                 case EnemyType.Jumper:
                     baseMoney = jumperEnemyMoney;
@@ -68,7 +74,7 @@ namespace ShootingRange
         void OnValidate()
         {
             normalEnemyMoney = Mathf.Max(0, normalEnemyMoney);
-            fastEnemyMoney = Mathf.Max(0, fastEnemyMoney);
+            zigZagEnemyMoney = Mathf.Max(0, zigZagEnemyMoney);
             jumperEnemyMoney = Mathf.Max(0, jumperEnemyMoney);
             valuableEnemyMoney = Mathf.Max(0, valuableEnemyMoney);
             innocentPenalty = Mathf.Max(0, innocentPenalty);

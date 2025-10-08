@@ -32,7 +32,7 @@ namespace ShootingRange
             {
                 case EnemyType.Normal:
                     return normalEnemyScore;
-                case EnemyType.Fast:
+                case EnemyType.ZigZag:
                     return fastEnemyScore;
                 case EnemyType.Jumper:
                     return jumperEnemyScore;

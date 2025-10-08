@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 5842233769854944869}
   - component: {fileID: 2548363620949935002}
   - component: {fileID: 7937050723225649115}
-  - component: {fileID: 5434375371585479554}
-  - component: {fileID: 8527494795976447931}
-  - component: {fileID: 2462855675014381857}
-  m_Layer: 7
-  m_Name: INNOCENT 1
-  m_TagString: Innocent
+  - component: {fileID: 1607610723663557446}
+  - component: {fileID: -8763723296083514941}
+  - component: {fileID: 2684199557902135247}
+  m_Layer: 6
+  m_Name: ZIG-ZAG
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 4, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -83,8 +83,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.3026329, g: 0.6117647, b: 0.23921567, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 7e27690d506be274db5eaebfef0b74e4, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -128,19 +128,19 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.42}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 6.6666665, y: 6.6666665}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 6.42, y: 4.53}
   m_EdgeRadius: 0
---- !u!114 &5434375371585479554
+--- !u!114 &1607610723663557446
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -152,11 +152,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dad2677b265e6d45bbc1abe80ff6dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 4
-  themeID: Innocent
+  enemyType: 2
+  themeID: Zig Zag
   hitParticles: {fileID: 0}
   hitSound: {fileID: 0}
---- !u!114 &8527494795976447931
+--- !u!114 &-8763723296083514941
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,8 +168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aaa9bcb36d69ee4f924456494af6fd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.EnemyMovementPatterns
-  currentPattern: 0
-  baseSpeed: 7
+  currentPattern: 1
+  baseSpeed: 5
   speedVariation: 1
   amplitude: 2
   frequency: 0.5
@@ -178,7 +178,15 @@ MonoBehaviour:
   patternChangeInterval: 1
   keepInBounds: 1
   screenMargin: 1.18
---- !u!114 &2462855675014381857
+  enemyType: 2
+  zigzagReturnChance: 0.4
+  zigzagMinProgress: 0.1
+  jumperRotationSpeed: 0
+  jumperMaxAngle: 45
+  valuableFlipsAtEnd: 0
+  valuableFlipDuration: 0.1
+  valuableFlipTime: 3
+--- !u!114 &2684199557902135247
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -193,7 +201,7 @@ MonoBehaviour:
   adaptBehaviorOverTime: 1
   behaviorChangeInterval: 5
   enemyConfigurations:
-  - enemyType: 4
-    preferredPatterns: 00000000
-    speedMultiplier: 1
+  - enemyType: 2
+    preferredPatterns: 01000000
+    speedMultiplier: 0.5
     aggressiveness: 0.1

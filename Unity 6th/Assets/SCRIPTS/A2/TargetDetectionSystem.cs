@@ -26,7 +26,9 @@ namespace ShootingRange
         [Header("Optimización Móvil")]
         [Tooltip("Cache de componentes para evitar GetComponent repetitivo")]
         public bool useComponentCache = true;
-        
+
+        [Header("B4: Sistema de Feedback de Inocentes")]
+        public InnocentPenaltyFeedback innocentFeedback;
         // Cache de componentes para optimización móvil
         private Dictionary<GameObject, IShootable> shootableCache = new Dictionary<GameObject, IShootable>();
         private Dictionary<GameObject, EnemyType> enemyTypeCache = new Dictionary<GameObject, EnemyType>();
@@ -61,6 +63,10 @@ namespace ShootingRange
             {
                 Debug.LogWarning("TargetScoreConfig no asignado. Usando valores por defecto.");
                 scoreConfig = ScriptableObject.CreateInstance<TargetScoreConfig>();
+            }
+            if (innocentFeedback == null)
+            {
+                innocentFeedback = FindObjectOfType<InnocentPenaltyFeedback>();
             }
         }
         
@@ -108,12 +114,22 @@ namespace ShootingRange
             {
                 moneySystem.AddMoneyForEnemy(enemyType);
             }
+            if (objectType == ObjectType.Innocent)
+            {
+                TriggerInnocentFeedback(scoreValue);
+            }
             // PLACEHOLDER: Conexión con sistema de temas (Lista C2)
             ProcessThemeEffects(hitObject, shootable.GetThemeID(), enemyType);
             
             Debug.Log($"Hit procesado: {enemyType} = {scoreValue} puntos");
         }
-        
+        void TriggerInnocentFeedback(int penaltyAmount)
+        {
+            if (innocentFeedback != null)
+            {
+                innocentFeedback.TriggerInnocentPenalty(Mathf.Abs(penaltyAmount));
+            }
+        }
         // Verificar si es un objetivo válido usando tags optimizados
         bool IsValidTarget(GameObject obj)
         {

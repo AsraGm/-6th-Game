@@ -174,7 +174,7 @@ namespace ShootingRange
             newRoute.routeSpeed = 3f;
             newRoute.randomVariation = 0.3f;
             newRoute.allowedEnemyTypes.Add(EnemyType.Normal);
-            newRoute.allowedEnemyTypes.Add(EnemyType.Fast);
+            newRoute.allowedEnemyTypes.Add(EnemyType.ZigZag);
             newRoute.routeWeight = 1f;
             newRoute.isActive = true;
             

@@ -18,7 +18,7 @@ namespace ShootingRange
         public List<EnemyType> allowedSpawnTypes = new List<EnemyType>
         {
             EnemyType.Normal,
-            EnemyType.Fast
+            EnemyType.ZigZag,
         };
         
         public float baseSpawnRate = 2f; // enemigos por segundo

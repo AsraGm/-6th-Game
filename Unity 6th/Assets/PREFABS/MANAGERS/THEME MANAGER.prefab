@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7837353501019624297
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5655921780707780291}
+  - component: {fileID: 6499103896805810107}
+  m_Layer: 0
+  m_Name: THEME MANAGER
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5655921780707780291
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7837353501019624297}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.2866046, y: -0.5513667, z: -0.5422028}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6499103896805810107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7837353501019624297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da36a5721b5452e4ba999839b3fd1b35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.ThemeManager
+  availableThemes:
+  - {fileID: 11400000, guid: 98a23b01445eac34dac81daedb874392, type: 2}
+  - {fileID: 11400000, guid: 9dc4a751945f12a4d874f6fb8c3ba7b8, type: 2}
+  - {fileID: 11400000, guid: 1f58b6d02f084f74683518dd306df45f, type: 2}
+  - {fileID: 11400000, guid: 03de97de0e7d335458966dad3f9cbf4f, type: 2}
+  - {fileID: 11400000, guid: 4835db1e14b4d8b45abdd71df0721db3, type: 2}
+  defaultTheme: {fileID: 11400000, guid: 98a23b01445eac34dac81daedb874392, type: 2}
+  backgroundRenderer: {fileID: 0}
+  backgroundImage: {fileID: 0}
+  curtainRenderer: {fileID: 0}
+  currentTheme: {fileID: 11400000, guid: 98a23b01445eac34dac81daedb874392, type: 2}
+  currentThemeID: circus
+  unloadPreviousThemeAssets: 1
+  precacheUnlockedThemes: 0

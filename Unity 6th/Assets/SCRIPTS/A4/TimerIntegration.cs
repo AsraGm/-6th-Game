@@ -475,7 +475,7 @@ namespace ShootingRange
             {
                 if (waveSystem != null)
                 {
-                    waveSystem.ForceSpawnEnemy(EnemyType.Fast);
+                    waveSystem.ForceSpawnEnemy(EnemyType.ZigZag);
                 }
             }
 

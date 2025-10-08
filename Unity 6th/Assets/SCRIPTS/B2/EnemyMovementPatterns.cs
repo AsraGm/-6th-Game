@@ -1,15 +1,14 @@
 using UnityEngine;
 
 // ARCHIVO: EnemyMovementPatterns.cs
-// Patrones de movimiento variables para enemigos estilo RE4 Remake (B2)
+// VERSIÓN ACTUALIZADA con comportamientos específicos por tipo de enemigo
 
 namespace ShootingRange
 {
-    // ENUM para tipos de movimiento
     public enum MovementPattern
     {
-        Linear,     // Movimiento recto
-        Zigzag,     // Movimiento en zigzag
+        Linear,     // Movimiento recto - NORMAL e INNOCENT
+        Zigzag,     // Movimiento en zigzag - ZIGZAG (antes Fast) con retorno prematuro
         Circular,   // Movimiento circular
         Erratic     // Movimiento errático/aleatorio
     }
@@ -55,6 +54,37 @@ namespace ShootingRange
         [Tooltip("Margen desde bordes de pantalla")]
         public float screenMargin = 1f;
 
+        [Header("NUEVOS: Comportamientos Especiales")]
+        [Tooltip("Tipo de enemigo (para comportamientos especiales)")]
+        public EnemyType enemyType = EnemyType.Normal;
+
+        [Header("ZIGZAG: Retorno Prematuro")]
+        [Tooltip("Probabilidad de NO completar ruta (0-1)")]
+        [Range(0f, 1f)]
+        public float zigzagReturnChance = 0.4f;
+
+        [Tooltip("Progreso mínimo antes de poder regresar")]
+        [Range(0.1f, 0.9f)]
+        public float zigzagMinProgress = 0.3f;
+
+        [Header("JUMPER: Rotación Continua")]
+        [Tooltip("Velocidad de rotación en Z (grados/segundo) - efecto de balanceo")]
+        public float jumperRotationSpeed = 180f;
+        [Tooltip("Ángulo máximo de balanceo (límites -X a +X grados)")]
+        public float jumperMaxAngle = 45f;
+        private float jumperCurrentAngle = 0f;
+        private float jumperDirection = 1f;
+
+        [Header("VALUABLE: Volteo al Final")]
+        [Tooltip("Se voltea 180° al llegar al destino")]
+        public bool valuableFlipsAtEnd = true;
+        [Tooltip("Duración de la rotación")]
+        [Range(0.1f, 1f)]
+        public float valuableFlipDuration = 0.3f;
+        [Tooltip("Tiempo antes de voltear (segundos)")]
+        [Range(1f, 10f)]
+        public float valuableFlipTime = 3f;
+
         // Variables privadas para cálculos
         private Vector2 currentDirection;
         private Vector2 currentVelocity;
@@ -71,7 +101,13 @@ namespace ShootingRange
         private float erraticChangeTime = 0f;
         private Vector2 erraticDirection;
 
-        // Cache de componentes para optimización
+        // NUEVAS VARIABLES para comportamientos especiales
+        private float routeProgress = 0f;
+        private bool hasDecidedToReturn = false;
+        private bool hasReachedDestination = false;
+        private bool hasFlipped = false;
+        private Vector3 destinationPoint;
+
         private Transform cachedTransform;
 
         void Start()
@@ -81,46 +117,187 @@ namespace ShootingRange
 
         void InitializeMovement()
         {
-            // Cache de componentes
             cachedTransform = transform;
             gameCamera = Camera.main;
 
-            // Configuración inicial
             startPosition = cachedTransform.position;
             currentDirection = initialDirection.normalized;
 
-            // Velocidad inicial con variación
             currentSpeed = baseSpeed + Random.Range(-speedVariation, speedVariation);
-            currentSpeed = Mathf.Max(0.5f, currentSpeed); // Mínimo de velocidad
+            currentSpeed = Mathf.Max(0.5f, currentSpeed);
 
-            // Configurar patrón inicial
             SetupPattern(currentPattern);
 
-            Debug.Log($"Enemigo inicializado - Patrón: {currentPattern}, Velocidad: {currentSpeed:F1}");
+            BasicEnemy basicEnemy = GetComponent<BasicEnemy>();
+
+            // POR esto:
+            if (enemyType == EnemyType.Jumper)
+            {
+                jumperCurrentAngle = -jumperMaxAngle; // Empieza desde un extremo
+                jumperDirection = 1f; // Va hacia el otro extremo
+                cachedTransform.rotation = Quaternion.Euler(0, 0, jumperCurrentAngle);
+            }
+
+            Debug.Log($"Enemigo inicializado - Tipo: {enemyType}, Patrón: {currentPattern}, Velocidad: {currentSpeed:F1}");
+            
         }
 
         void Update()
         {
             timeAlive += Time.deltaTime;
 
-            // Cambiar patrón en vuelo si está habilitado
             if (changePatternsInFlight && timeAlive - lastPatternChange >= patternChangeInterval)
             {
                 ChangePatternRandomly();
                 lastPatternChange = timeAlive;
             }
 
-            // Calcular movimiento según patrón actual
-            CalculateMovement();
+            // APLICAR COMPORTAMIENTOS ESPECIALES POR TIPO
+            ApplySpecialBehaviors();
 
-            // Aplicar movimiento
+            CalculateMovement();
             ApplyMovement();
 
-            // Mantener en límites de pantalla
             if (keepInBounds)
             {
                 KeepInScreenBounds();
             }
+        }
+
+        void ApplySpecialBehaviors()
+        {
+            switch (enemyType)
+            {
+                case EnemyType.ZigZag: // ZIGZAG con retorno prematuro
+                    ApplyZigZagBehavior();
+                    break;
+
+                case EnemyType.Jumper: // Rotación continua en X
+                    ApplyJumperBehavior();
+                    break;
+
+                case EnemyType.Valuable: // Volteo al llegar al destino
+                    CheckValuableDestination();
+                    break;
+            }
+        }
+
+        // ZIGZAG: Puede NO completar la ruta y regresar antes
+        void ApplyZigZagBehavior()
+        {
+            if (hasDecidedToReturn) return;
+
+            UpdateRouteProgress();
+
+            // Solo decide regresar si ha avanzado suficiente
+            if (routeProgress >= zigzagMinProgress)
+            {
+                // Probabilidad de regresar cada frame
+                if (Random.value < zigzagReturnChance * Time.deltaTime * 2f)
+                {
+                    hasDecidedToReturn = true;
+                    Debug.Log($"ZIGZAG decidió regresar en {routeProgress:P0} de la ruta");
+
+                    // Invertir dirección
+                    currentDirection = -currentDirection;
+                    initialDirection = currentDirection;
+                }
+            }
+        }
+        // Método público para rotar rápidamente el Jumper al finalizar oleada
+        public void RotateToWarning()
+        {
+            if (enemyType == EnemyType.Jumper)
+            {
+                // Para Jumper: rotar rápidamente a 90° en Z (mantiene el eje de balanceo)
+                StartCoroutine(QuickRotateJumper());
+            }
+        }
+
+        System.Collections.IEnumerator QuickRotateJumper()
+        {
+            float duration = 0.1f; // Rotación rápida
+            float elapsed = 0f;
+            Quaternion startRotation = cachedTransform.rotation;
+            Quaternion targetRotation = Quaternion.Euler(90, 0, 0); // 90° en Z
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float progress = elapsed / duration;
+                cachedTransform.rotation = Quaternion.Lerp(startRotation, targetRotation, progress);
+                yield return null;
+            }
+
+            cachedTransform.rotation = targetRotation;
+
+            // Detener el balanceo
+            enabled = false;
+        }
+
+        void UpdateRouteProgress()
+        {
+            // Calcular progreso basado en distancia desde inicio
+            float distanceFromStart = Vector3.Distance(startPosition, cachedTransform.position);
+
+            // Estimar distancia total (puedes ajustar este valor según tus rutas)
+            float estimatedTotalDistance = 10f;
+
+            routeProgress = Mathf.Clamp01(distanceFromStart / estimatedTotalDistance);
+        }
+        void ApplyJumperBehavior()
+        {
+            // Calcular nuevo ángulo
+            jumperCurrentAngle += jumperRotationSpeed * jumperDirection * Time.deltaTime;
+
+            // Si llega al límite, invertir dirección
+            if (jumperCurrentAngle >= jumperMaxAngle)
+            {
+                jumperCurrentAngle = jumperMaxAngle;
+                jumperDirection = -1f;
+            }
+            else if (jumperCurrentAngle <= -jumperMaxAngle)
+            {
+                jumperCurrentAngle = -jumperMaxAngle;
+                jumperDirection = 1f;
+            }
+
+            // Aplicar rotación
+            cachedTransform.rotation = Quaternion.Euler(0, 0, jumperCurrentAngle);
+        }
+
+        // VALUABLE: Detecta cuando llega al destino y se voltea
+        void CheckValuableDestination()
+        {
+            if (hasFlipped || !valuableFlipsAtEnd) return;
+
+            if (timeAlive >= valuableFlipTime)
+            {
+                hasReachedDestination = true;
+                StartCoroutine(FlipValuableEnemy());
+            }
+        }
+        System.Collections.IEnumerator FlipValuableEnemy()
+        {
+            hasFlipped = true;
+            Debug.Log($"VALUABLE volteándose 180° - ¡Ya no le pueden disparar!");
+
+            Quaternion startRotation = cachedTransform.rotation;
+            Quaternion targetRotation = startRotation * Quaternion.Euler(90, 0, 0);
+
+            float elapsed = 0f;
+
+            while (elapsed < valuableFlipDuration)
+            {
+                elapsed += Time.deltaTime;
+                float progress = elapsed / valuableFlipDuration;
+
+                cachedTransform.rotation = Quaternion.Lerp(startRotation, targetRotation, progress);
+
+                yield return null;
+            }
+
+            cachedTransform.rotation = targetRotation;
         }
 
         void SetupPattern(MovementPattern pattern)
@@ -130,7 +307,6 @@ namespace ShootingRange
             switch (pattern)
             {
                 case MovementPattern.Linear:
-                    // Sin configuración adicional necesaria
                     break;
 
                 case MovementPattern.Zigzag:
@@ -182,14 +358,10 @@ namespace ShootingRange
 
         Vector2 CalculateZigzagMovement()
         {
-            // Avanzar la fase del zigzag
             zigzagPhase += Time.deltaTime * frequency;
 
-            // Dirección base (hacia adelante)
             Vector2 forward = currentDirection;
-
-            // Componente lateral (zigzag)
-            Vector2 perpendicular = new Vector2(-forward.y, forward.x); // Perpendicular a forward
+            Vector2 perpendicular = new Vector2(-forward.y, forward.x);
             float sideMovement = Mathf.Sin(zigzagPhase) * amplitude;
 
             return (forward + perpendicular * sideMovement) * currentSpeed;
@@ -197,10 +369,8 @@ namespace ShootingRange
 
         Vector2 CalculateCircularMovement()
         {
-            // Incrementar ángulo
             circularAngle += Time.deltaTime * frequency;
 
-            // Calcular posición en círculo
             float x = Mathf.Cos(circularAngle) * amplitude;
             float y = Mathf.Sin(circularAngle) * amplitude;
 
@@ -214,13 +384,11 @@ namespace ShootingRange
         {
             erraticChangeTime += Time.deltaTime;
 
-            // Cambiar dirección aleatoriamente cada cierto tiempo
             if (erraticChangeTime >= 1f / frequency)
             {
                 erraticDirection = Random.insideUnitCircle.normalized;
                 erraticChangeTime = 0f;
 
-                // Ocasionalmente cambiar velocidad también
                 if (Random.value < 0.3f)
                 {
                     currentSpeed = baseSpeed + Random.Range(-speedVariation, speedVariation);
@@ -233,7 +401,6 @@ namespace ShootingRange
 
         void ApplyMovement()
         {
-            // Mover usando cached transform para mejor rendimiento
             Vector3 newPosition = cachedTransform.position + (Vector3)currentVelocity * Time.deltaTime;
             cachedTransform.position = newPosition;
         }
@@ -245,7 +412,6 @@ namespace ShootingRange
             Vector3 viewportPosition = gameCamera.WorldToViewportPoint(cachedTransform.position);
             bool bounced = false;
 
-            // Verificar límites y rebotar si es necesario
             if (viewportPosition.x < screenMargin / 10f)
             {
                 currentDirection.x = Mathf.Abs(currentDirection.x);
@@ -268,12 +434,10 @@ namespace ShootingRange
                 bounced = true;
             }
 
-            // Si rebotó, normalizar dirección
             if (bounced)
             {
                 currentDirection = currentDirection.normalized;
 
-                // Para circular, actualizar centro
                 if (currentPattern == MovementPattern.Circular)
                 {
                     circularCenter = cachedTransform.position;
@@ -290,13 +454,11 @@ namespace ShootingRange
             do
             {
                 newPattern = patterns[Random.Range(0, patterns.Length)];
-            } while (newPattern == currentPattern); // Evitar el mismo patrón
+            } while (newPattern == currentPattern);
 
             SetupPattern(newPattern);
             Debug.Log($"Patrón cambiado a: {newPattern}");
         }
-
-        // MÉTODOS PÚBLICOS PARA CONTROL EXTERNO
 
         public void SetPattern(MovementPattern newPattern)
         {
@@ -323,60 +485,29 @@ namespace ShootingRange
             enabled = true;
         }
 
-        // GETTERS PARA INFORMACIÓN
         public MovementPattern GetCurrentPattern() => currentPattern;
         public float GetCurrentSpeed() => currentSpeed;
         public Vector2 GetCurrentDirection() => currentDirection;
         public Vector2 GetCurrentVelocity() => currentVelocity;
 
-        // MÉTODOS DE DEBUG
         [ContextMenu("Change Pattern Randomly")]
         public void DebugChangePattern()
         {
             ChangePatternRandomly();
         }
 
-        [ContextMenu("Set Linear Pattern")]
-        public void DebugSetLinear()
-        {
-            SetupPattern(MovementPattern.Linear);
-        }
-
-        [ContextMenu("Set Zigzag Pattern")]
-        public void DebugSetZigzag()
-        {
-            SetupPattern(MovementPattern.Zigzag);
-        }
-
-        [ContextMenu("Set Circular Pattern")]
-        public void DebugSetCircular()
-        {
-            SetupPattern(MovementPattern.Circular);
-        }
-
-        [ContextMenu("Set Erratic Pattern")]
-        public void DebugSetErratic()
-        {
-            SetupPattern(MovementPattern.Erratic);
-        }
-
-        // Visualización de debug en Scene View
         void OnDrawGizmos()
         {
-            // Mostrar límites de pantalla siempre (incluso cuando no está en Play)
             DrawScreenBounds();
 
             if (!Application.isPlaying) return;
 
-            // Mostrar dirección actual
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(transform.position, transform.position + (Vector3)currentDirection * 2f);
 
-            // Mostrar velocidad actual
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, transform.position + (Vector3)currentVelocity);
 
-            // Para patrón circular, mostrar centro
             if (currentPattern == MovementPattern.Circular)
             {
                 Gizmos.color = Color.blue;
@@ -390,18 +521,15 @@ namespace ShootingRange
             if (cam == null) cam = Camera.main;
             if (cam == null) return;
 
-            // Calcular límites de pantalla
             float height = cam.orthographicSize;
             float width = height * cam.aspect;
             Vector3 camPos = cam.transform.position;
 
-            // Límites con margen
             float leftBound = camPos.x - width + screenMargin;
             float rightBound = camPos.x + width - screenMargin;
             float bottomBound = camPos.y - height + screenMargin;
             float topBound = camPos.y + height - screenMargin;
 
-            // Dibujar límites de pantalla (externos)
             Gizmos.color = Color.cyan;
             Vector3[] screenCorners = {
                 new Vector3(camPos.x - width, camPos.y - height, 0),
@@ -415,7 +543,6 @@ namespace ShootingRange
                 Gizmos.DrawLine(screenCorners[i], screenCorners[(i + 1) % 4]);
             }
 
-            // Dibujar límites con margen (donde rebotan los enemigos)
             if (keepInBounds)
             {
                 Gizmos.color = Color.red;
@@ -430,15 +557,6 @@ namespace ShootingRange
                 {
                     Gizmos.DrawLine(marginBounds[i], marginBounds[(i + 1) % 4]);
                 }
-
-                // Mostrar zona de margen
-                Gizmos.color = new Color(1f, 0f, 0f, 0.1f);
-
-                // Líneas de margen
-                Gizmos.DrawLine(screenCorners[0], marginBounds[0]); // Bottom-left
-                Gizmos.DrawLine(screenCorners[1], marginBounds[1]); // Bottom-right
-                Gizmos.DrawLine(screenCorners[2], marginBounds[2]); // Top-right
-                Gizmos.DrawLine(screenCorners[3], marginBounds[3]); // Top-left
             }
         }
     }

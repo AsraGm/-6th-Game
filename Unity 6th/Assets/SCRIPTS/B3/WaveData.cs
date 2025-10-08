@@ -18,7 +18,6 @@ namespace ShootingRange
         public int quantity;
         
         [Tooltip("Delay entre spawns individuales (segundos)")]
-        [Range(0.1f, 5f)]
         public float spawnDelay;
         
         [Header("Configuración Visual")]
