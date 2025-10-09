@@ -107,7 +107,23 @@ namespace ShootingRange
                 sr.color = Color.white;
             }
         }
+        void OnEnable()
+        {
+            // Registrar enemigo con ThemeManager para aplicar skin
+            if (ThemeManager.Instance != null)
+            {
+                ThemeManager.Instance.RegisterEnemy(this);
+            }
+        }
 
+        void OnDisable()
+        {
+            // Desregistrar del ThemeManager
+            if (ThemeManager.Instance != null)
+            {
+                ThemeManager.Instance.UnregisterEnemy(this);
+            }
+        }
         void CleanupEnemyState()
         {
             // Detener partículas si están reproduciéndose
