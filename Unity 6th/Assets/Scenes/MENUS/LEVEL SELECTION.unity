@@ -131,9 +131,9 @@ GameObject:
   - component: {fileID: 63706084}
   - component: {fileID: 63706083}
   - component: {fileID: 63706082}
-  - component: {fileID: 63706088}
   - component: {fileID: 63706087}
   - component: {fileID: 63706086}
+  - component: {fileID: 63706088}
   m_Layer: 5
   m_Name: MENU CANVAS
   m_TagString: Untagged
@@ -273,9 +273,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 63706081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c951f6ecfd5f01b41bd1a7a844e3133f, type: 3}
+  m_Script: {fileID: 11500000, guid: 1183e873cc35c9e4081b9d1f54616338, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::LEVELSELECTION
 --- !u!1 &724729975
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,8 +531,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 63706088}
-        m_TargetAssemblyTypeName: MAINMENU, Assembly-CSharp
-        m_MethodName: EXIT
+        m_TargetAssemblyTypeName: LEVELSELECTION, Assembly-CSharp
+        m_MethodName: L1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -664,8 +664,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 63706088}
-        m_TargetAssemblyTypeName: MAINMENU, Assembly-CSharp
-        m_MethodName: STORE
+        m_TargetAssemblyTypeName: LEVELSELECTION, Assembly-CSharp
+        m_MethodName: L1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1069,8 +1069,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 63706088}
-        m_TargetAssemblyTypeName: MAINMENU, Assembly-CSharp
-        m_MethodName: GAMESTARTED
+        m_TargetAssemblyTypeName: LEVELSELECTION, Assembly-CSharp
+        m_MethodName: L1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

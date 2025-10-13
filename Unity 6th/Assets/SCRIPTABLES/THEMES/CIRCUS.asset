@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34f7bde9ac9aa8c48984ba3c944cfb5e, type: 3}
   m_Name: CIRCUS
   m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.SOGameTheme
-  themeName: Circus Theme
+  themeName: Circus
   themeID: circus
   themeDescription: Circus Theme
-  themeIcon: {fileID: 21300000, guid: ca546107688daa043bff82c24d73f190, type: 3}
+  themeIcon: {fileID: 21300000, guid: 47f889fb1aa33a247ac8b0d7518d1225, type: 3}
   themeCost: 0
   normalEnemySprite: {fileID: 21300000, guid: 74819b743f74555489f8bf7334369291, type: 3}
   staticEnemySprite: {fileID: 21300000, guid: 3e86f37770c2a4e429cd6aed1f50cb9c, type: 3}
@@ -23,5 +23,5 @@ MonoBehaviour:
   jumperEnemySprite: {fileID: 21300000, guid: ba0d58568195ca1459afb3ff0952609a, type: 3}
   valuableEnemySprite: {fileID: 21300000, guid: b62201febdd455547bfff835a8b018bd, type: 3}
   innocentEnemySprite: {fileID: 21300000, guid: ca546107688daa043bff82c24d73f190, type: 3}
-  backgroundSprite: {fileID: 1256712488773506981, guid: a6a85efa39ece7a459ad0d8bc0bedbe1, type: 3}
+  backgroundSprite: {fileID: 21300000, guid: a6a85efa39ece7a459ad0d8bc0bedbe1, type: 3}
   curtainSprite: {fileID: -2788517720551565878, guid: 4d13d3545c7639443b9430b59a20fd25, type: 3}

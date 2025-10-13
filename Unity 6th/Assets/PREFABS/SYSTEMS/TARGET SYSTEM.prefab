@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6104058403365398186
+--- !u!1 &3281836608566485843
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,43 +8,50 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2758359777611185975}
-  - component: {fileID: 627630231737879956}
+  - component: {fileID: 8812707550975632803}
+  - component: {fileID: 1971361052462950061}
   m_Layer: 0
-  m_Name: THEME MANAGER
+  m_Name: TARGET SYSTEM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2758359777611185975
+--- !u!4 &8812707550975632803
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6104058403365398186}
+  m_GameObject: {fileID: 3281836608566485843}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &627630231737879956
+--- !u!114 &1971361052462950061
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6104058403365398186}
+  m_GameObject: {fileID: 3281836608566485843}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1660d8fce1f312448d65db4e721b026, type: 3}
+  m_Script: {fileID: 11500000, guid: f94c045bfb1c355429c60b4b4581f369, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.ThemeManager
-  currentTheme: {fileID: 11400000, guid: 93ee048c2e8b70844935ede8350bc9c1, type: 2}
-  backgroundRenderer: {fileID: 0}
-  curtainRenderer: {fileID: 0}
-  autoApplyOnChange: 1
+  m_EditorClassIdentifier: 
+  useTriggerOptimization: 1
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  scoreConfig: {fileID: 11400000, guid: ddd330c4d2ba5cb45b3fa5a23b37f848, type: 2}
+  scoreSystem: {fileID: 0}
+  useComponentCache: 1
+  innocentFeedback: {fileID: 0}
+  totalHits: 0
+  innocentHits: 0
+  enemyHits: 0

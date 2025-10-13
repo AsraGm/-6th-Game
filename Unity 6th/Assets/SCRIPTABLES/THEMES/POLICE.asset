@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34f7bde9ac9aa8c48984ba3c944cfb5e, type: 3}
+  m_Name: POLICE
+  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.SOGameTheme
+  themeName: Police
+  themeID: police
+  themeDescription: Terror Theme
+  themeIcon: {fileID: 21300000, guid: 47f889fb1aa33a247ac8b0d7518d1225, type: 3}
+  themeCost: 10
+  normalEnemySprite: {fileID: 21300000, guid: 5a66c0d4c3fa7f642b7f064f1dda7098, type: 3}
+  staticEnemySprite: {fileID: 21300000, guid: e53e7659c9b25f14e9b34d2b83edac43, type: 3}
+  zigzagEnemySprite: {fileID: 21300000, guid: dc9b3119783f1ea43a581b892730c853, type: 3}
+  jumperEnemySprite: {fileID: 21300000, guid: 6f7c4344ab05f8948a934ba76fa1bf25, type: 3}
+  valuableEnemySprite: {fileID: 21300000, guid: b225977b690793c428e4f851d36c8acd, type: 3}
+  innocentEnemySprite: {fileID: 21300000, guid: a64d7ec44f333a4428c4211691649562, type: 3}
+  backgroundSprite: {fileID: 21300000, guid: d1d0d165023b1f949b235a779e52ca4b, type: 3}
+  curtainSprite: {fileID: -2788517720551565878, guid: 4d13d3545c7639443b9430b59a20fd25, type: 3}

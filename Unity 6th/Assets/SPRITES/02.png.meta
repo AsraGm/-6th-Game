@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: d1d0d165023b1f949b235a779e52ca4b
+guid: 54e4dc06284c37446b8a19ee9c3e85ce
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1393925882343104700
-    second: (B) POLICE_0
+      213: -5225540622116197949
+    second: 02_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: (B) POLICE_0
+      name: 02_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cb0a8446438385310800000000000000
-      internalID: 1393925882343104700
+      spriteID: 3c9e3638d762b77b0800000000000000
+      internalID: -5225540622116197949
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      (B) POLICE_0: 1393925882343104700
+      02_0: -5225540622116197949
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

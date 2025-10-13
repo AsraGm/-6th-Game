@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34f7bde9ac9aa8c48984ba3c944cfb5e, type: 3}
+  m_Name: ROBOTS
+  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.SOGameTheme
+  themeName: Robots
+  themeID: robots
+  themeDescription: Robots Theme
+  themeIcon: {fileID: 21300000, guid: 47f889fb1aa33a247ac8b0d7518d1225, type: 3}
+  themeCost: 10
+  normalEnemySprite: {fileID: 21300000, guid: b3b582bbddcbec34fb256ded495530f9, type: 3}
+  staticEnemySprite: {fileID: 21300000, guid: c5e4e1036e296a440be422cce57f64f4, type: 3}
+  zigzagEnemySprite: {fileID: 21300000, guid: a84f97b0e2d48ed4d8e97632c7831262, type: 3}
+  jumperEnemySprite: {fileID: 21300000, guid: 5a3d80d5019435243b6941d398e0ca99, type: 3}
+  valuableEnemySprite: {fileID: 21300000, guid: e4eb5a803b4730e41a2dd7a3b76f9f42, type: 3}
+  innocentEnemySprite: {fileID: 21300000, guid: 26a8760a60f05c7468b8e90ba290e80d, type: 3}
+  backgroundSprite: {fileID: 21300000, guid: 74f7f74b3ec5a9c4caf4f9b4ce116fb7, type: 3}
+  curtainSprite: {fileID: -2788517720551565878, guid: 4d13d3545c7639443b9430b59a20fd25, type: 3}

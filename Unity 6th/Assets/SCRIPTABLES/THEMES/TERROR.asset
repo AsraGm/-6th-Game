@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34f7bde9ac9aa8c48984ba3c944cfb5e, type: 3}
+  m_Name: TERROR
+  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.SOGameTheme
+  themeName: Terror
+  themeID: terror
+  themeDescription: Terror Theme
+  themeIcon: {fileID: 21300000, guid: 47f889fb1aa33a247ac8b0d7518d1225, type: 3}
+  themeCost: 10
+  normalEnemySprite: {fileID: 21300000, guid: 08aaba7f5e8598f409a960602c6dfa31, type: 3}
+  staticEnemySprite: {fileID: 21300000, guid: c901cc7617c19d4408314fd7cee06f3a, type: 3}
+  zigzagEnemySprite: {fileID: 21300000, guid: d224b47a1a2b0af4d9a82b366898d7d8, type: 3}
+  jumperEnemySprite: {fileID: 21300000, guid: e9f97a044200fbd41a4c147f1f1afb58, type: 3}
+  valuableEnemySprite: {fileID: 21300000, guid: 20e048653629a5d42a63cdeaa4ee4ddb, type: 3}
+  innocentEnemySprite: {fileID: 21300000, guid: 3c5194ffb3c0f9241ab80c456a27ee7d, type: 3}
+  backgroundSprite: {fileID: 21300000, guid: 5090709a65b27904ab2aaab737ea4826, type: 3}
+  curtainSprite: {fileID: -2788517720551565878, guid: 4d13d3545c7639443b9430b59a20fd25, type: 3}
