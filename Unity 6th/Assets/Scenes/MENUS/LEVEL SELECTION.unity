@@ -134,8 +134,9 @@ GameObject:
   - component: {fileID: 63706087}
   - component: {fileID: 63706086}
   - component: {fileID: 63706088}
+  - component: {fileID: 63706089}
   m_Layer: 5
-  m_Name: MENU CANVAS
+  m_Name: LEVELS CANVAS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -276,6 +277,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1183e873cc35c9e4081b9d1f54616338, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LEVELSELECTION
+--- !u!114 &63706089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 63706081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c15b1403d202f014c9bda20614470a5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.MobileHUD
+  hudCanvas: {fileID: 63706084}
+  mainPanel: {fileID: 0}
+  applySafeArea: 1
+  safeAreaPanel: {fileID: 0}
+  minTouchSize: 44
+  autoScaleForAspect: 1
+  hudButtons:
+  - {fileID: 2077944539}
+  - {fileID: 1531686153}
+  - {fileID: 1147725922}
+  criticalUIElements: []
+  canvasRenderMode: 1
+  uiCamera: {fileID: 841972822}
+  screenSize: {x: 0, y: 0}
+  screenAspect: 0
+  safeArea:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  hasNotch: 0
 --- !u!1 &724729975
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,7 +495,7 @@ GameObject:
   - component: {fileID: 1147725923}
   - component: {fileID: 1147725922}
   m_Layer: 5
-  m_Name: EXIT
+  m_Name: Lv. 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -593,7 +628,7 @@ GameObject:
   - component: {fileID: 1531686154}
   - component: {fileID: 1531686153}
   m_Layer: 5
-  m_Name: STORE
+  m_Name: Lv. 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -998,7 +1033,7 @@ GameObject:
   - component: {fileID: 2077944540}
   - component: {fileID: 2077944539}
   m_Layer: 5
-  m_Name: START
+  m_Name: Lv. 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

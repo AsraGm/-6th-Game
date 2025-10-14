@@ -110,7 +110,7 @@ namespace ShootingRange
                     scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
                     scaler.referenceResolution = new Vector2(1080, 1920); // Resolución base móvil vertical
                     scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-                    scaler.matchWidthOrHeight = 0.5f; // Balance entre width y height
+                    scaler.matchWidthOrHeight = 0f; // Balance entre width y height
                 }
             }
         }
