@@ -103,10 +103,6 @@ namespace ShootingRange
                 sessionEarnings += amount;
                 totalEarningsAllTime += amount;
             }
-            
-            // Guardar automáticamente
-            SaveMoney();
-            
             // Notificar cambios con animación
             if (moneyDisplay != null)
             {

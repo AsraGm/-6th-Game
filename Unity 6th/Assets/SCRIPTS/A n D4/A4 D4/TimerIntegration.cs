@@ -208,7 +208,11 @@ namespace ShootingRange
             {
                 shootingSystem.enabled = false;
             }
-
+            if (moneySystem != null)
+            {
+                moneySystem.SaveMoney();
+                Debug.Log($"💾 Nivel completado - Dinero guardado: ${moneySystem.GetCurrentMoney()}");
+            }
             // Calcular resultados finales
             CalculateLevelResults();
 

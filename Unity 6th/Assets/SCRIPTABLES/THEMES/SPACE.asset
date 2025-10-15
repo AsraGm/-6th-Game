@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34f7bde9ac9aa8c48984ba3c944cfb5e, type: 3}
   m_Name: SPACE
   m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.SOGameTheme
-  themeName: SPACE
+  themeName: Space
   themeID: space
   themeDescription: Space Theme
   themeIcon: {fileID: 21300000, guid: 47f889fb1aa33a247ac8b0d7518d1225, type: 3}
