@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using ShootingRange;
 
-// INSTRUCCIÓN A1: Sistema de disparo táctil optimizado para móvil - VERSIÓN TOUCH DIRECTO
-// Características: Touch directo a enemigos, bala visual, pool de proyectiles
-
 public class TouchShootingSystem : MonoBehaviour
 {
     [Header("Configuración de Disparo")]
@@ -46,11 +43,9 @@ public class TouchShootingSystem : MonoBehaviour
     [Tooltip("Usar touch directo: toca enemigo = hit inmediato + bala visual")]
     public bool useDirectTouch = true;
 
-    // Sistema de Pool para balas VISUALES
     private Queue<GameObject> bulletPool = new Queue<GameObject>();
     private List<GameObject> activeBullets = new List<GameObject>();
 
-    // Control de input
     private bool canShoot = true;
     private float lastShotTime;
 
@@ -62,11 +57,9 @@ public class TouchShootingSystem : MonoBehaviour
     {
         InitializeBulletPool();
 
-        // Si no se asigna cámara, usar la principal
         if (shootingCamera == null)
             shootingCamera = Camera.main;
 
-        // Si no se asigna firePoint, usar la posición de este objeto
         if (firePoint == null)
             firePoint = this.transform;
     }
@@ -77,10 +70,8 @@ public class TouchShootingSystem : MonoBehaviour
         UpdateActiveBullets();
     }
 
-    // Manejo de input táctil - VERSIÓN TOUCH DIRECTO
     void HandleTouchInput()
     {
-        // Para móvil - Touch input
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
@@ -91,7 +82,6 @@ public class TouchShootingSystem : MonoBehaviour
             }
         }
 
-        // Para testing en editor - Mouse input
 #if UNITY_EDITOR
         if (Input.GetMouseButtonDown(0))
         {
@@ -100,14 +90,11 @@ public class TouchShootingSystem : MonoBehaviour
 #endif
     }
 
-    // NUEVO: Procesamiento de touch directo
     void ProcessDirectTouch(Vector2 screenPosition)
     {
-        // Verificar rate limiting
         if (!canShoot || Time.time - lastShotTime < fireRate)
             return;
 
-        // Verificar deadzone (opcional)
         if (IsInDeadZone(screenPosition))
             return;
 
@@ -115,7 +102,6 @@ public class TouchShootingSystem : MonoBehaviour
 
         if (useDirectTouch)
         {
-            // MÉTODO DIRECTO: Raycast desde cámara hacia donde tocaste
             Ray ray = shootingCamera.ScreenPointToRay(screenPosition);
             RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, targetLayer);
 
@@ -123,7 +109,6 @@ public class TouchShootingSystem : MonoBehaviour
             {
                 Debug.Log($"Touch directo HIT: {hit.collider.name} en {hit.point}");
 
-                // PROCESAR HIT INMEDIATAMENTE
                 TargetDetectionSystem detector = FindObjectOfType<TargetDetectionSystem>();
                 if (detector != null)
                 {
@@ -134,10 +119,8 @@ public class TouchShootingSystem : MonoBehaviour
                     Debug.Log($"Touch directo impactó: {hit.collider.name}");
                 }
 
-                // CREAR BALA VISUAL que vuele hacia el punto de impacto
                 CreateVisualBullet(firePoint.position, hit.point);
 
-                // Feedback táctil
                 if (useHapticFeedback)
                     TriggerHapticFeedback();
 
@@ -147,7 +130,6 @@ public class TouchShootingSystem : MonoBehaviour
             {
                 Debug.Log("Touch directo: No se detectó objetivo");
 
-                // FALLBACK: Crear bala hacia donde tocaste (sin hit)
                 Vector3 worldPos = shootingCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10f));
                 worldPos.z = 0;
                 CreateVisualBullet(firePoint.position, worldPos);
@@ -160,12 +142,10 @@ public class TouchShootingSystem : MonoBehaviour
         }
         else
         {
-            // MÉTODO ANTERIOR (por si quieres probarlo)
             ProcessShot(screenPosition);
         }
     }
 
-    // NUEVO: Crear bala puramente visual
     void CreateVisualBullet(Vector3 startPos, Vector3 targetPos)
     {
         GameObject bullet = GetPooledBullet();
@@ -175,17 +155,14 @@ public class TouchShootingSystem : MonoBehaviour
             bullet.transform.position = startPos;
             bullet.SetActive(true);
 
-            // Calcular dirección hacia el target
             Vector3 direction = (targetPos - startPos).normalized;
 
-            // Configurar comportamiento visual
             BulletBehavior bulletBehavior = bullet.GetComponent<BulletBehavior>();
             if (bulletBehavior == null)
             {
                 bulletBehavior = bullet.AddComponent<BulletBehavior>();
             }
 
-            // Inicializar como bala visual
             bulletBehavior.InitializeVisual(this, bulletLifetime, direction, bulletSpeed, targetPos);
 
             activeBullets.Add(bullet);
@@ -194,12 +171,10 @@ public class TouchShootingSystem : MonoBehaviour
         }
     }
 
-    // Método anterior (mantener para compatibilidad)
     void ProcessShot(Vector2 screenPosition)
     {
         Debug.Log("Usando método de disparo anterior");
 
-        // Tu código anterior aquí si necesitas fallback
         Vector3 worldPos = shootingCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10f));
         worldPos.z = 0;
 
@@ -213,7 +188,6 @@ public class TouchShootingSystem : MonoBehaviour
         lastShotTime = Time.time;
     }
 
-    // Inicializar pool de balas VISUALES
     void InitializeBulletPool()
     {
         for (int i = 0; i < poolSize; i++)
@@ -222,11 +196,9 @@ public class TouchShootingSystem : MonoBehaviour
             bullet.SetActive(false);
             bulletPool.Enqueue(bullet);
 
-            // Solo BulletBehavior para balas visuales
             if (bullet.GetComponent<BulletBehavior>() == null)
                 bullet.AddComponent<BulletBehavior>();
 
-            // Remover Rigidbody2D si existe (balas visuales no necesitan física)
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
@@ -235,7 +207,6 @@ public class TouchShootingSystem : MonoBehaviour
         }
     }
 
-    // Verificar si está en zona muerta
     bool IsInDeadZone(Vector2 screenPos)
     {
         Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
@@ -244,7 +215,6 @@ public class TouchShootingSystem : MonoBehaviour
         return Vector2.Distance(screenPos, screenCenter) < deadZonePixels;
     }
 
-    // Obtener bala del pool
     GameObject GetPooledBullet()
     {
         if (bulletPool.Count > 0)
@@ -252,12 +222,10 @@ public class TouchShootingSystem : MonoBehaviour
             return bulletPool.Dequeue();
         }
 
-        // Crear nueva bala visual
         GameObject newBullet = Instantiate(bulletPrefab);
         if (newBullet.GetComponent<BulletBehavior>() == null)
             newBullet.AddComponent<BulletBehavior>();
 
-        // Remover física
         Rigidbody2D rb = newBullet.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
@@ -267,7 +235,6 @@ public class TouchShootingSystem : MonoBehaviour
         return newBullet;
     }
 
-    // Devolver bala al pool
     public void ReturnBulletToPool(GameObject bullet)
     {
         bullet.SetActive(false);
@@ -275,7 +242,6 @@ public class TouchShootingSystem : MonoBehaviour
         bulletPool.Enqueue(bullet);
     }
 
-    // Actualizar balas activas
     void UpdateActiveBullets()
     {
         for (int i = activeBullets.Count - 1; i >= 0; i--)
@@ -286,8 +252,6 @@ public class TouchShootingSystem : MonoBehaviour
             }
         }
     }
-
-    // Feedback táctil
     void TriggerHapticFeedback()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -296,27 +260,8 @@ public class TouchShootingSystem : MonoBehaviour
         Handheld.Vibrate();
 #endif
     }
-
-    // Debug visual
-    void OnDrawGizmos()
-    {
-        if (firePoint != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(firePoint.position, 0.1f);
-        }
-
-        // Mostrar deadzone
-        if (shootingCamera != null)
-        {
-            Vector3 screenCenter = shootingCamera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, shootingCamera.nearClipPlane));
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(screenCenter, deadZone);
-        }
-    }
 }
 
-// COMPONENTE AUXILIAR: Comportamiento de bala VISUAL
 public class BulletBehavior : MonoBehaviour
 {
     private TouchShootingSystem parentSystem;
@@ -327,7 +272,6 @@ public class BulletBehavior : MonoBehaviour
     private Vector3 targetPosition;
     private bool isVisualOnly = false;
 
-    // NUEVO: Inicialización para balas visuales
     public void InitializeVisual(TouchShootingSystem parent, float life, Vector3 dir, float bulletSpeed, Vector3 target)
     {
         parentSystem = parent;
@@ -347,10 +291,8 @@ public class BulletBehavior : MonoBehaviour
 
         if (isVisualOnly)
         {
-            // Movimiento visual simple hacia el target
             transform.Translate(direction * speed * Time.deltaTime, Space.World);
 
-            // Verificar si llegó cerca del target o se acabó el tiempo
             if (Vector3.Distance(transform.position, targetPosition) < 0.5f || timeAlive >= lifetime)
             {
                 ReturnToPool();
@@ -358,7 +300,6 @@ public class BulletBehavior : MonoBehaviour
         }
         else
         {
-            // Método anterior para compatibilidad
             if (timeAlive >= lifetime)
             {
                 ReturnToPool();
@@ -368,7 +309,6 @@ public class BulletBehavior : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Solo para balas no visuales (fallback)
         if (!isVisualOnly)
         {
             TargetDetectionSystem detector = FindObjectOfType<TargetDetectionSystem>();
@@ -400,7 +340,6 @@ public class BulletBehavior : MonoBehaviour
         ReturnToPool();
     }
 
-    // Método legacy para compatibilidad
     public void Initialize(TouchShootingSystem parent, float life, float speedZ = 0f)
     {
         parentSystem = parent;

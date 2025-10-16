@@ -3,9 +3,6 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
-// ARCHIVO: ThemeStoreUI.cs - VERSIÓN CORREGIDA
-// Ahora mantiene todos los items visibles siempre
-
 namespace ShootingRange
 {
     public class ThemeStoreUI : MonoBehaviour
@@ -73,7 +70,6 @@ namespace ShootingRange
         [Tooltip("ARRASTRA AQUÍ tu MoneySystem")]
         public MoneySystem moneySystem;
 
-        // Variables privadas
         private List<ThemeStoreItem> spawnedItems = new List<ThemeStoreItem>();
         private SOGameTheme currentPreviewTheme;
         private Coroutine messageCoroutine;
@@ -85,20 +81,16 @@ namespace ShootingRange
 
         void InitializeUI()
         {
-            // Buscar sistemas si no están asignados
             FindSystems();
 
-            // Ocultar paneles inicialmente
             if (messagePanel != null)
                 messagePanel.SetActive(false);
 
             if (previewPanel != null)
                 previewPanel.SetActive(false);
 
-            // Configurar listeners de botones
             SetupButtons();
 
-            // Suscribirse a eventos del store manager
             if (storeManager != null)
             {
                 storeManager.OnStoreUpdated += RefreshStoreUI;
@@ -107,17 +99,12 @@ namespace ShootingRange
                 storeManager.OnPurchaseFailed += ShowMessage;
             }
 
-            // Suscribirse a cambios de dinero
             if (moneySystem != null)
             {
                 moneySystem.OnMoneyChanged += UpdateMoneyDisplay;
                 UpdateMoneyDisplay(moneySystem.CurrentMoney);
             }
-
-            // Popular la tienda
             PopulateStore();
-
-            Debug.Log("ThemeStoreUI inicializada");
         }
 
         void FindSystems()
@@ -127,7 +114,6 @@ namespace ShootingRange
                 storeManager = ThemeStoreManager.Instance;
                 if (storeManager == null)
                 {
-                    Debug.LogError("ThemeStoreManager no encontrado");
                 }
             }
 
@@ -150,44 +136,26 @@ namespace ShootingRange
             }
         }
 
-        // ========================================
-        // POBLACIÓN DE LA TIENDA
-        // ========================================
-
-        /// <summary>
-        /// Crea todos los items de temas en la UI
-        /// </summary>
         void PopulateStore()
         {
             if (storeManager == null || itemsContainer == null || themeItemPrefab == null)
             {
-                Debug.LogError("Faltan referencias para popular la tienda");
                 return;
             }
 
-            // Limpiar items existentes
             ClearStoreItems();
 
-            // Crear item para cada tema
             foreach (var theme in storeManager.availableThemes)
             {
                 CreateThemeItem(theme);
             }
-
-            Debug.Log($"Tienda poblada con {spawnedItems.Count} items");
-
-            // VERIFICACIÓN: Asegurar que todos están activos
             VerifyAllItemsVisible();
         }
 
-        /// <summary>
-        /// Crea un item individual de tema
-        /// </summary>
         void CreateThemeItem(SOGameTheme theme)
         {
             GameObject itemObj = Instantiate(themeItemPrefab, itemsContainer);
 
-            // FORZAR que el objeto esté activo
             itemObj.SetActive(true);
 
             ThemeStoreItem item = itemObj.GetComponent<ThemeStoreItem>();
@@ -196,18 +164,13 @@ namespace ShootingRange
             {
                 item.Initialize(theme, this);
                 spawnedItems.Add(item);
-                Debug.Log($"[ThemeStoreUI] Item creado para '{theme.themeName}' - Estado inicial verificado");
             }
             else
             {
-                Debug.LogError("ThemeItemPrefab no tiene componente ThemeStoreItem");
                 Destroy(itemObj);
             }
         }
 
-        /// <summary>
-        /// Limpia todos los items de la tienda
-        /// </summary>
         void ClearStoreItems()
         {
             foreach (var item in spawnedItems)
@@ -216,13 +179,8 @@ namespace ShootingRange
                     Destroy(item.gameObject);
             }
             spawnedItems.Clear();
-
-            Debug.Log("[ThemeStoreUI] Items limpiados");
         }
 
-        /// <summary>
-        /// Refresca todos los items (cuando hay cambios)
-        /// </summary>
         void RefreshStoreUI()
         {
             Debug.Log($"[ThemeStoreUI] Refrescando UI - Total items: {spawnedItems.Count}");
@@ -232,7 +190,6 @@ namespace ShootingRange
             {
                 if (item != null)
                 {
-                    // FORZAR que el item esté activo antes de actualizar
                     item.gameObject.SetActive(true);
                     item.UpdateState();
 
@@ -241,18 +198,12 @@ namespace ShootingRange
                 }
             }
 
-            Debug.Log($"[ThemeStoreUI] Items visibles después del refresh: {visibleCount}/{spawnedItems.Count}");
-
-            // Refrescar preview si hay uno activo
             if (currentPreviewTheme != null)
             {
                 ShowPreview(currentPreviewTheme);
             }
         }
 
-        /// <summary>
-        /// Verifica que todos los items estén visibles
-        /// </summary>
         void VerifyAllItemsVisible()
         {
             int activeCount = 0;
@@ -266,17 +217,9 @@ namespace ShootingRange
 
             if (activeCount < spawnedItems.Count)
             {
-                Debug.LogWarning($"[ThemeStoreUI] ⚠️ Hay {spawnedItems.Count - activeCount} items INVISIBLES!");
             }
         }
 
-        // ========================================
-        // SISTEMA DE PREVIEW
-        // ========================================
-
-        /// <summary>
-        /// Muestra el preview de un tema
-        /// </summary>
         public void ShowPreview(SOGameTheme theme)
         {
             if (theme == null || previewPanel == null)
@@ -285,7 +228,6 @@ namespace ShootingRange
             currentPreviewTheme = theme;
             previewPanel.SetActive(true);
 
-            // Actualizar imágenes
             if (previewBackgroundImage != null && theme.backgroundSprite != null)
             {
                 previewBackgroundImage.sprite = theme.backgroundSprite;
@@ -298,7 +240,6 @@ namespace ShootingRange
                 previewCurtainImage.gameObject.SetActive(true);
             }
 
-            // Actualizar textos
             if (previewThemeNameText != null)
                 previewThemeNameText.text = theme.themeName;
 
@@ -308,13 +249,9 @@ namespace ShootingRange
             if (previewPriceText != null)
                 previewPriceText.text = $"{moneyPrefix}{theme.themeCost}";
 
-            // Actualizar botones según estado del tema
             UpdatePreviewButtons(theme);
         }
 
-        /// <summary>
-        /// Actualiza los botones del preview según el estado del tema
-        /// </summary>
         void UpdatePreviewButtons(SOGameTheme theme)
         {
             if (storeManager == null) return;
@@ -324,7 +261,6 @@ namespace ShootingRange
             switch (state)
             {
                 case ThemeState.Locked:
-                    // Mostrar botón de compra
                     if (buyButton != null)
                     {
                         buyButton.gameObject.SetActive(true);
@@ -340,7 +276,6 @@ namespace ShootingRange
                     break;
 
                 case ThemeState.Unlocked:
-                    // Mostrar botón de equipar
                     if (buyButton != null)
                         buyButton.gameObject.SetActive(false);
 
@@ -352,7 +287,6 @@ namespace ShootingRange
                     break;
 
                 case ThemeState.Equipped:
-                    // Tema equipado, mostrar estado
                     if (buyButton != null)
                         buyButton.gameObject.SetActive(false);
 
@@ -369,9 +303,6 @@ namespace ShootingRange
             }
         }
 
-        /// <summary>
-        /// Oculta el preview
-        /// </summary>
         public void HidePreview()
         {
             if (previewPanel != null)
@@ -379,10 +310,6 @@ namespace ShootingRange
 
             currentPreviewTheme = null;
         }
-
-        // ========================================
-        // EVENTOS DE BOTONES
-        // ========================================
 
         void OnBuyButtonClicked()
         {
@@ -393,25 +320,20 @@ namespace ShootingRange
             {
                 ShowMessage($"¡{currentPreviewTheme.themeName} comprado!");
 
-                // CRÍTICO: Esperar un frame antes de refrescar
                 StartCoroutine(RefreshAfterPurchase());
             }
         }
 
         System.Collections.IEnumerator RefreshAfterPurchase()
         {
-            yield return null; // Esperar un frame
+            yield return null; 
 
-            // Refrescar el preview
             if (currentPreviewTheme != null)
             {
                 ShowPreview(currentPreviewTheme);
             }
 
-            // Verificar visibilidad
             VerifyAllItemsVisible();
-
-            Debug.Log("[ThemeStoreUI] UI refrescada después de compra");
         }
 
         void OnEquipButtonClicked()
@@ -424,10 +346,6 @@ namespace ShootingRange
                 ShowMessage($"¡{currentPreviewTheme.themeName} equipado!");
             }
         }
-
-        // ========================================
-        // CALLBACKS DE EVENTOS
-        // ========================================
 
         void OnThemePurchased(SOGameTheme theme)
         {
@@ -446,20 +364,12 @@ namespace ShootingRange
                 currentMoneyText.text = $"{moneyPrefix}{amount}";
             }
 
-            // Actualizar preview si está abierto
             if (currentPreviewTheme != null)
             {
                 UpdatePreviewButtons(currentPreviewTheme);
             }
         }
 
-        // ========================================
-        // SISTEMA DE MENSAJES
-        // ========================================
-
-        /// <summary>
-        /// Muestra un mensaje temporal
-        /// </summary>
         public void ShowMessage(string message)
         {
             if (messagePanel == null || messageText == null)
@@ -468,7 +378,6 @@ namespace ShootingRange
             messageText.text = message;
             messagePanel.SetActive(true);
 
-            // Cancelar mensaje anterior si existe
             if (messageCoroutine != null)
                 StopCoroutine(messageCoroutine);
 
@@ -483,13 +392,6 @@ namespace ShootingRange
                 messagePanel.SetActive(false);
         }
 
-        // ========================================
-        // MÉTODOS PÚBLICOS PARA UI
-        // ========================================
-
-        /// <summary>
-        /// Abre la tienda
-        /// </summary>
         public void OpenStore()
         {
             if (storePanel != null)
@@ -499,9 +401,6 @@ namespace ShootingRange
             VerifyAllItemsVisible();
         }
 
-        /// <summary>
-        /// Cierra la tienda
-        /// </summary>
         public void CloseStore()
         {
             if (storePanel != null)
@@ -510,29 +409,22 @@ namespace ShootingRange
             HidePreview();
         }
 
-        // ========================================
-        // DEBUG - CONTEXT MENU
-        // ========================================
-
         [ContextMenu("Force Verify All Items Visible")]
         void ForceVerifyVisibility()
         {
             VerifyAllItemsVisible();
 
-            // Reactivar todos manualmente
             foreach (var item in spawnedItems)
             {
                 if (item != null)
                 {
                     item.gameObject.SetActive(true);
-                    Debug.Log($"[ThemeStoreUI] Forzando visibilidad de: {item.name}");
                 }
             }
         }
 
         void OnDestroy()
         {
-            // Desuscribirse de eventos
             if (storeManager != null)
             {
                 storeManager.OnStoreUpdated -= RefreshStoreUI;

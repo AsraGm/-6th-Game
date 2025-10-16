@@ -1,8 +1,5 @@
 using UnityEngine;
 
-// ARCHIVO: TimerIntegration.cs - ACTUALIZADO PARA WAVE SYSTEM B3
-// Este reemplaza tu TimerIntegration existente
-
 namespace ShootingRange
 {
     public class TimerIntegration : MonoBehaviour
@@ -32,6 +29,9 @@ namespace ShootingRange
         [Tooltip("Mostrar mensajes de waves en consola")]
         public bool showWaveMessages = true;
 
+        [Tooltip("ARRASTRA AQUÍ tu ResultsScreen")]
+        public ResultsScreen resultsScreen;
+
         void Start()
         {
             if (autoStartTimer)
@@ -44,10 +44,8 @@ namespace ShootingRange
 
         void ConnectSystems()
         {
-            // Buscar sistemas automáticamente si no están asignados
             FindSystems();
 
-            // Conectar eventos del timer
             if (levelTimer != null)
             {
                 levelTimer.OnTimeUp += HandleTimeUp;
@@ -56,7 +54,6 @@ namespace ShootingRange
                 levelTimer.OnTimerStarted += HandleTimerStarted;
             }
 
-            // Conectar eventos del Wave System - ACTUALIZADO
             if (waveSystem != null)
             {
                 waveSystem.OnWaveStarted += HandleWaveStarted;
@@ -66,8 +63,6 @@ namespace ShootingRange
                 waveSystem.OnGameStarted += HandleGameStarted;
                 waveSystem.OnFinalWave += HandleFinalWave;
             }
-
-            Debug.Log("TimerIntegration: Sistemas conectados con WaveSystem B3");
         }
 
         void FindSystems()
@@ -91,9 +86,11 @@ namespace ShootingRange
             {
                 moneySystem = FindObjectOfType<MoneySystem>();
             }
+            if (resultsScreen == null)
+            {
+                resultsScreen = FindObjectOfType<ResultsScreen>();
+            }
         }
-
-        // MÉTODOS DE CONTROL PÚBLICO - MEJORADOS
 
         public void StartLevel()
         {
@@ -102,13 +99,10 @@ namespace ShootingRange
                 levelTimer.StartTimer();
             }
 
-            // CONEXIÓN CON WAVE SYSTEM B3
             if (waveSystem != null)
             {
                 waveSystem.StartWaveSystem();
             }
-
-            Debug.Log("Nivel iniciado con WaveSystem B3");
         }
 
         public void PauseLevel()
@@ -118,13 +112,10 @@ namespace ShootingRange
                 levelTimer.PauseTimer();
             }
 
-            // Pausar wave system
             if (waveSystem != null)
             {
                 waveSystem.PauseWaveSystem();
             }
-
-            Debug.Log("Nivel pausado");
         }
 
         public void ResumeLevel()
@@ -134,53 +125,39 @@ namespace ShootingRange
                 levelTimer.ResumeTimer();
             }
 
-            // Resumir wave system
             if (waveSystem != null)
             {
                 waveSystem.ResumeWaveSystem();
             }
-
-            Debug.Log("Nivel resumido");
         }
 
         public void RestartLevel()
         {
-            // Reset timer
             if (levelTimer != null)
             {
                 levelTimer.ResetTimer();
             }
 
-            // Reset wave system
             if (waveSystem != null)
             {
                 waveSystem.ResetWaveSystem();
             }
 
-            // Reset money de sesión
             if (moneySystem != null)
             {
                 moneySystem.ResetSessionEarnings();
             }
-
-            // Reiniciar después de un frame
             Invoke(nameof(StartLevel), 0.1f);
-
-            Debug.Log("Nivel reiniciado con WaveSystem B3");
         }
-
-        // MANEJADORES DE EVENTOS DEL TIMER - CONSERVADOS
 
         void HandleTimerStarted()
         {
-            Debug.Log("TimerIntegration: Timer iniciado");
         }
 
         void HandleWarning30()
         {
             if (showWaveMessages)
             {
-                Debug.Log("⚠️ ALERTA: 30 segundos restantes");
             }
         }
 
@@ -188,21 +165,16 @@ namespace ShootingRange
         {
             if (showWaveMessages)
             {
-                Debug.Log("🚨 ALERTA CRÍTICA: 10 segundos restantes");
             }
         }
 
         void HandleTimeUp()
         {
-            Debug.Log("⏰ TimerIntegration: Tiempo agotado - Finalizando nivel");
-
-            // DETENER WAVE SYSTEM
             if (waveSystem != null)
             {
                 waveSystem.StopWaveSystem();
             }
 
-            // Detener sistema de disparo
             TouchShootingSystem shootingSystem = FindObjectOfType<TouchShootingSystem>();
             if (shootingSystem != null)
             {
@@ -211,24 +183,17 @@ namespace ShootingRange
             if (moneySystem != null)
             {
                 moneySystem.SaveMoney();
-                Debug.Log($"💾 Nivel completado - Dinero guardado: ${moneySystem.GetCurrentMoney()}");
             }
-            // Calcular resultados finales
             CalculateLevelResults();
 
-            // Mostrar pantalla de resultados después de delay
             Invoke(nameof(ShowResults), 2f);
         }
-
-        // MANEJADORES DE EVENTOS DEL WAVE SYSTEM - NUEVOS
 
         void HandleGameStarted()
         {
             if (showWaveMessages)
             {
-                Debug.Log("🎮 ¡INICIO DE JUEGO! - Primera oleada comenzando");
             }
-
             // PLACEHOLDER: Efectos de UI para inicio de juego
             // UIManager.ShowMessage("¡INICIO DE JUEGO!");
         }
@@ -237,9 +202,7 @@ namespace ShootingRange
         {
             if (showWaveMessages)
             {
-                Debug.Log($"🌊 Wave iniciada: {wave.waveName} ({waveSystem.CurrentWaveIndex + 1}/{waveSystem.TotalWaves})");
             }
-
             // PLACEHOLDER: Efectos visuales/auditivos para nueva wave
             // UIManager.ShowWaveMessage($"Wave: {wave.waveName}");
             // AudioManager.PlayWaveStartSound();
@@ -251,7 +214,6 @@ namespace ShootingRange
             {
                 Debug.Log($"✅ Wave completada: {wave.waveName}");
             }
-
             // PLACEHOLDER: Efectos de wave completada
             // AudioManager.PlayWaveCompleteSound();
             // UIManager.ShowWaveCompleteEffect();
@@ -259,22 +221,15 @@ namespace ShootingRange
 
         void HandleAllWavesCompleted()
         {
-            Debug.Log("🏆 ¡TODAS LAS WAVES COMPLETADAS!");
-
-            // Opcional: Completar el nivel anticipadamente
             if (levelTimer != null && levelTimer.IsRunning)
             {
-                // Podrías terminar el nivel aquí o dejarlo continuar
-                Debug.Log("Waves completadas pero timer aún corriendo");
             }
         }
 
         void HandleEnemySpawned(int totalSpawned)
         {
-            // Solo para estadísticas, no hacer nada especial aquí
             if (totalSpawned % 10 == 0 && showWaveMessages)
             {
-                Debug.Log($"📊 Enemigos spawneados: {totalSpawned}");
             }
         }
 
@@ -282,9 +237,7 @@ namespace ShootingRange
         {
             if (showWaveMessages)
             {
-                Debug.Log("🔥 ¡CERCA DE TERMINAR! - Oleada final comenzando");
             }
-
             // PLACEHOLDER: Efectos especiales para wave final
             // UIManager.ShowFinalWaveMessage();
             // AudioManager.PlayFinalWaveMusic();
@@ -292,59 +245,38 @@ namespace ShootingRange
 
         void CalculateLevelResults()
         {
-            Debug.Log("📊 Calculando resultados del nivel...");
-
-            // CONEXIÓN CON MONEY SYSTEM - CONSERVADO
             if (moneySystem != null)
             {
                 int sessionEarnings = moneySystem.GetSessionEarnings();
                 int totalMoney = moneySystem.GetCurrentMoney();
-
-                Debug.Log($"💰 Dinero ganado esta sesión: ${sessionEarnings}");
-                Debug.Log($"💰 Dinero total: ${totalMoney}");
             }
 
-            // CONEXIÓN CON SCORE SYSTEM - CONSERVADO
             ScoreSystem scoreSystem = FindObjectOfType<ScoreSystem>();
             if (scoreSystem != null)
             {
                 int finalScore = scoreSystem.GetCurrentScore();
                 float accuracy = scoreSystem.GetAccuracy();
-
-                Debug.Log($"🎯 Puntuación final: {finalScore}");
-                Debug.Log($"🎯 Precisión: {accuracy:F1}%");
             }
 
-            // CONEXIÓN CON WAVE SYSTEM PARA ESTADÍSTICAS - NUEVO
             if (waveSystem != null)
             {
                 int enemiesSpawned = waveSystem.GetTotalEnemiesSpawned();
                 int currentWave = waveSystem.CurrentWaveIndex + 1;
                 int totalWaves = waveSystem.TotalWaves;
                 int activeEnemies = waveSystem.GetActiveEnemyCount();
-
-                Debug.Log($"👾 Enemigos spawneados: {enemiesSpawned}");
-                Debug.Log($"🌊 Waves completadas: {currentWave}/{totalWaves}");
-                Debug.Log($"👾 Enemigos activos restantes: {activeEnemies}");
             }
         }
 
         void ShowResults()
         {
-            Debug.Log("🏁 Mostrando pantalla de resultados");
-
-            // PLACEHOLDER: Conexión con Results Screen (Lista D6)
-            // ResultsScreen resultsScreen = FindObjectOfType<ResultsScreen>();
-            // if (resultsScreen != null)
-            // {
-            //     resultsScreen.ShowResults();
-            // }
-
-            Debug.Log("=== NIVEL COMPLETADO ===");
-            Debug.Log("Presiona R para reiniciar el nivel");
+            if (resultsScreen != null)
+            {
+                resultsScreen.ShowResults();
+            }
+            else
+            {
+            }
         }
-
-        // MÉTODOS PÚBLICOS PARA UI - MEJORADOS
 
         public void OnRestartButtonClicked()
         {
@@ -369,14 +301,11 @@ namespace ShootingRange
             // SceneManager.LoadScene("MainMenu");
         }
 
-        // MÉTODOS ESPECÍFICOS PARA WAVE SYSTEM - NUEVOS
-
         public void OnSkipWaveButtonClicked()
         {
             if (waveSystem != null && waveSystem.IsRunning)
             {
                 waveSystem.SkipCurrentWave();
-                Debug.Log("Wave saltada manualmente");
             }
         }
 
@@ -385,12 +314,8 @@ namespace ShootingRange
             if (waveSystem != null && waveSystem.CanSpawnMore())
             {
                 waveSystem.ForceSpawnEnemy(EnemyType.Normal);
-                Debug.Log("Enemigo spawneado forzadamente");
             }
         }
-
-        // MÉTODOS DE CONFIGURACIÓN - MEJORADOS
-
         public void SetLevelDuration(float seconds)
         {
             if (levelTimer != null)
@@ -434,7 +359,6 @@ namespace ShootingRange
             return waveSystem != null ? waveSystem.CurrentWave : null;
         }
 
-        // INPUT PARA TESTING - MEJORADO
         void Update()
         {
 #if UNITY_EDITOR
@@ -485,7 +409,6 @@ namespace ShootingRange
 
             if (Input.GetKeyDown(KeyCode.I))
             {
-                // Info debug
                 if (waveSystem != null)
                 {
                     waveSystem.DebugLogWaveInfo();
@@ -496,7 +419,6 @@ namespace ShootingRange
 
         void OnDestroy()
         {
-            // Desconectar eventos del timer
             if (levelTimer != null)
             {
                 levelTimer.OnTimeUp -= HandleTimeUp;
@@ -505,7 +427,6 @@ namespace ShootingRange
                 levelTimer.OnTimerStarted -= HandleTimerStarted;
             }
 
-            // Desconectar eventos del wave system - NUEVO
             if (waveSystem != null)
             {
                 waveSystem.OnWaveStarted -= HandleWaveStarted;

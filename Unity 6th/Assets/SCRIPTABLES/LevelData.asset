@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.SOLevelData
   levelNumber: 0
   levelName: Level #01
-  levelDuration: 60
+  levelDuration: 27
   allowedSpawnTypes: 0000000001000000040000000200000003000000
   baseSpawnRate: 2
   maxEnemiesAtOnce: 10

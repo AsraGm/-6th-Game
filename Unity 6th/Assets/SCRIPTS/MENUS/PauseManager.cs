@@ -87,6 +87,15 @@ namespace ShootingRange
                     Debug.LogWarning("MoneySystem no encontrado.");
                 }
             }
+
+            if (touchShootingSystem == null)
+            {
+                touchShootingSystem = FindObjectOfType<TouchShootingSystem>();
+                if (touchShootingSystem == null)
+                {
+                    Debug.LogWarning("TouchShootingSystem no encontrado.");
+                }
+            }
         }
 
         // MÉTODO PRINCIPAL: Pausar el juego
@@ -95,6 +104,12 @@ namespace ShootingRange
             if (isPaused) return; // Ya está pausado
 
             isPaused = true;
+
+            // LIMPIAR balas activas para evitar disparos accidentales del botón de pausa
+            if (touchShootingSystem != null)
+            {
+                ClearActiveBullets();
+            }
 
             // Pausar el tiempo del juego (esto pausa enemigos y físicas)
             if (useTimeScale)
@@ -108,6 +123,13 @@ namespace ShootingRange
                 timerIntegration.PauseLevel();
             }
 
+            // DESHABILITAR sistema de disparo para evitar disparos accidentales
+            if (touchShootingSystem != null)
+            {
+                touchShootingSystem.enabled = false;
+                Debug.Log("🔫 Sistema de disparo deshabilitado");
+            }
+
             // Mostrar panel de pausa
             if (pausePanel != null)
             {
@@ -117,7 +139,7 @@ namespace ShootingRange
             // Disparar evento
             OnGamePaused?.Invoke();
 
-            Debug.Log("Juego pausado");
+            Debug.Log("⏸️ Juego pausado");
         }
 
         // MÉTODO PRINCIPAL: Reanudar el juego
@@ -139,6 +161,13 @@ namespace ShootingRange
                 timerIntegration.ResumeLevel();
             }
 
+            // REHABILITAR sistema de disparo
+            if (touchShootingSystem != null)
+            {
+                touchShootingSystem.enabled = true;
+                Debug.Log("🔫 Sistema de disparo habilitado");
+            }
+
             // Ocultar panel de pausa
             if (pausePanel != null)
             {
@@ -148,7 +177,7 @@ namespace ShootingRange
             // Disparar evento
             OnGameResumed?.Invoke();
 
-            Debug.Log("Juego reanudado");
+            Debug.Log("▶️ Juego reanudado");
         }
 
         // Toggle pause (para botón de pausa en pantalla)
@@ -255,6 +284,32 @@ namespace ShootingRange
         public bool IsLevelActive()
         {
             return timerIntegration != null && timerIntegration.IsLevelActive();
+        }
+
+        // NUEVO: Limpiar balas activas
+        void ClearActiveBullets()
+        {
+            // Buscar todas las balas activas en la escena
+            BulletBehavior[] bullets = FindObjectsOfType<BulletBehavior>();
+
+            foreach (BulletBehavior bullet in bullets)
+            {
+                if (bullet != null && bullet.gameObject.activeInHierarchy)
+                {
+                    // Retornar al pool si es del sistema de disparo
+                    if (touchShootingSystem != null)
+                    {
+                        touchShootingSystem.ReturnBulletToPool(bullet.gameObject);
+                    }
+                    else
+                    {
+                        // Si no hay sistema, simplemente desactivar
+                        bullet.gameObject.SetActive(false);
+                    }
+                }
+            }
+
+            Debug.Log($"🧹 Limpiadas {bullets.Length} balas activas");
         }
     }
 }
