@@ -15,7 +15,7 @@ MonoBehaviour:
   themeName: Terror
   themeID: terror
   themeDescription: Terror Theme
-  themeIcon: {fileID: 21300000, guid: 47f889fb1aa33a247ac8b0d7518d1225, type: 3}
+  themeIcon: {fileID: 21300000, guid: 8b2a086d65bffd04098805795c623b2f, type: 3}
   themeCost: 10
   normalEnemySprite: {fileID: 21300000, guid: 08aaba7f5e8598f409a960602c6dfa31, type: 3}
   staticEnemySprite: {fileID: 21300000, guid: c901cc7617c19d4408314fd7cee06f3a, type: 3}

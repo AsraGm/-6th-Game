@@ -15,7 +15,7 @@ MonoBehaviour:
   themeName: Circus
   themeID: circus
   themeDescription: Circus Theme
-  themeIcon: {fileID: 21300000, guid: 47f889fb1aa33a247ac8b0d7518d1225, type: 3}
+  themeIcon: {fileID: 21300000, guid: 8b2a086d65bffd04098805795c623b2f, type: 3}
   themeCost: 0
   normalEnemySprite: {fileID: 21300000, guid: 74819b743f74555489f8bf7334369291, type: 3}
   staticEnemySprite: {fileID: 21300000, guid: 3e86f37770c2a4e429cd6aed1f50cb9c, type: 3}
