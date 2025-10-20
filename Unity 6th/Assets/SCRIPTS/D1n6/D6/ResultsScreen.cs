@@ -4,12 +4,13 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using System.Collections;
 
-// ARCHIVO: ResultsScreen.cs
-// Sistema de pantalla de resultados (D6) - Conectado con A3, A4, G1, F2
-// Muestra estadísticas del nivel completado
-
 namespace ShootingRange
 {
+    /// <summary>
+    /// Sistema de pantalla de resultados (D6)
+    /// INTEGRADO con G2 (StatsTracker) y G1 (SaveSystem)
+    /// Muestra estadísticas del nivel completado
+    /// </summary>
     public class ResultsScreen : MonoBehaviour
     {
         [Header("Referencias UI - Textos")]
@@ -27,6 +28,12 @@ namespace ShootingRange
 
         [Tooltip("ARRASTRA AQUÍ el texto de enemigos eliminados")]
         public TextMeshProUGUI enemiesKilledText;
+
+        [Tooltip("(Opcional) Texto para mostrar mejor puntaje")]
+        public TextMeshProUGUI bestScoreText;
+
+        [Tooltip("(Opcional) Indicador de nuevo récord")]
+        public GameObject newRecordIndicator;
 
         [Header("Referencias UI - Botones")]
         [Tooltip("ARRASTRA AQUÍ el botón para volver a Level Selection")]
@@ -55,18 +62,10 @@ namespace ShootingRange
         [Header("Colores")]
         public Color positiveColor = Color.green;
         public Color normalColor = Color.white;
+        public Color newRecordColor = Color.yellow;
 
-        // Referencias a sistemas
-        private MoneySystem moneySystem;
-        private LevelTimer levelTimer;
-        private ScoreSystem scoreSystem;
-        private WaveSystem waveSystem;
-
-        // Datos del nivel
-        private int sessionMoney;
-        private int totalMoney;
-        private float levelTime;
-        private int enemiesKilled;
+        // Datos del nivel (ahora vienen de StatsTracker)
+        private LevelStats currentLevelStats;
 
         void Start()
         {
@@ -75,13 +74,16 @@ namespace ShootingRange
 
         void InitializeResultsScreen()
         {
-            // Buscar sistemas
-            FindSystems();
-
             // Ocultar panel al inicio
             if (resultsPanel != null)
             {
                 resultsPanel.SetActive(false);
+            }
+
+            // Ocultar indicador de nuevo récord
+            if (newRecordIndicator != null)
+            {
+                newRecordIndicator.SetActive(false);
             }
 
             // Conectar botones
@@ -98,22 +100,12 @@ namespace ShootingRange
             Debug.Log("✅ ResultsScreen inicializado");
         }
 
-        void FindSystems()
-        {
-            if (moneySystem == null)
-                moneySystem = FindObjectOfType<MoneySystem>();
+        #region Show Results
 
-            if (levelTimer == null)
-                levelTimer = FindObjectOfType<LevelTimer>();
-
-            if (scoreSystem == null)
-                scoreSystem = FindObjectOfType<ScoreSystem>();
-
-            if (waveSystem == null)
-                waveSystem = FindObjectOfType<WaveSystem>();
-        }
-
-        // MÉTODO PRINCIPAL: Mostrar resultados
+        /// <summary>
+        /// MÉTODO PRINCIPAL: Mostrar resultados del nivel
+        /// Usa StatsTracker (G2) para obtener y guardar datos
+        /// </summary>
         public void ShowResults()
         {
             StartCoroutine(ShowResultsCoroutine());
@@ -124,11 +116,14 @@ namespace ShootingRange
             // Esperar el delay configurado
             yield return new WaitForSeconds(showDelay);
 
-            // Recopilar datos
-            CollectLevelData();
+            // CONEXIÓN G2: Completar nivel y obtener estadísticas
+            currentLevelStats = StatsTracker.Instance.CompleteLevelAndSave();
 
-            // Guardar progreso (CONEXIÓN G1)
-            SaveProgress();
+            if (currentLevelStats == null)
+            {
+                Debug.LogError("No se pudieron obtener estadísticas del nivel");
+                yield break;
+            }
 
             // Mostrar panel
             if (resultsPanel != null)
@@ -139,99 +134,85 @@ namespace ShootingRange
             // Actualizar UI con los datos
             UpdateResultsUI();
 
-            // Animación de fade in (simple)
+            // Animación de fade in
             yield return StartCoroutine(FadeInAnimation());
 
             Debug.Log("📊 Resultados mostrados");
         }
 
-        // Recopilar datos del nivel completado
-        void CollectLevelData()
-        {
-            // CONEXIÓN A3: Dinero
-            if (moneySystem != null)
-            {
-                sessionMoney = moneySystem.GetSessionEarnings();
-                totalMoney = moneySystem.GetCurrentMoney();
-            }
+        #endregion
 
-            // CONEXIÓN A4: Tiempo
-            if (levelTimer != null)
-            {
-                levelTime = levelTimer.LevelDuration - levelTimer.CurrentTime;
-            }
+        #region Update UI
 
-            // CONEXIÓN con ScoreSystem: Enemigos eliminados
-            if (scoreSystem != null)
-            {
-                enemiesKilled = scoreSystem.GetEnemiesHit();
-            }
-            else
-            {
-                // Fallback: usar WaveSystem si no hay ScoreSystem
-                if (waveSystem != null)
-                {
-                    enemiesKilled = waveSystem.GetTotalEnemiesSpawned();
-                }
-                else
-                {
-                    // Si no hay ninguno, poner 0
-                    enemiesKilled = 0;
-                }
-            }
-
-            Debug.Log($"📊 Datos recopilados - Dinero: ${sessionMoney}, Tiempo: {levelTime:F1}s, Enemigos: {enemiesKilled}");
-        }
-
-        // Actualizar UI con los datos recopilados
+        /// <summary>
+        /// Actualizar UI con las estadísticas del nivel
+        /// </summary>
         void UpdateResultsUI()
         {
+            if (currentLevelStats == null) return;
+
             // Título
             if (titleText != null)
             {
-                titleText.text = "¡NIVEL COMPLETADO!";
+                string title = currentLevelStats.isNewBestScore ?
+                    "¡NUEVO RÉCORD!" : "¡NIVEL COMPLETADO!";
+                titleText.text = title;
+
+                if (currentLevelStats.isNewBestScore)
+                {
+                    titleText.color = newRecordColor;
+                }
             }
 
             // Dinero de sesión
             if (sessionMoneyText != null)
             {
-                sessionMoneyText.text = $"Dinero Ganado: ${sessionMoney}";
-                sessionMoneyText.color = sessionMoney > 0 ? positiveColor : normalColor;
+                sessionMoneyText.text = $"Dinero Ganado: ${currentLevelStats.moneyEarned}";
+                sessionMoneyText.color = currentLevelStats.moneyEarned > 0 ? positiveColor : normalColor;
             }
 
-            // Dinero total
+            // Dinero total (CONEXIÓN G1 vía StatsTracker)
             if (totalMoneyText != null)
             {
+                int totalMoney = StatsTracker.Instance.GetTotalMoney();
                 totalMoneyText.text = $"Dinero Total: ${totalMoney}";
             }
 
             // Tiempo del nivel
             if (levelTimeText != null)
             {
-                levelTimeText.text = $"Tiempo: {FormatTime(levelTime)}";
+                levelTimeText.text = $"Tiempo: {FormatTime(currentLevelStats.timeSpent)}";
             }
 
             // Enemigos eliminados
             if (enemiesKilledText != null)
             {
-                enemiesKilledText.text = $"Enemigos Eliminados: {enemiesKilled}";
+                enemiesKilledText.text = $"Enemigos Eliminados: {currentLevelStats.enemiesKilled}";
             }
-        }
 
-        // Guardar progreso (CONEXIÓN G1)
-        void SaveProgress()
-        {
-            if (moneySystem != null)
+            // Mejor puntaje (opcional)
+            if (bestScoreText != null)
             {
-                moneySystem.SaveMoney();
-                Debug.Log("💾 Progreso guardado");
+                int bestScore = StatsTracker.Instance.GetBestScore(currentLevelStats.levelID);
+                bestScoreText.text = $"Mejor Score: {bestScore}";
             }
 
-            // PLACEHOLDER: Aquí podrías guardar best score, etc.
-            // PlayerPrefs.SetInt($"BestScore_{currentLevel}", bestScore);
+            // Indicador de nuevo récord (opcional)
+            if (newRecordIndicator != null)
+            {
+                newRecordIndicator.SetActive(currentLevelStats.isNewBestScore);
+            }
+
+            Debug.Log($"UI actualizada con stats: {currentLevelStats.ToString()}");
         }
 
-        // Formatear tiempo
+        #endregion
+
+        #region Utility Methods
+
+        /// <summary>
+        /// Formatear tiempo en formato MM:SS
+        /// </summary>
         string FormatTime(float seconds)
         {
             int minutes = Mathf.FloorToInt(seconds / 60f);
@@ -239,7 +220,9 @@ namespace ShootingRange
             return $"{minutes:00}:{secs:00}";
         }
 
-        // Animación simple de fade in
+        /// <summary>
+        /// Animación simple de fade in
+        /// </summary>
         IEnumerator FadeInAnimation()
         {
             CanvasGroup canvasGroup = resultsPanel.GetComponent<CanvasGroup>();
@@ -254,7 +237,7 @@ namespace ShootingRange
 
             while (elapsed < fadeInDuration)
             {
-                elapsed += Time.unscaledDeltaTime; // unscaledDeltaTime porque el juego puede estar pausado
+                elapsed += Time.unscaledDeltaTime;
                 canvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeInDuration);
                 yield return null;
             }
@@ -262,7 +245,13 @@ namespace ShootingRange
             canvasGroup.alpha = 1f;
         }
 
-        // BOTÓN: Volver a Level Selection (CONEXIÓN F2)
+        #endregion
+
+        #region Button Callbacks
+
+        /// <summary>
+        /// BOTÓN: Volver a Level Selection
+        /// </summary>
         public void BackToLevelSelection()
         {
             Debug.Log($"🔙 Volviendo a {levelSelectionSceneName}");
@@ -274,7 +263,9 @@ namespace ShootingRange
             SceneManager.LoadScene(levelSelectionSceneName);
         }
 
-        // BOTÓN: Reintentar nivel
+        /// <summary>
+        /// BOTÓN: Reintentar nivel
+        /// </summary>
         public void RetryLevel()
         {
             Debug.Log("🔄 Reintentando nivel");
@@ -286,23 +277,31 @@ namespace ShootingRange
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
-        // MÉTODO PÚBLICO: Mostrar resultados con datos específicos (uso avanzado)
-        public void ShowResultsWithData(int money, int total, float time, int enemies)
-        {
-            sessionMoney = money;
-            totalMoney = total;
-            levelTime = time;
-            enemiesKilled = enemies;
+        #endregion
 
-            ShowResults();
-        }
+        #region Testing Methods
 
-        // MÉTODO PARA TESTING
+        /// <summary>
+        /// Método para testing - Mostrar resultados con datos de prueba
+        /// </summary>
         [ContextMenu("Test Show Results")]
         public void TestShowResults()
         {
-            ShowResultsWithData(150, 1000, 120f, 25);
+            // Crear datos de prueba
+            currentLevelStats = new LevelStats
+            {
+                levelID = "Level_Test",
+                moneyEarned = 250,
+                enemiesKilled = 15,
+                timeSpent = 120f,
+                finalScore = 250,
+                isNewBestScore = true
+            };
+
+            StartCoroutine(ShowResultsCoroutine());
         }
+
+        #endregion
 
         void OnDestroy()
         {

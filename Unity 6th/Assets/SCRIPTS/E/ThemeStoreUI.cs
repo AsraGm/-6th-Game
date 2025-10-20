@@ -268,7 +268,7 @@ namespace ShootingRange
                         buyButton.interactable = canAfford;
 
                         if (buyButtonText != null)
-                            buyButtonText.text = canAfford ? "COMPRAR" : "PLAY MORE!!";
+                            buyButtonText.text = canAfford ? "BUY" : "PLAY MORE!!";
                     }
 
                     if (equipButton != null)
