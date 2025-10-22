@@ -15,9 +15,9 @@ MonoBehaviour:
   levelName: Level 1
   levelNumber: 1
   waves:
-  - {fileID: 11400000, guid: a62d3c0b4a9b47545858e2b29855d11e, type: 2}
   - {fileID: 11400000, guid: db9c19aaf6110fb40b3218de52a499dc, type: 2}
   - {fileID: 11400000, guid: 2e3fbc6ee8899bf408bb0dc36bfbd894, type: 2}
+  - {fileID: 11400000, guid: a62d3c0b4a9b47545858e2b29855d11e, type: 2}
   waveTransitionDelay: 1
   showWaveTransitionMessages: 1
   enemyPrefabs:
@@ -31,13 +31,15 @@ MonoBehaviour:
     prefab: {fileID: 7437913946537063531, guid: 4a8e265dada3b1a4d8c53299fa82f0b8, type: 3}
   - enemyType: 4
     prefab: {fileID: 7437913946537063531, guid: 870bd44ff40394d4c9b8ffe4a2da8fb7, type: 3}
+  - enemyType: 1
+    prefab: {fileID: 7437913946537063531, guid: fc99033513e15244fad3417cf8396742, type: 3}
   totalWaves: 3
   totalEnemies: 14
-  estimatedDuration: 48
+  estimatedDuration: 30
   enemyTypesUsed:
-  - Jumper
-  - Valuable
   - ZigZag
   - Static
   - Normal
   - Innocent
+  - Jumper
+  - Valuable

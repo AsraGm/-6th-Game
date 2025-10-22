@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc35b003d1bc57647990634b5c795e13, type: 3}
   m_Name: LevelData
   m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.SOLevelData
+  levelID: Level_01
   levelNumber: 0
   levelName: Level #01
-  levelDuration: 27
-  allowedSpawnTypes: 0000000001000000040000000200000003000000
+  levelDuration: 20
+  allowedSpawnTypes: 000000000100000004000000020000000300000005000000
   baseSpawnRate: 2
   maxEnemiesAtOnce: 10
   difficultyMultiplier: 1.5

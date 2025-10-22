@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: MoneyConfig
   m_EditorClassIdentifier: 
   normalEnemyMoney: 5
-  fastEnemyMoney: 8
-  jumperEnemyMoney: 10
+  staticEnemyMoney: 7
+  zigZagEnemyMoney: 10
+  jumperEnemyMoney: 12
   valuableEnemyMoney: 25
-  innocentPenalty: 15
+  innocentPenalty: 25
   moneyMultiplier: 1
   startingMoney: 0

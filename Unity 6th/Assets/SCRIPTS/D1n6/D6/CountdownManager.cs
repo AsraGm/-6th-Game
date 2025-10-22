@@ -2,686 +2,527 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-
-
-// ARCHIVO: CountdownManager_Simple.cs
-
-// VersiÃ³n SUPER SIMPLE con GameObjects activados/desactivados
-
-
-
 namespace ShootingRange
-
 {
-
-    public class CountdownManager_Simple : MonoBehaviour
-
+    public class CountdownManager: MonoBehaviour
     {
-
         [Header("Referencias de Sistema")]
-
         public WaveSystem waveSystem;
-
         public LevelTimer levelTimer;
-
         public ThemeManager themeManager;
 
-
-
-        [Header("ConfiguraciÃ³n de Countdown")]
-
+        [Header("Configuración de Countdown")]
         [Range(0.3f, 2f)]
-
         public float phaseDuration = 0.8f;
-
-
-
         public float goDuration = 0.5f;
-
-
-
         public bool autoStart = true;
 
-
-
         [Header("Audio (Opcional)")]
-
         public AudioClip readySetSound;
-
         public AudioClip goSound;
 
-
-
-        [Header("Global Light Control (Opcional)")]
-
-        [Tooltip("Arrastra tu Global Light 2D aquÃ­")]
-
+        [Header("Global Light Control")]
+        [Tooltip("Arrastra tu Global Light 2D aquí")]
         public UnityEngine.Rendering.Universal.Light2D globalLight;
 
-
-
         [Tooltip("Intensidad inicial (oscuro)")]
-
         public float startLightIntensity = 0f;
 
-
-
         [Tooltip("Intensidad final (normal)")]
-
         public float targetLightIntensity = 1.2f;
 
-
-
-        [Tooltip("DuraciÃ³n de la transiciÃ³n de luz")]
-
+        [Tooltip("Duración de la transición de luz")]
         public float lightFadeDuration = 1.5f;
 
-
+        [Header("Sistema de Luces Adicionales")]
+        [Tooltip("Luces adicionales que se activarán en tiempos específicos")]
+        public AdditionalLightConfig[] additionalLights;
 
         [Header("UIs por Tema")]
-
         public CountdownUITheme[] countdownUIs;
 
-
-
         private bool isCountdownActive = false;
-
         private CountdownUITheme currentUI;
-
         private AudioSource audioSource;
-
-
+        private float countdownStartTime;
 
         [System.Serializable]
-
-        public class CountdownUITheme
-
+        public class AdditionalLightConfig
         {
+            [Tooltip("Nombre identificador de esta luz")]
+            public string lightName;
 
+            [Tooltip("Componente Light 2D a controlar")]
+            public UnityEngine.Rendering.Universal.Light2D light2D;
+
+            [Header("Configuración de Fade")]
+            [Tooltip("¿Activar fade para esta luz?")]
+            public bool enableFade = true;
+
+            [Tooltip("Tiempo de delay antes de iniciar el fade (desde inicio del countdown)")]
+            public float fadeStartDelay = 0f;
+
+            [Tooltip("Duración del fade")]
+            public float fadeDuration = 1.5f;
+
+            [Tooltip("Intensidad inicial")]
+            public float startIntensity = 0f;
+
+            [Tooltip("Intensidad final")]
+            public float targetIntensity = 1f;
+
+            [Header("Configuración de Activación por Tiempo")]
+            [Tooltip("¿Activar/desactivar la luz en momentos específicos?")]
+            public bool enableTimedToggle = false;
+
+            [Tooltip("Tiempo para ENCENDER la luz (desde inicio del countdown)")]
+            public float turnOnTime = 0f;
+
+            [Tooltip("Tiempo para APAGAR la luz (desde inicio del countdown, 0 = no apagar)")]
+            public float turnOffTime = 0f;
+
+            [HideInInspector]
+            public bool isProcessing = false;
+        }
+
+        [System.Serializable]
+        public class CountdownUITheme
+        {
             [Tooltip("Nombre del tema (Western, Zombie, etc.)")]
-
             public string themeName;
 
-
-
-            [Tooltip("GameObject raÃ­z que contiene todo")]
-
+            [Tooltip("GameObject raíz que contiene todo")]
             public GameObject uiRoot;
 
-
-
             [Header("Luces 2D (GameObjects con Light 2D)")]
-
             [Tooltip("GameObject con Light 2D roja")]
-
             public GameObject redLight;
 
-
-
             [Tooltip("GameObject con Light 2D amarilla")]
-
             public GameObject yellowLight;
 
-
-
             [Tooltip("GameObject con Light 2D verde")]
-
             public GameObject greenLight;
 
-
-
             [Header("Texto del Mensaje")]
-
             public TextMeshProUGUI messageTextTMP;
-
         }
-
-
 
         void Start()
-
         {
-
             Initialize();
 
-
-
             if (autoStart)
-
             {
-
                 StartCountdown();
-
             }
-
         }
-
-
 
         void Initialize()
-
         {
-
             // Buscar sistemas
-
             if (waveSystem == null)
-
                 waveSystem = FindObjectOfType<WaveSystem>();
 
-
-
             if (levelTimer == null)
-
                 levelTimer = FindObjectOfType<LevelTimer>();
 
-
-
             if (themeManager == null)
-
                 themeManager = FindObjectOfType<ThemeManager>();
 
-
-
             // AudioSource
-
             audioSource = GetComponent<AudioSource>();
-
             if (audioSource == null)
-
                 audioSource = gameObject.AddComponent<AudioSource>();
 
-
-
             // Ocultar todos los UIs
-
             HideAllCountdownUIs();
 
-
-
             // Configurar Global Light en intensidad inicial
-
             if (globalLight != null)
-
             {
-
                 globalLight.intensity = startLightIntensity;
-
             }
 
+            // Inicializar luces adicionales
+            InitializeAdditionalLights();
 
-
-            Debug.Log("âœ… CountdownManager_Simple inicializado");
-
+            Debug.Log("✅ CountdownManager_Enhanced inicializado");
         }
 
+        void InitializeAdditionalLights()
+        {
+            if (additionalLights == null || additionalLights.Length == 0)
+            {
+                Debug.Log("No hay luces adicionales configuradas");
+                return;
+            }
 
+            foreach (var lightConfig in additionalLights)
+            {
+                if (lightConfig.light2D != null)
+                {
+                    // Configurar intensidad inicial
+                    if (lightConfig.enableFade)
+                    {
+                        lightConfig.light2D.intensity = lightConfig.startIntensity;
+                    }
+
+                    // Si tiene timed toggle, iniciar apagada
+                    if (lightConfig.enableTimedToggle)
+                    {
+                        lightConfig.light2D.gameObject.SetActive(false);
+                    }
+
+                    lightConfig.isProcessing = false;
+                    Debug.Log($"🔆 Luz '{lightConfig.lightName}' inicializada");
+                }
+                else
+                {
+                    Debug.LogWarning($"⚠️ Light2D no asignado para '{lightConfig.lightName}'");
+                }
+            }
+        }
 
         void HideAllCountdownUIs()
-
         {
-
             foreach (var ui in countdownUIs)
-
             {
-
                 if (ui.uiRoot != null)
-
                 {
-
                     ui.uiRoot.SetActive(false);
-
                 }
-
             }
-
         }
-
-
 
         public void StartCountdown()
-
         {
-
             if (isCountdownActive)
-
             {
-
-                Debug.LogWarning("Countdown ya estÃ¡ activo");
-
+                Debug.LogWarning("Countdown ya está activo");
                 return;
-
             }
-
-
 
             StartCoroutine(CountdownSequence());
-
         }
-
-
 
         IEnumerator CountdownSequence()
-
         {
-
             isCountdownActive = true;
+            countdownStartTime = Time.time;
 
-
-
-            // Seleccionar UI segÃºn tema
-
+            // Seleccionar UI según tema
             SelectCurrentThemeUI();
 
-
-
             if (currentUI == null)
-
             {
-
-                Debug.LogError("No se encontrÃ³ UI para el tema actual");
-
+                Debug.LogError("No se encontró UI para el tema actual");
                 CompleteCountdown();
-
                 yield break;
-
             }
-
-
 
             // Mostrar UI Root
-
             currentUI.uiRoot.SetActive(true);
 
-
-
             // Apagar todas las luces al inicio
-
             TurnOffAllLights(currentUI);
 
-
-
             // Iniciar fade de Global Light en paralelo
-
             Coroutine lightFade = null;
-
             if (globalLight != null)
-
             {
-
                 lightFade = StartCoroutine(FadeGlobalLight());
-
             }
 
-
+            // Iniciar sistema de luces adicionales
+            StartCoroutine(ManageAdditionalLights());
 
             // FASE 1: READY
-
             yield return StartCoroutine(ShowPhaseSimple("READY", currentUI.redLight));
 
-
-
             // FASE 2: SET
-
             yield return StartCoroutine(ShowPhaseSimple("SET", currentUI.yellowLight));
 
-
-
             // FASE 3: GO
-
             yield return StartCoroutine(ShowPhaseSimple("GO!", currentUI.greenLight, true));
 
-
-
             // ESPERAR a que el fade de luz termine antes de continuar
-
             if (lightFade != null)
-
             {
-
                 yield return lightFade;
-
             }
 
-
+            // Esperar a que todas las luces adicionales terminen si están configuradas
+            yield return StartCoroutine(WaitForAdditionalLights());
 
             // Ocultar UI
-
             currentUI.uiRoot.SetActive(false);
 
-
-
             // Completar e iniciar juego
-
             CompleteCountdown();
-
         }
 
-
-
-        void SelectCurrentThemeUI()
-
+        IEnumerator ManageAdditionalLights()
         {
+            if (additionalLights == null || additionalLights.Length == 0)
+                yield break;
 
-            currentUI = null;
-
-
-
-            // Si no hay ThemeManager, usar el primero
-
-            if (themeManager == null)
-
+            foreach (var lightConfig in additionalLights)
             {
+                if (lightConfig.light2D == null) continue;
 
-                if (countdownUIs.Length > 0)
-
+                // Iniciar fade si está habilitado
+                if (lightConfig.enableFade)
                 {
-
-                    currentUI = countdownUIs[0];
-
-                    Debug.LogWarning("ThemeManager no encontrado, usando primer UI");
-
+                    StartCoroutine(FadeAdditionalLight(lightConfig));
                 }
 
-                return;
+                // Iniciar toggle por tiempo si está habilitado
+                if (lightConfig.enableTimedToggle)
+                {
+                    StartCoroutine(TimedToggleLight(lightConfig));
+                }
+            }
+        }
 
+        IEnumerator FadeAdditionalLight(AdditionalLightConfig config)
+        {
+            config.isProcessing = true;
+
+            // Esperar el delay inicial
+            if (config.fadeStartDelay > 0)
+            {
+                yield return new WaitForSeconds(config.fadeStartDelay);
             }
 
+            float elapsed = 0f;
+            Debug.Log($"💡 Iniciando fade de '{config.lightName}': {config.startIntensity} → {config.targetIntensity}");
 
+            while (elapsed < config.fadeDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / config.fadeDuration;
 
-            // Obtener tema actual
+                // Lerp suave con curva ease-in-out
+                float smoothT = Mathf.SmoothStep(0f, 1f, t);
+                config.light2D.intensity = Mathf.Lerp(config.startIntensity, config.targetIntensity, smoothT);
+
+                yield return null;
+            }
+
+            // Asegurar valor final
+            config.light2D.intensity = config.targetIntensity;
+            config.isProcessing = false;
+
+            Debug.Log($"✅ Fade completo para '{config.lightName}'");
+        }
+
+        IEnumerator TimedToggleLight(AdditionalLightConfig config)
+        {
+            config.isProcessing = true;
+
+            // Esperar hasta el tiempo de encendido
+            float timeToWait = config.turnOnTime;
+            if (timeToWait > 0)
+            {
+                yield return new WaitForSeconds(timeToWait);
+            }
+
+            // Encender luz
+            config.light2D.gameObject.SetActive(true);
+            Debug.Log($"🔆 Luz '{config.lightName}' ENCENDIDA en t={config.turnOnTime}s");
+
+            // Si hay tiempo de apagado configurado
+            if (config.turnOffTime > config.turnOnTime && config.turnOffTime > 0)
+            {
+                float offDelay = config.turnOffTime - config.turnOnTime;
+                yield return new WaitForSeconds(offDelay);
+
+                config.light2D.gameObject.SetActive(false);
+                Debug.Log($"🔴 Luz '{config.lightName}' APAGADA en t={config.turnOffTime}s");
+            }
+
+            config.isProcessing = false;
+        }
+
+        IEnumerator WaitForAdditionalLights()
+        {
+            if (additionalLights == null || additionalLights.Length == 0)
+                yield break;
+
+            bool anyProcessing = true;
+            while (anyProcessing)
+            {
+                anyProcessing = false;
+                foreach (var lightConfig in additionalLights)
+                {
+                    if (lightConfig.isProcessing)
+                    {
+                        anyProcessing = true;
+                        break;
+                    }
+                }
+
+                if (anyProcessing)
+                {
+                    yield return null;
+                }
+            }
+
+            Debug.Log("✅ Todas las luces adicionales completadas");
+        }
+
+        void SelectCurrentThemeUI()
+        {
+            currentUI = null;
+
+            if (themeManager == null)
+            {
+                if (countdownUIs.Length > 0)
+                {
+                    currentUI = countdownUIs[0];
+                    Debug.LogWarning("ThemeManager no encontrado, usando primer UI");
+                }
+                return;
+            }
 
             string currentTheme = GetCurrentThemeName();
 
-
-
-            // Buscar UI correspondiente
-
             foreach (var ui in countdownUIs)
-
             {
-
                 if (ui.themeName.Equals(currentTheme, System.StringComparison.OrdinalIgnoreCase))
-
                 {
-
                     currentUI = ui;
-
-                    Debug.Log($"ðŸŽ¨ UI de countdown: {ui.themeName}");
-
+                    Debug.Log($"🎨 UI de countdown: {ui.themeName}");
                     return;
-
                 }
-
             }
-
-
-
-            // Fallback
 
             if (countdownUIs.Length > 0)
-
             {
-
                 currentUI = countdownUIs[0];
-
-                Debug.LogWarning($"No se encontrÃ³ UI para '{currentTheme}', usando fallback");
-
+                Debug.LogWarning($"No se encontró UI para '{currentTheme}', usando fallback");
             }
-
         }
-
-
 
         string GetCurrentThemeName()
-
         {
-
-            // Usar el mÃ©todo pÃºblico del ThemeManager
-
             if (themeManager != null)
-
             {
-
                 return themeManager.GetCurrentThemeName();
-
             }
 
-
-
-            return "Default"; // Fallback si no hay ThemeManager
-
+            return "Default";
         }
 
-
-
         IEnumerator ShowPhaseSimple(string message, GameObject light, bool isGoPhase = false)
-
         {
-
-            Debug.Log($"ðŸ”¦ Fase: {message} | Luz: {(light != null ? light.name : "NULL")}");
-
-
-
-            // Actualizar texto
+            Debug.Log($"🏁 Fase: {message} | Luz: {(light != null ? light.name : "NULL")}");
 
             SetMessage(message);
 
-
-
-            // Encender luz
-
             if (light != null)
-
             {
-
                 light.SetActive(true);
-
-                Debug.Log($"âœ… Luz {light.name} activada");
-
+                Debug.Log($"✅ Luz {light.name} activada");
             }
-
             else
-
             {
-
-                Debug.LogError($"âŒ Luz es NULL para fase {message}");
-
+                Debug.LogError($"❌ Luz es NULL para fase {message}");
             }
-
-
-
-            // Reproducir sonido
 
             PlaySound(isGoPhase ? goSound : readySetSound);
 
-
-
-            // Esperar
-
             float duration = isGoPhase ? goDuration : phaseDuration;
-
             yield return new WaitForSeconds(duration);
 
-
-
-            // Apagar luz
-
             if (light != null)
-
             {
-
                 light.SetActive(false);
-
-                Debug.Log($"ðŸ”´ Luz {light.name} desactivada");
-
+                Debug.Log($"🔴 Luz {light.name} desactivada");
             }
-
         }
-
-
 
         void TurnOffAllLights(CountdownUITheme ui)
-
         {
-
             if (ui.redLight != null)
-
                 ui.redLight.SetActive(false);
 
-
-
             if (ui.yellowLight != null)
-
                 ui.yellowLight.SetActive(false);
 
-
-
             if (ui.greenLight != null)
-
                 ui.greenLight.SetActive(false);
-
         }
-
-
 
         void SetMessage(string message)
-
         {
-
             if (currentUI.messageTextTMP != null)
-
             {
-
                 currentUI.messageTextTMP.text = message;
-
             }
-
         }
-
-
 
         void PlaySound(AudioClip clip)
-
         {
-
             if (audioSource != null && clip != null)
-
             {
-
                 audioSource.PlayOneShot(clip);
-
             }
-
         }
-
-
 
         void CompleteCountdown()
-
         {
-
             isCountdownActive = false;
 
-
-
-            // Iniciar sistemas del juego
-
             if (waveSystem != null)
-
             {
-
                 waveSystem.StartWaveSystem();
-
             }
-
-
 
             if (levelTimer != null)
-
             {
-
                 levelTimer.StartTimer();
-
             }
 
-
-
-            Debug.Log("âœ… Countdown completado - Juego iniciado");
-
+            Debug.Log("✅ Countdown completado - Juego iniciado");
         }
 
-
-
         IEnumerator FadeGlobalLight()
-
         {
-
             if (globalLight == null) yield break;
-
-
 
             float elapsed = 0f;
 
-
-
-            Debug.Log($"ðŸ’¡ Iniciando fade: {startLightIntensity} â†’ {targetLightIntensity} en {lightFadeDuration}s");
-
-
+            Debug.Log($"💡 Iniciando fade global: {startLightIntensity} → {targetLightIntensity} en {lightFadeDuration}s");
 
             while (elapsed < lightFadeDuration)
-
             {
-
-                elapsed += Time.deltaTime; // Cambiado de unscaledDeltaTime a deltaTime
-
+                elapsed += Time.deltaTime;
                 float t = elapsed / lightFadeDuration;
 
-
-
-                // Lerp suave con curva ease-in-out
-
                 float smoothT = Mathf.SmoothStep(0f, 1f, t);
-
                 globalLight.intensity = Mathf.Lerp(startLightIntensity, targetLightIntensity, smoothT);
 
-
-
-                Debug.Log($"Fade progress: {t:F2} | Intensity: {globalLight.intensity:F2}");
-
-
-
                 yield return null;
-
             }
-
-
-
-            // Asegurar valor final
 
             globalLight.intensity = targetLightIntensity;
 
-
-
-            Debug.Log($"ðŸ’¡ Global Light fade completo: {targetLightIntensity}");
-
+            Debug.Log($"💡 Global Light fade completo: {targetLightIntensity}");
         }
-
-
 
         public bool IsCountdownActive() => isCountdownActive;
 
-
-
-        [ContextMenu("Test Countdown")]
-
-        public void TestCountdown()
-
+        public float GetCountdownElapsedTime()
         {
-
-            StartCountdown();
-
+            return isCountdownActive ? Time.time - countdownStartTime : 0f;
         }
 
+        [ContextMenu("Test Countdown")]
+        public void TestCountdown()
+        {
+            StartCountdown();
+        }
     }
-
 }

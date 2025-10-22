@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WaveData 2
   m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.WaveData
   waveName: '#00'
-  waveDuration: 15
+  waveDuration: 9
   warningTime: 3
   enemiesToSpawn:
   - enemyType: 3
@@ -24,7 +24,7 @@ MonoBehaviour:
     quantity: 2
     spawnDelay: 0.8
     rotationDelay: 1
-  initialDelay: 0.5
+  initialDelay: 0.3
   spawnInRandomOrder: 0
   totalEnemies: 5
-  estimatedSpawnTime: 2.4
+  estimatedSpawnTime: 2.2

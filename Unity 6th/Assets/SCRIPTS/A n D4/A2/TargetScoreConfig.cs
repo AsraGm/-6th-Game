@@ -9,17 +9,20 @@ namespace ShootingRange
     public class TargetScoreConfig : ScriptableObject
     {
         [Header("Puntuaciones por Tipo de Enemigo")]
+        [Tooltip("Puntos que da un enemigo statico al ser disparado")]
+        public int staticScore = 5;
+
         [Tooltip("Puntos que da un enemigo normal al ser disparado")]
-        public int normalEnemyScore = 10;
+        public int normalScore= 10;
         
         [Tooltip("Puntos que da un enemigo rápido al ser disparado")]
-        public int fastEnemyScore = 15;
+        public int zigZagEnemy = 15;
         
         [Tooltip("Puntos que da un enemigo saltador al ser disparado")]
-        public int jumperEnemyScore = 20;
+        public int hangedScore = 20;
         
         [Tooltip("Puntos que da un enemigo valioso al ser disparado")]
-        public int valuableEnemyScore = 50;
+        public int valuableScore = 50;
         
         [Header("Penalizaciones")]
         [Tooltip("Puntos que se RESTAN al disparar un inocente (número negativo)")]
@@ -30,14 +33,16 @@ namespace ShootingRange
         {
             switch (enemyType)
             {
+                case EnemyType.Static:
+                    return staticScore;
                 case EnemyType.Normal:
-                    return normalEnemyScore;
+                    return normalScore;
                 case EnemyType.ZigZag:
-                    return fastEnemyScore;
+                    return zigZagEnemy;
                 case EnemyType.Jumper:
-                    return jumperEnemyScore;
+                    return hangedScore;
                 case EnemyType.Valuable:
-                    return valuableEnemyScore;
+                    return valuableScore;
                 case EnemyType.Innocent:
                     return innocentPenalty;
                 default:
