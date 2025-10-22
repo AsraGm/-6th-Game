@@ -94,6 +94,12 @@ namespace ShootingRange
 
         public void StartLevel()
         {
+            if (StatsTracker.Instance != null)
+            {
+                string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+                StatsTracker.Instance.StartLevelSession(currentSceneName);
+            }
+
             if (levelTimer != null)
             {
                 levelTimer.StartTimer();
@@ -361,6 +367,10 @@ namespace ShootingRange
 
         void Update()
         {
+            if (levelTimer != null && levelTimer.IsRunning && StatsTracker.Instance != null)
+            {
+                StatsTracker.Instance.UpdateSessionTime(levelTimer.LevelDuration - levelTimer.CurrentTime);
+            }
 #if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.Space))
             {

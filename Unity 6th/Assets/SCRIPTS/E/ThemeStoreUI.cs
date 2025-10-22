@@ -268,7 +268,7 @@ namespace ShootingRange
                         buyButton.interactable = canAfford;
 
                         if (buyButtonText != null)
-                            buyButtonText.text = canAfford ? "BUY" : "PLAY MORE!!";
+                            buyButtonText.text = canAfford ? "BUY" : "BUY";
                     }
 
                     if (equipButton != null)
@@ -297,7 +297,7 @@ namespace ShootingRange
 
                         var equipText = equipButton.GetComponentInChildren<TextMeshProUGUI>();
                         if (equipText != null)
-                            equipText.text = "EQUIPADO";
+                            equipText.text = "EQUIP";
                     }
                     break;
             }

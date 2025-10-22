@@ -51,6 +51,11 @@ namespace ShootingRange
         }
         public void OnHit(ObjectType objectType, int scoreValue)
         {
+            if (StatsTracker.Instance != null && enemyType != EnemyType.Innocent)
+            {
+                StatsTracker.Instance.AddEnemyKilled();
+            }
+
             Debug.Log($"{name} ({enemyType}) fue disparado! Puntos: {scoreValue}");
 
             // Reproducir efectos visuales

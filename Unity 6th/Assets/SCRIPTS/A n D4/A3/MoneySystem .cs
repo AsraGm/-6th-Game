@@ -96,7 +96,10 @@ namespace ShootingRange
             
             // No permitir dinero negativo
             currentMoney = Mathf.Max(0, currentMoney);
-            
+            if (isPositive && amount > 0 && StatsTracker.Instance != null)
+            {
+                StatsTracker.Instance.AddSessionMoney(amount);
+            }
             // Actualizar estadísticas
             if (isPositive && amount > 0)
             {

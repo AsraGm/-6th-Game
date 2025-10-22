@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   themeID: Normal
-  hitParticles: {fileID: 0}
+  hitParticles: {fileID: 3620693087637465483, guid: 4fefd7f7eef046744a0a6d58ef6826d5, type: 3}
   hitSound: {fileID: 0}
 --- !u!114 &-8763723296083514941
 MonoBehaviour:
@@ -185,6 +185,7 @@ MonoBehaviour:
   jumperMaxAngle: 45
   valuableFlipsAtEnd: 0
   valuableFlipDuration: 0.1
+  valuableFlipTime: 3
 --- !u!114 &2684199557902135247
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 3
   themeID: Hanged
-  hitParticles: {fileID: 0}
+  hitParticles: {fileID: 3620693087637465483, guid: 4fefd7f7eef046744a0a6d58ef6826d5, type: 3}
   hitSound: {fileID: 0}
 --- !u!114 &-8763723296083514941
 MonoBehaviour:

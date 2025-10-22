@@ -24,4 +24,4 @@ MonoBehaviour:
   valuableEnemySprite: {fileID: 21300000, guid: 20e048653629a5d42a63cdeaa4ee4ddb, type: 3}
   innocentEnemySprite: {fileID: 21300000, guid: 3c5194ffb3c0f9241ab80c456a27ee7d, type: 3}
   backgroundSprite: {fileID: 21300000, guid: 5090709a65b27904ab2aaab737ea4826, type: 3}
-  curtainSprite: {fileID: -2788517720551565878, guid: 4d13d3545c7639443b9430b59a20fd25, type: 3}
+  curtainSprite: {fileID: 21300000, guid: e0e8b2e329f69234bbaa05d24b442665, type: 3}

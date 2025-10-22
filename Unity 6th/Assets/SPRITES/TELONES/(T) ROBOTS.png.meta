@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 54e4dc06284c37446b8a19ee9c3e85ce
+guid: 5225ac0de9bdadd4c89e892897ae4bf0
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5225540622116197949
-    second: 02_0
+      213: 8958614704389323498
+    second: (T) ROBOTS_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,11 +96,24 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 02_0
+      name: (T) ROBOTS_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3c9e3638d762b77b0800000000000000
-      internalID: -5225540622116197949
+      spriteID: aea77bedb94635c70800000000000000
+      internalID: 8958614704389323498
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      02_0: -5225540622116197949
+      (T) ROBOTS_0: 8958614704389323498
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
