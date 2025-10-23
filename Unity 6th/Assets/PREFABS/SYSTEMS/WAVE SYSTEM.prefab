@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7988512634123613880}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.4477751, y: 2.5650818, z: -81.53827}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -67,21 +67,25 @@ MonoBehaviour:
     spawnPoints:
     - {fileID: 0}
     - {fileID: 0}
-  - enemyType: 4
+  - enemyType: 3
     spawnPoints:
     - {fileID: 0}
-    - {fileID: 0}
-  - enemyType: 5
-    spawnPoints:
     - {fileID: 0}
     - {fileID: 0}
   - enemyType: 2
     spawnPoints:
     - {fileID: 0}
     - {fileID: 0}
-  - enemyType: 3
+    - {fileID: 0}
+  - enemyType: 4
     spawnPoints:
+    - {fileID: 0}
+    - {fileID: 0}
     - {fileID: 0}
   - enemyType: 1
     spawnPoints:
+    - {fileID: 0}
+  - enemyType: 5
+    spawnPoints:
+    - {fileID: 0}
     - {fileID: 0}

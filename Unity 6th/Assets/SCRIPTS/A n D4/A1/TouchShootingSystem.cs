@@ -43,15 +43,22 @@ public class TouchShootingSystem : MonoBehaviour
     [Tooltip("Usar touch directo: toca enemigo = hit inmediato + bala visual")]
     public bool useDirectTouch = true;
 
+    [Header("Control de Disparo")]
+    [Tooltip("Tiempo mínimo entre disparos en segundos. 0.1 = 10 disparos por segundo máximo")]
+    public float fireRate = 0.2f;
+
+    [Header("🖱️ Control de Mouse (Editor/PC)")]
+    [Tooltip("¿Permitir disparo continuo manteniendo clic izquierdo?")]
+    public bool allowContinuousFire = true;
+
+    [Tooltip("¿Disparar también con clic derecho?")]
+    public bool allowRightClick = false;
+
     private Queue<GameObject> bulletPool = new Queue<GameObject>();
     private List<GameObject> activeBullets = new List<GameObject>();
 
     private bool canShoot = true;
     private float lastShotTime;
-
-    [Header("Control de Disparo")]
-    [Tooltip("Tiempo mínimo entre disparos en segundos. 0.1 = 10 disparos por segundo máximo")]
-    public float fireRate = 0.2f;
 
     void Start()
     {
@@ -67,11 +74,13 @@ public class TouchShootingSystem : MonoBehaviour
     void Update()
     {
         HandleTouchInput();
+        HandleMouseInput(); // 🆕 Método separado para mouse
         UpdateActiveBullets();
     }
 
     void HandleTouchInput()
     {
+        // Solo procesar touch si estamos en dispositivo móvil
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
@@ -81,11 +90,34 @@ public class TouchShootingSystem : MonoBehaviour
                 ProcessDirectTouch(touch.position);
             }
         }
+    }
 
-#if UNITY_EDITOR
+    // 🆕 MÉTODO NUEVO: Manejo completo de mouse
+    void HandleMouseInput()
+    {
+#if UNITY_EDITOR || UNITY_STANDALONE
+        // Clic izquierdo - Disparo al presionar
         if (Input.GetMouseButtonDown(0))
         {
             ProcessDirectTouch(Input.mousePosition);
+        }
+        // Mantener presionado - Disparo continuo (si está habilitado)
+        else if (allowContinuousFire && Input.GetMouseButton(0))
+        {
+            ProcessDirectTouch(Input.mousePosition);
+        }
+
+        // Clic derecho (opcional)
+        if (allowRightClick)
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                ProcessDirectTouch(Input.mousePosition);
+            }
+            else if (allowContinuousFire && Input.GetMouseButton(1))
+            {
+                ProcessDirectTouch(Input.mousePosition);
+            }
         }
 #endif
     }
@@ -96,9 +128,12 @@ public class TouchShootingSystem : MonoBehaviour
             return;
 
         if (IsInDeadZone(screenPosition))
+        {
+            Debug.Log("❌ Disparo bloqueado: Zona muerta");
             return;
+        }
 
-        Debug.Log($"Touch directo en: {screenPosition}");
+        Debug.Log($"🎯 Touch/Clic en: {screenPosition}");
 
         if (useDirectTouch)
         {
@@ -107,7 +142,7 @@ public class TouchShootingSystem : MonoBehaviour
 
             if (hit.collider != null)
             {
-                Debug.Log($"Touch directo HIT: {hit.collider.name} en {hit.point}");
+                Debug.Log($"✅ HIT directo: {hit.collider.name} en {hit.point}");
 
                 TargetDetectionSystem detector = FindObjectOfType<TargetDetectionSystem>();
                 if (detector != null)
@@ -116,7 +151,7 @@ public class TouchShootingSystem : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log($"Touch directo impactó: {hit.collider.name}");
+                    Debug.Log($"⚠️ TargetDetectionSystem no encontrado. Impacto en: {hit.collider.name}");
                 }
 
                 CreateVisualBullet(firePoint.position, hit.point);
@@ -128,7 +163,7 @@ public class TouchShootingSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Touch directo: No se detectó objetivo");
+                Debug.Log("⚪ No se detectó objetivo - Bala visual al punto");
 
                 Vector3 worldPos = shootingCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10f));
                 worldPos.z = 0;
@@ -167,13 +202,13 @@ public class TouchShootingSystem : MonoBehaviour
 
             activeBullets.Add(bullet);
 
-            Debug.Log($"Bala visual creada: {startPos} -> {targetPos}, Dir: {direction}");
+            Debug.Log($"💥 Bala visual creada: {startPos} -> {targetPos}");
         }
     }
 
     void ProcessShot(Vector2 screenPosition)
     {
-        Debug.Log("Usando método de disparo anterior");
+        Debug.Log("🔫 Usando método de disparo anterior (sin detección directa)");
 
         Vector3 worldPos = shootingCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 10f));
         worldPos.z = 0;
@@ -205,10 +240,14 @@ public class TouchShootingSystem : MonoBehaviour
                 DestroyImmediate(rb);
             }
         }
+
+        Debug.Log($"🎯 Bullet Pool inicializado: {poolSize} balas");
     }
 
     bool IsInDeadZone(Vector2 screenPos)
     {
+        if (deadZone <= 0f) return false; // Sin zona muerta
+
         Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
         float deadZonePixels = deadZone * Screen.height;
 
@@ -222,6 +261,7 @@ public class TouchShootingSystem : MonoBehaviour
             return bulletPool.Dequeue();
         }
 
+        Debug.LogWarning("⚠️ Pool vacío - Creando bala nueva");
         GameObject newBullet = Instantiate(bulletPrefab);
         if (newBullet.GetComponent<BulletBehavior>() == null)
             newBullet.AddComponent<BulletBehavior>();
@@ -252,6 +292,7 @@ public class TouchShootingSystem : MonoBehaviour
             }
         }
     }
+
     void TriggerHapticFeedback()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -259,6 +300,32 @@ public class TouchShootingSystem : MonoBehaviour
 #elif UNITY_IOS && !UNITY_EDITOR
         Handheld.Vibrate();
 #endif
+    }
+
+    // 🆕 MÉTODOS DE DEBUG
+    [ContextMenu("🔍 Test Mouse Input")]
+    void TestMouseInput()
+    {
+        Debug.Log("=== TEST MOUSE INPUT ===");
+        Debug.Log($"Allow Continuous Fire: {allowContinuousFire}");
+        Debug.Log($"Allow Right Click: {allowRightClick}");
+        Debug.Log($"Fire Rate: {fireRate}s");
+        Debug.Log($"Dead Zone: {deadZone * 100}%");
+    }
+
+    void OnDrawGizmos()
+    {
+        // Visualizar zona muerta en Scene view
+        if (shootingCamera != null && deadZone > 0)
+        {
+            Vector3 screenCenter = shootingCamera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 10f));
+            screenCenter.z = 0;
+
+            float worldDeadZone = deadZone * 2f; // Aproximación visual
+
+            Gizmos.color = new Color(1f, 0f, 0f, 0.2f);
+            Gizmos.DrawSphere(screenCenter, worldDeadZone);
+        }
     }
 }
 
@@ -282,7 +349,9 @@ public class BulletBehavior : MonoBehaviour
         targetPosition = target;
         isVisualOnly = true;
 
-        Debug.Log($"Bala visual inicializada hacia: {target}");
+        // Rotar bala hacia la dirección
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
     void Update()
@@ -317,7 +386,7 @@ public class BulletBehavior : MonoBehaviour
                 detector.ProcessBulletHit(other.gameObject, transform.position);
             }
 
-            Debug.Log($"Bala impactó: {other.name}");
+            Debug.Log($"💥 Bala impactó: {other.name}");
         }
 
         ReturnToPool();

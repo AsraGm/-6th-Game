@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b576cb39d7ec6454daf969a99695afa7, type: 3}
+  m_Name: Level #02
+  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.LevelConfiguration
+  levelName: Level 2
+  levelNumber: 2
+  waves:
+  - {fileID: 11400000, guid: d353134301afe784fbc86f024c301881, type: 2}
+  - {fileID: 11400000, guid: 8281fffe2d0b74b41b351d7f8d71edeb, type: 2}
+  - {fileID: 11400000, guid: 1915dd37e3988af488365dfc79f9a51c, type: 2}
+  - {fileID: 11400000, guid: 8f6a47222ff9a804599efbc1e825d587, type: 2}
+  - {fileID: 11400000, guid: 168e4bd87ba1e514c99a404a456abd71, type: 2}
+  - {fileID: 11400000, guid: b934bde3864177a409a3d79c25f9a154, type: 2}
+  waveTransitionDelay: 1
+  showWaveTransitionMessages: 1
+  enemyPrefabs:
+  - enemyType: 0
+    prefab: {fileID: 7437913946537063531, guid: b29f533555baa33458ca323493fb9012, type: 3}
+  - enemyType: 2
+    prefab: {fileID: 7437913946537063531, guid: e094a9b7dd259b845ad10265dd7ce6a4, type: 3}
+  - enemyType: 5
+    prefab: {fileID: 7437913946537063531, guid: 5929d73aef19fa6488e784afcd0ef453, type: 3}
+  - enemyType: 3
+    prefab: {fileID: 7437913946537063531, guid: 4a8e265dada3b1a4d8c53299fa82f0b8, type: 3}
+  - enemyType: 4
+    prefab: {fileID: 7437913946537063531, guid: 870bd44ff40394d4c9b8ffe4a2da8fb7, type: 3}
+  - enemyType: 1
+    prefab: {fileID: 7437913946537063531, guid: fc99033513e15244fad3417cf8396742, type: 3}
+  totalWaves: 6
+  totalEnemies: 47
+  estimatedDuration: 70
+  enemyTypesUsed:
+  - Jumper
+  - ZigZag
+  - Normal
+  - Innocent
+  - Valuable
+  - Static

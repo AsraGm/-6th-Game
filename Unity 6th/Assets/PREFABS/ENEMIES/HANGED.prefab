@@ -216,13 +216,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.EnemyMovementPatterns
   currentPattern: 2
-  baseSpeed: 4
-  speedVariation: 0.8
-  amplitude: 1
-  frequency: 0.5
-  initialDirection: {x: 1, y: 0}
+  baseSpeed: 6
+  speedVariation: 0.3
+  amplitude: 3
+  frequency: 0.7
+  initialDirection: {x: 1, y: 0.1}
   changePatternsInFlight: 1
-  patternChangeInterval: 2.24
+  patternChangeInterval: 1.86
   keepInBounds: 1
   screenMargin: 1.18
   enemyType: 3

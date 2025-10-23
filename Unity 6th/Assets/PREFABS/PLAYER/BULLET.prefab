@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1953651566319640982}
   - component: {fileID: -1014230796879254213}
   - component: {fileID: 1648483321143970256}
+  - component: {fileID: 2432244602727806000}
   m_Layer: 9
   m_Name: BULLET
   m_TagString: Untagged
@@ -137,3 +138,25 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2.54, y: 2.54}
   m_EdgeRadius: 0
+--- !u!95 &2432244602727806000
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9163442320148204173}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: eaca870b6eba8fa44bb8d5e031865d33, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

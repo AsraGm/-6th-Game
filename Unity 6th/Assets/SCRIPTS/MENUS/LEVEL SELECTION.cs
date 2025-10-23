@@ -15,6 +15,12 @@ public class LEVELSELECTION: MonoBehaviour
         Debug.Log("Entering Level Selection");
         SceneManager.LoadScene("LEVEL 2");
     }
+    public void L3()
+    {
+        Time.timeScale = 1f;
+        Debug.Log("Entering Level Selection");
+        SceneManager.LoadScene("LEVEL 3");
+    }
 
     public void STORE()
     {

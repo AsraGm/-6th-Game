@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1660d8fce1f312448d65db4e721b026, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.ThemeManager
-  currentTheme: {fileID: 11400000, guid: 93ee048c2e8b70844935ede8350bc9c1, type: 2}
+  currentTheme: {fileID: 11400000, guid: f9e58c8903bf4c543be8c6f54be79602, type: 2}
   backgroundRenderer: {fileID: 0}
   curtainRenderer: {fileID: 0}
   autoApplyOnChange: 1

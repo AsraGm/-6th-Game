@@ -15,8 +15,14 @@ EditorBuildSettings:
     path: Assets/Scenes/MENUS/LEVEL SELECTION.unity
     guid: 0da23018197327d4d8150536da2b26d6
   - enabled: 1
-    path: Assets/Scenes/LEVEL 1.unity
+    path: Assets/Scenes/LEVELS/LEVEL 1.unity
     guid: 2dd3dd73bb5a39b4b852917efc452326
+  - enabled: 1
+    path: Assets/Scenes/LEVELS/LEVEL 2.unity
+    guid: bab6de4ceb019e84ea687bf6ec6a6ba8
+  - enabled: 1
+    path: Assets/Scenes/LEVELS/LEVEL 3.unity
+    guid: 2fe893ea28dfdc44993c082bdfc8c3f6
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

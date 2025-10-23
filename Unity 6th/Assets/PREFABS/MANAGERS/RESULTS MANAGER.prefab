@@ -54,7 +54,7 @@ MonoBehaviour:
   backToLevelSelectionButton: {fileID: 0}
   retryButton: {fileID: 0}
   resultsPanel: {fileID: 0}
-  showDelay: 1.5
+  showDelay: 0.5
   fadeInDuration: 0.5
   levelSelectionSceneName: LEVEL SELECTION
   positiveColor: {r: 0, g: 1, b: 0, a: 1}

@@ -455,7 +455,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -12
   m_Sprite: {fileID: 21300000, guid: 0f661bcb55b040f4b9a3dc77d5f97290, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -572,6 +572,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3657681266999667416, guid: da336534db4f91d4abb78c6998e301a3, type: 3}
       propertyPath: uiCamera
+      value: 
+      objectReference: {fileID: 841972822}
+    - target: {fileID: 7336058323346326498, guid: da336534db4f91d4abb78c6998e301a3, type: 3}
+      propertyPath: m_Camera
       value: 
       objectReference: {fileID: 841972822}
     - target: {fileID: 8797337177679061885, guid: da336534db4f91d4abb78c6998e301a3, type: 3}

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ShootingRange
 {
-    public class CountdownManager: MonoBehaviour
+    public class CountdownManager : MonoBehaviour
     {
         [Header("Referencias de Sistema")]
         public WaveSystem waveSystem;
@@ -88,7 +88,7 @@ namespace ShootingRange
         [System.Serializable]
         public class CountdownUITheme
         {
-            [Tooltip("Nombre del tema (Western, Zombie, etc.)")]
+            [Tooltip("Nombre del tema (Western, Zombie, etc.) - DEBE coincidir con SOGameTheme.themeName")]
             public string themeName;
 
             [Tooltip("GameObject raíz que contiene todo")]
@@ -147,7 +147,10 @@ namespace ShootingRange
             // Inicializar luces adicionales
             InitializeAdditionalLights();
 
-            Debug.Log("✅ CountdownManager_Enhanced inicializado");
+            Debug.Log("✅ CountdownManager inicializado");
+
+            // 🆕 DEBUG: Mostrar temas disponibles
+            LogAvailableThemes();
         }
 
         void InitializeAdditionalLights()
@@ -216,7 +219,7 @@ namespace ShootingRange
 
             if (currentUI == null)
             {
-                Debug.LogError("No se encontró UI para el tema actual");
+                Debug.LogError("❌ No se encontró UI para el tema actual");
                 CompleteCountdown();
                 yield break;
             }
@@ -376,40 +379,69 @@ namespace ShootingRange
         {
             currentUI = null;
 
+            // 🆕 Verificar si ThemeManager existe
             if (themeManager == null)
+            {
+                Debug.LogWarning("⚠️ ThemeManager no encontrado - Buscando...");
+                themeManager = FindObjectOfType<ThemeManager>();
+            }
+
+            if (themeManager == null || themeManager.CurrentTheme == null)
             {
                 if (countdownUIs.Length > 0)
                 {
                     currentUI = countdownUIs[0];
-                    Debug.LogWarning("ThemeManager no encontrado, usando primer UI");
+                    Debug.LogWarning($"⚠️ ThemeManager/Tema no disponible, usando primer UI: {currentUI.themeName}");
                 }
                 return;
             }
 
-            string currentTheme = GetCurrentThemeName();
+            // 🆕 Obtener nombre del tema directamente del ScriptableObject
+            string currentThemeName = themeManager.CurrentTheme.themeName;
 
+            Debug.Log($"🔍 Buscando UI para tema: '{currentThemeName}'");
+
+            // 🆕 Buscar con comparación más flexible
             foreach (var ui in countdownUIs)
             {
-                if (ui.themeName.Equals(currentTheme, System.StringComparison.OrdinalIgnoreCase))
+                // Comparación exacta (case-insensitive)
+                if (ui.themeName.Equals(currentThemeName, System.StringComparison.OrdinalIgnoreCase))
                 {
                     currentUI = ui;
-                    Debug.Log($"🎨 UI de countdown: {ui.themeName}");
+                    Debug.Log($"✅ UI encontrado para tema: '{ui.themeName}'");
                     return;
                 }
             }
 
+            // 🆕 Si no encuentra, buscar por coincidencia parcial
+            foreach (var ui in countdownUIs)
+            {
+                if (ui.themeName.ToLower().Contains(currentThemeName.ToLower()) ||
+                    currentThemeName.ToLower().Contains(ui.themeName.ToLower()))
+                {
+                    currentUI = ui;
+                    Debug.LogWarning($"⚠️ Coincidencia parcial encontrada: '{ui.themeName}' para tema '{currentThemeName}'");
+                    return;
+                }
+            }
+
+            // Si no encuentra nada, usar fallback
             if (countdownUIs.Length > 0)
             {
                 currentUI = countdownUIs[0];
-                Debug.LogWarning($"No se encontró UI para '{currentTheme}', usando fallback");
+                Debug.LogWarning($"⚠️ No se encontró UI para '{currentThemeName}', usando fallback: '{currentUI.themeName}'");
+            }
+            else
+            {
+                Debug.LogError("❌ No hay ningún CountdownUI configurado!");
             }
         }
 
         string GetCurrentThemeName()
         {
-            if (themeManager != null)
+            if (themeManager != null && themeManager.CurrentTheme != null)
             {
-                return themeManager.GetCurrentThemeName();
+                return themeManager.CurrentTheme.themeName;
             }
 
             return "Default";
@@ -417,7 +449,7 @@ namespace ShootingRange
 
         IEnumerator ShowPhaseSimple(string message, GameObject light, bool isGoPhase = false)
         {
-            Debug.Log($"🏁 Fase: {message} | Luz: {(light != null ? light.name : "NULL")}");
+            Debug.Log($"🚦 Fase: {message} | Luz: {(light != null ? light.name : "NULL")}");
 
             SetMessage(message);
 
@@ -517,6 +549,30 @@ namespace ShootingRange
         public float GetCountdownElapsedTime()
         {
             return isCountdownActive ? Time.time - countdownStartTime : 0f;
+        }
+
+        // 🆕 MÉTODO DE DEBUG MEJORADO
+        [ContextMenu("🔍 Log Available Themes")]
+        public void LogAvailableThemes()
+        {
+            Debug.Log("=== 🎨 COUNTDOWN THEMES DEBUG ===");
+
+            if (themeManager != null && themeManager.CurrentTheme != null)
+            {
+                Debug.Log($"📌 Tema Actual en ThemeManager: '{themeManager.CurrentTheme.themeName}'");
+            }
+            else
+            {
+                Debug.LogWarning("⚠️ ThemeManager o CurrentTheme es NULL");
+            }
+
+            Debug.Log($"\n📋 Countdown UIs configurados ({countdownUIs.Length}):");
+            for (int i = 0; i < countdownUIs.Length; i++)
+            {
+                var ui = countdownUIs[i];
+                Debug.Log($"  [{i}] '{ui.themeName}' - UIRoot: {(ui.uiRoot != null ? "✅" : "❌")}");
+                Debug.Log($"      Red: {(ui.redLight != null ? "✅" : "❌")} | Yellow: {(ui.yellowLight != null ? "✅" : "❌")} | Green: {(ui.greenLight != null ? "✅" : "❌")}");
+            }
         }
 
         [ContextMenu("Test Countdown")]
