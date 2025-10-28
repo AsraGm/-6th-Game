@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abe781fc413309443b8f33e611c1ff43, type: 3}
   m_Name: MoneyConfig
   m_EditorClassIdentifier: 
-  normalEnemyMoney: 5
-  staticEnemyMoney: 7
-  zigZagEnemyMoney: 10
-  jumperEnemyMoney: 12
-  valuableEnemyMoney: 25
+  normalEnemyMoney: 1
+  staticEnemyMoney: 3
+  zigZagEnemyMoney: 7
+  jumperEnemyMoney: 10
+  valuableEnemyMoney: 12
   innocentPenalty: 25
   moneyMultiplier: 1
   startingMoney: 0

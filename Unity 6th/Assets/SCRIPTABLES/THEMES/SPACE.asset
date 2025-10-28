@@ -16,12 +16,12 @@ MonoBehaviour:
   themeID: space
   themeDescription: Space Theme
   themeIcon: {fileID: 21300000, guid: 8b2a086d65bffd04098805795c623b2f, type: 3}
-  themeCost: 10
-  normalEnemySprite: {fileID: 21300000, guid: 492df8cccca959f459fbe67c43ad8e75, type: 3}
+  themeCost: 3500
+  normalEnemySprite: {fileID: 21300000, guid: 5c993089fb1cb6f49826375612257a59, type: 3}
   staticEnemySprite: {fileID: 21300000, guid: 1228562dd18857c4aa57352bf0f899ba, type: 3}
   zigzagEnemySprite: {fileID: 21300000, guid: 211a980c371e3204fae8b12dc623468e, type: 3}
-  jumperEnemySprite: {fileID: 21300000, guid: 999d84b3e3540944792bb3e285c699a6, type: 3}
-  valuableEnemySprite: {fileID: 21300000, guid: 1228562dd18857c4aa57352bf0f899ba, type: 3}
-  innocentEnemySprite: {fileID: 21300000, guid: 5c993089fb1cb6f49826375612257a59, type: 3}
+  jumperEnemySprite: {fileID: 21300000, guid: 5c873562efa6c5d418d823e46030927a, type: 3}
+  valuableEnemySprite: {fileID: 21300000, guid: 492df8cccca959f459fbe67c43ad8e75, type: 3}
+  innocentEnemySprite: {fileID: 21300000, guid: 999d84b3e3540944792bb3e285c699a6, type: 3}
   backgroundSprite: {fileID: 21300000, guid: 6187be003bb88364b835f6bf120871ce, type: 3}
   curtainSprite: {fileID: 21300000, guid: 6c58c51683461f84cacbde201ec09c5d, type: 3}

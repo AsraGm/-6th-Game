@@ -676,6 +676,81 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &3309701091977308767
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3204738382569743490}
+  - component: {fileID: 418041805736061306}
+  - component: {fileID: 6094573500968959339}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3204738382569743490
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3309701091977308767}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2628075014398518826}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &418041805736061306
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3309701091977308767}
+  m_CullTransparentMesh: 1
+--- !u!114 &6094573500968959339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3309701091977308767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 0f661bcb55b040f4b9a3dc77d5f97290, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &3798038032992333819
 GameObject:
   m_ObjectHideFlags: 0
@@ -1724,7 +1799,6 @@ GameObject:
   - component: {fileID: 9210753544972510087}
   - component: {fileID: 6392190153366662502}
   - component: {fileID: 2504759114278364000}
-  - component: {fileID: 3657681266999667416}
   m_Layer: 5
   m_Name: LEVELS CANVAS
   m_TagString: Untagged
@@ -1744,6 +1818,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3204738382569743490}
   - {fileID: 5159363074019248210}
   - {fileID: 1377639526413537312}
   m_Father: {fileID: 0}
@@ -1840,38 +1915,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c951f6ecfd5f01b41bd1a7a844e3133f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MAINMENU
---- !u!114 &3657681266999667416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8797337177679061885}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c15b1403d202f014c9bda20614470a5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.MobileHUD
-  hudCanvas: {fileID: 7336058323346326498}
-  mainPanel: {fileID: 2628075014398518826}
-  applySafeArea: 1
-  safeAreaPanel: {fileID: 2628075014398518826}
-  minTouchSize: 44
-  autoScaleForAspect: 1
-  hudButtons:
-  - {fileID: 7305252065068719492}
-  - {fileID: 9022215069469399755}
-  - {fileID: 1610263226661798626}
-  - {fileID: 4188264108288134019}
-  criticalUIElements: []
-  canvasRenderMode: 1
-  uiCamera: {fileID: 0}
-  screenSize: {x: 0, y: 0}
-  screenAspect: 0
-  safeArea:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
-  hasNotch: 0

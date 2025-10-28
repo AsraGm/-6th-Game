@@ -452,7 +452,7 @@ MonoBehaviour:
   m_text: "\xA1\xA1PENALTY!!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 532fe04981ed48547a1104d7932651ae, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -1791991025615798123, guid: 532fe04981ed48547a1104d7932651ae, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -653,8 +653,8 @@ RectTransform:
   - {fileID: 8901515423778521104}
   m_Father: {fileID: 7314463082536085387}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 104.65, y: -42.550003}
   m_SizeDelta: {x: 209.3, y: 75.9}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1345,7 +1345,6 @@ GameObject:
   - component: {fileID: 7102857071558495693}
   - component: {fileID: 4731659294822750836}
   - component: {fileID: 6566399422240883767}
-  - component: {fileID: 7466312342349745017}
   - component: {fileID: 4353640709874436270}
   m_Layer: 5
   m_Name: Canvas
@@ -1443,46 +1442,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &7466312342349745017
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3708991607519671814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c15b1403d202f014c9bda20614470a5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.MobileHUD
-  hudCanvas: {fileID: 7102857071558495693}
-  mainPanel: {fileID: 8901221713224112140}
-  applySafeArea: 1
-  safeAreaPanel: {fileID: 8901221713224112140}
-  minTouchSize: 45
-  autoScaleForAspect: 1
-  hudButtons:
-  - {fileID: 1855522117961953057}
-  criticalUIElements:
-  - {fileID: 8206284402479798614}
-  - {fileID: 6352479621743590082}
-  - {fileID: 6943878491200719998}
-  - {fileID: 3742337591428942240}
-  - {fileID: 229772407747880307}
-  - {fileID: 4831588182966887597}
-  - {fileID: 3655215334209543754}
-  - {fileID: 1980899518122956856}
-  canvasRenderMode: 1
-  uiCamera: {fileID: 0}
-  screenSize: {x: 0, y: 0}
-  screenAspect: 0
-  safeArea:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
-  hasNotch: 0
 --- !u!114 &4353640709874436270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1890,8 +1849,8 @@ RectTransform:
   - {fileID: 2755781494068859632}
   m_Father: {fileID: 7314463082536085387}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 104.65, y: -37.949997}
   m_SizeDelta: {x: 209.3, y: 75.9}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2842,8 +2801,8 @@ RectTransform:
   - {fileID: 5141723087016092709}
   m_Father: {fileID: 7314463082536085387}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 104.65, y: -40.25}
   m_SizeDelta: {x: 209.3, y: 75.9}
   m_Pivot: {x: 0.5, y: 0.5}
