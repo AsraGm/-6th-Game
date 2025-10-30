@@ -107,11 +107,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5073480829657504844}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -1727, y: 266}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 84.1, y: 266}
   m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 1, y: 0.5}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1278128842135333013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,7 +273,7 @@ RectTransform:
   m_GameObject: {fileID: 1709204769449603110}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 3.0199}
-  m_LocalScale: {x: 2.1268222, y: 4.818835, z: 3.62}
+  m_LocalScale: {x: 2.4593081, y: 5.084599, z: 4.185914}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 323794134018717722}
@@ -282,7 +282,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 3.0199, y: 37}
+  m_AnchoredPosition: {x: 163.6, y: 4.951294}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &8413948912573871114
@@ -1260,7 +1260,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: EQUIP
+  m_text: BUY
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 532fe04981ed48547a1104d7932651ae, type: 2}
   m_sharedMaterial: {fileID: -1791991025615798123, guid: 532fe04981ed48547a1104d7932651ae, type: 2}
@@ -1472,7 +1472,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: EQUIP
+  m_text: BUY
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 532fe04981ed48547a1104d7932651ae, type: 2}
   m_sharedMaterial: {fileID: -1791991025615798123, guid: 532fe04981ed48547a1104d7932651ae, type: 2}
@@ -1571,7 +1571,7 @@ RectTransform:
   m_GameObject: {fileID: 5532340575376240986}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 3.0199}
-  m_LocalScale: {x: 2.1268222, y: 4.818835, z: 3.62}
+  m_LocalScale: {x: 2.4593081, y: 5.084599, z: 4.185914}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4740788713443989601}
@@ -1580,7 +1580,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 3.0199, y: 37}
+  m_AnchoredPosition: {x: 163.59999, y: 4.951294}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &7271095931427712991
@@ -2025,14 +2025,13 @@ GameObject:
   - component: {fileID: 1563909666925424200}
   - component: {fileID: 1972714861841795540}
   - component: {fileID: 3624252917077940028}
-  - component: {fileID: 7678585813705612785}
   m_Layer: 5
   m_Name: STORE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5073480829657504844
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2155,48 +2154,6 @@ MonoBehaviour:
   messageDuration: 2
   storeManager: {fileID: 0}
   moneySystem: {fileID: 0}
---- !u!114 &7678585813705612785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8163288903778358042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c15b1403d202f014c9bda20614470a5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.MobileHUD
-  hudCanvas: {fileID: 2101894453884190050}
-  mainPanel: {fileID: 288480529706393511}
-  applySafeArea: 1
-  safeAreaPanel: {fileID: 5073480829657504844}
-  minTouchSize: 44
-  autoScaleForAspect: 1
-  hudButtons:
-  - {fileID: 7877651902457407304}
-  - {fileID: 7842180160568243066}
-  - {fileID: 9167430100454152814}
-  - {fileID: 1836099651153631874, guid: 7244589bfb741e443981d3aa350ae3d5, type: 3}
-  criticalUIElements:
-  - {fileID: 3398794880921471913}
-  - {fileID: 4737263031434839380}
-  - {fileID: 4007697255783329751}
-  - {fileID: 5809604366533453144}
-  - {fileID: 7640304126556559250}
-  - {fileID: 5095078067998664799}
-  - {fileID: 8364047222753606205}
-  canvasRenderMode: 1
-  uiCamera: {fileID: 0}
-  screenSize: {x: 0, y: 0}
-  screenAspect: 0
-  safeArea:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
-  hasNotch: 0
 --- !u!1 &8816100224078481585
 GameObject:
   m_ObjectHideFlags: 0

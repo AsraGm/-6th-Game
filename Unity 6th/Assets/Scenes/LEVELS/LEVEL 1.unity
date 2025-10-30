@@ -1275,10 +1275,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3530536269020481294, guid: 393a36b77d0f5444e8571817a49bf283, type: 3}
-      propertyPath: uiCamera
-      value: 
-      objectReference: {fileID: 1782025381}
     - target: {fileID: 4138184775615263617, guid: 393a36b77d0f5444e8571817a49bf283, type: 3}
       propertyPath: m_Name
       value: LIGHTS CANVAS
@@ -1898,7 +1894,8 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1470505449}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7466312342349745017, guid: 9e4cfad7d2b39a0458f9e28e28a99a4d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1919,18 +1916,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1826340444}
-    - target: {fileID: 3720049262029784007, guid: 0930283656848b049b0589795b67a4b9, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -111.700195
-      objectReference: {fileID: 0}
-    - target: {fileID: 3720049262029784007, guid: 0930283656848b049b0589795b67a4b9, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 86.30005
-      objectReference: {fileID: 0}
-    - target: {fileID: 4201513726689006571, guid: 0930283656848b049b0589795b67a4b9, type: 3}
-      propertyPath: uiCamera
-      value: 
-      objectReference: {fileID: 1782025381}
     - target: {fileID: 5790189202568973013, guid: 0930283656848b049b0589795b67a4b9, type: 3}
       propertyPath: m_Pivot.x
       value: 0
