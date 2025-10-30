@@ -4,23 +4,12 @@ using UnityEngine;
 
 namespace ShootingRange
 {
-    /// <summary>
-    /// Sistema híbrido SIMPLIFICADO con overlay negro INDEPENDIENTE del tema:
-    /// - Overlay negro permanece igual siempre (no afectado por temas)
-    /// - Durante countdown: Luces 2D + overlay negro visible
-    /// - Al GO!: Luz baja a 0 (oscuro)
-    /// - Desactivar overlay (invisible porque está oscuro)
-    /// - Luz sube revelando el escenario gradualmente
-    /// </summary>
-    public class HybridCountdownManager : MonoBehaviour
+    public class CountdownManager : MonoBehaviour
     {
         [Header("Referencias de Sistema")]
         public WaveSystem waveSystem;
         public LevelTimer levelTimer;
-
-        [Header("⚠️ IMPORTANTE: Theme Manager")]
-        [Tooltip("Usa CanvasThemeManager SI usas Canvas UI, o ThemeManager normal si usas SpriteRenderer")]
-        public MonoBehaviour themeManagerReference;
+        public ThemeManager themeManager;
 
         [Header("Configuración de Countdown")]
         [Range(0.3f, 2f)]
@@ -32,30 +21,21 @@ namespace ShootingRange
         public AudioClip readySetSound;
         public AudioClip goSound;
 
-        [Header("🆕 OVERLAY NEGRO (Independiente del tema)")]
-        [Tooltip("ARRASTRA AQUÍ el SpriteRenderer del overlay negro - ESTE SPRITE NUNCA CAMBIA")]
-        public SpriteRenderer blackOverlay;
-
-        [Header("🆕 Configuración de Transición SIMPLIFICADA")]
-        [Tooltip("Duración de la transición de luz (revelar escenario)")]
-        [Range(0.5f, 3f)]
-        public float transitionDuration = 1.5f;
-
-        [Tooltip("¿Ocultar escenario (Canvas o SpriteRenderer) al inicio?")]
-        public bool hideSceneryAtStart = true;
-
         [Header("Global Light Control")]
         [Tooltip("Arrastra tu Global Light 2D aquí")]
         public UnityEngine.Rendering.Universal.Light2D globalLight;
 
-        [Tooltip("Intensidad durante countdown (para ver las luces)")]
-        public float countdownLightIntensity = 0.3f;
+        [Tooltip("Intensidad inicial (oscuro)")]
+        public float startLightIntensity = 0f;
 
-        [Tooltip("Intensidad final del juego")]
-        public float gameLightIntensity = 1.2f;
+        [Tooltip("Intensidad final (normal)")]
+        public float targetLightIntensity = 1.2f;
+
+        [Tooltip("Duración de la transición de luz")]
+        public float lightFadeDuration = 1.5f;
 
         [Header("Sistema de Luces Adicionales")]
-        [Tooltip("Luces adicionales")]
+        [Tooltip("Luces adicionales que se activarán en tiempos específicos")]
         public AdditionalLightConfig[] additionalLights;
 
         [Header("UIs por Tema")]
@@ -66,24 +46,20 @@ namespace ShootingRange
         private AudioSource audioSource;
         private float countdownStartTime;
 
-        // Referencias dinámicas
-        private CanvasThemeManager canvasThemeManager;
-        private ThemeManager spriteThemeManager;
-
         [System.Serializable]
         public class AdditionalLightConfig
         {
-            [Tooltip("Nombre identificador")]
+            [Tooltip("Nombre identificador de esta luz")]
             public string lightName;
 
-            [Tooltip("Componente Light 2D")]
+            [Tooltip("Componente Light 2D a controlar")]
             public UnityEngine.Rendering.Universal.Light2D light2D;
 
             [Header("Configuración de Fade")]
-            [Tooltip("¿Activar fade?")]
+            [Tooltip("¿Activar fade para esta luz?")]
             public bool enableFade = true;
 
-            [Tooltip("Delay antes del fade")]
+            [Tooltip("Tiempo de delay antes de iniciar el fade (desde inicio del countdown)")]
             public float fadeStartDelay = 0f;
 
             [Tooltip("Duración del fade")]
@@ -95,14 +71,14 @@ namespace ShootingRange
             [Tooltip("Intensidad final")]
             public float targetIntensity = 1f;
 
-            [Header("Activación por Tiempo")]
-            [Tooltip("¿Activar/desactivar en momentos específicos?")]
+            [Header("Configuración de Activación por Tiempo")]
+            [Tooltip("¿Activar/desactivar la luz en momentos específicos?")]
             public bool enableTimedToggle = false;
 
-            [Tooltip("Tiempo para ENCENDER")]
+            [Tooltip("Tiempo para ENCENDER la luz (desde inicio del countdown)")]
             public float turnOnTime = 0f;
 
-            [Tooltip("Tiempo para APAGAR (0 = no apagar)")]
+            [Tooltip("Tiempo para APAGAR la luz (desde inicio del countdown, 0 = no apagar)")]
             public float turnOffTime = 0f;
 
             [HideInInspector]
@@ -112,13 +88,13 @@ namespace ShootingRange
         [System.Serializable]
         public class CountdownUITheme
         {
-            [Tooltip("Nombre del tema")]
+            [Tooltip("Nombre del tema (Western, Zombie, etc.) - DEBE coincidir con SOGameTheme.themeName")]
             public string themeName;
 
-            [Tooltip("GameObject raíz del UI")]
+            [Tooltip("GameObject raíz que contiene todo")]
             public GameObject uiRoot;
 
-            [Header("Luces 2D del Semáforo")]
+            [Header("Luces 2D (GameObjects con Light 2D)")]
             [Tooltip("GameObject con Light 2D roja")]
             public GameObject redLight;
 
@@ -151,8 +127,8 @@ namespace ShootingRange
             if (levelTimer == null)
                 levelTimer = FindObjectOfType<LevelTimer>();
 
-            // Detectar qué tipo de ThemeManager está en uso
-            DetectThemeManager();
+            if (themeManager == null)
+                themeManager = FindObjectOfType<ThemeManager>();
 
             // AudioSource
             audioSource = GetComponent<AudioSource>();
@@ -162,148 +138,26 @@ namespace ShootingRange
             // Ocultar todos los UIs
             HideAllCountdownUIs();
 
-            // Ocultar escenario al inicio
-            if (hideSceneryAtStart)
-            {
-                HideSceneryElements();
-            }
-
-            // 🆕 CONFIGURAR OVERLAY NEGRO (INDEPENDIENTE DEL TEMA)
-            if (blackOverlay != null)
-            {
-                // Asegurar que el overlay esté configurado correctamente
-                Color c = blackOverlay.color;
-                c.a = 1f; // Opaco
-                blackOverlay.color = c;
-                blackOverlay.gameObject.SetActive(true);
-
-                // Sorting order alto para estar adelante
-                blackOverlay.sortingLayerName = "Default";
-                blackOverlay.sortingOrder = 9999;
-
-                Debug.Log("🖤 Overlay negro configurado (independiente del tema)");
-            }
-            else
-            {
-                Debug.LogWarning("⚠️ Black Overlay no asignado");
-            }
-
-            // Configurar luz inicial para countdown
+            // Configurar Global Light en intensidad inicial
             if (globalLight != null)
             {
-                globalLight.intensity = countdownLightIntensity;
-                Debug.Log($"💡 Luz inicial: {countdownLightIntensity}");
+                globalLight.intensity = startLightIntensity;
             }
 
             // Inicializar luces adicionales
             InitializeAdditionalLights();
 
-            Debug.Log("✅ HybridCountdownManager inicializado");
+            Debug.Log("✅ CountdownManager inicializado");
+
+            // 🆕 DEBUG: Mostrar temas disponibles
             LogAvailableThemes();
-        }
-
-        void DetectThemeManager()
-        {
-            // Intentar obtener CanvasThemeManager
-            canvasThemeManager = CanvasThemeManager.Instance;
-            if (canvasThemeManager != null)
-            {
-                Debug.Log("✅ Usando CanvasThemeManager (Canvas UI)");
-                return;
-            }
-
-            // Intentar obtener ThemeManager normal
-            spriteThemeManager = ThemeManager.Instance;
-            if (spriteThemeManager != null)
-            {
-                Debug.Log("✅ Usando ThemeManager (SpriteRenderer)");
-                return;
-            }
-
-            Debug.LogWarning("⚠️ No se encontró ningún ThemeManager");
-        }
-
-        void HideSceneryElements()
-        {
-            if (canvasThemeManager != null)
-            {
-                // Ocultar Canvas
-                if (canvasThemeManager.backgroundCanvas != null)
-                {
-                    canvasThemeManager.backgroundCanvas.gameObject.SetActive(false);
-                    Debug.Log("🙈 Background Canvas ocultado");
-                }
-
-                if (canvasThemeManager.curtainCanvas != null)
-                {
-                    canvasThemeManager.curtainCanvas.gameObject.SetActive(false);
-                    Debug.Log("🙈 Curtain Canvas ocultado");
-                }
-            }
-            else if (spriteThemeManager != null)
-            {
-                // Ocultar SpriteRenderers
-                if (spriteThemeManager.backgroundRenderer != null)
-                {
-                    spriteThemeManager.backgroundRenderer.gameObject.SetActive(false);
-                    Debug.Log("🙈 Background SpriteRenderer ocultado");
-                }
-
-                if (spriteThemeManager.curtainRenderer != null)
-                {
-                    spriteThemeManager.curtainRenderer.gameObject.SetActive(false);
-                    Debug.Log("🙈 Curtain SpriteRenderer ocultado");
-                }
-            }
-        }
-
-        void RevealSceneryElements()
-        {
-            if (canvasThemeManager != null)
-            {
-                // Activar Canvas
-                if (canvasThemeManager.backgroundCanvas != null)
-                {
-                    canvasThemeManager.backgroundCanvas.gameObject.SetActive(true);
-                    Debug.Log("👁️ Background Canvas activado");
-                }
-
-                if (canvasThemeManager.curtainCanvas != null)
-                {
-                    canvasThemeManager.curtainCanvas.gameObject.SetActive(true);
-                    Debug.Log("👁️ Curtain Canvas activado");
-                }
-
-                // Aplicar tema actual
-                canvasThemeManager.ApplyCurrentTheme();
-                Debug.Log("🎨 Tema Canvas aplicado");
-            }
-            else if (spriteThemeManager != null)
-            {
-                // Activar SpriteRenderers
-                if (spriteThemeManager.backgroundRenderer != null)
-                {
-                    spriteThemeManager.backgroundRenderer.gameObject.SetActive(true);
-                    Debug.Log("👁️ Background SpriteRenderer activado");
-                }
-
-                if (spriteThemeManager.curtainRenderer != null)
-                {
-                    spriteThemeManager.curtainRenderer.gameObject.SetActive(true);
-                    Debug.Log("👁️ Curtain SpriteRenderer activado");
-                }
-
-                // Aplicar tema actual
-                spriteThemeManager.ApplyCurrentTheme();
-                Debug.Log("🎨 Tema SpriteRenderer aplicado");
-            }
         }
 
         void InitializeAdditionalLights()
         {
             if (additionalLights == null || additionalLights.Length == 0)
             {
-                Debug.Log("No hay luces adicionales");
+                Debug.Log("No hay luces adicionales configuradas");
                 return;
             }
 
@@ -311,18 +165,24 @@ namespace ShootingRange
             {
                 if (lightConfig.light2D != null)
                 {
+                    // Configurar intensidad inicial
                     if (lightConfig.enableFade)
                     {
                         lightConfig.light2D.intensity = lightConfig.startIntensity;
                     }
 
+                    // Si tiene timed toggle, iniciar apagada
                     if (lightConfig.enableTimedToggle)
                     {
                         lightConfig.light2D.gameObject.SetActive(false);
                     }
 
                     lightConfig.isProcessing = false;
-                    Debug.Log($"💡 Luz '{lightConfig.lightName}' inicializada");
+                    Debug.Log($"🔆 Luz '{lightConfig.lightName}' inicializada");
+                }
+                else
+                {
+                    Debug.LogWarning($"⚠️ Light2D no asignado para '{lightConfig.lightName}'");
                 }
             }
         }
@@ -359,20 +219,26 @@ namespace ShootingRange
 
             if (currentUI == null)
             {
-                Debug.LogError("❌ No se encontró UI");
+                Debug.LogError("❌ No se encontró UI para el tema actual");
                 CompleteCountdown();
                 yield break;
             }
 
+            // Mostrar UI Root
             currentUI.uiRoot.SetActive(true);
+
+            // Apagar todas las luces al inicio
             TurnOffAllLights(currentUI);
 
-            // Iniciar luces adicionales
-            StartCoroutine(ManageAdditionalLights());
+            // Iniciar fade de Global Light en paralelo
+            Coroutine lightFade = null;
+            if (globalLight != null)
+            {
+                lightFade = StartCoroutine(FadeGlobalLight());
+            }
 
-            // ==========================================
-            // COUNTDOWN CON LUCES
-            // ==========================================
+            // Iniciar sistema de luces adicionales
+            StartCoroutine(ManageAdditionalLights());
 
             // FASE 1: READY
             yield return StartCoroutine(ShowPhaseSimple("READY", currentUI.redLight));
@@ -380,69 +246,23 @@ namespace ShootingRange
             // FASE 2: SET
             yield return StartCoroutine(ShowPhaseSimple("SET", currentUI.yellowLight));
 
-            // FASE 3: GO!
+            // FASE 3: GO
             yield return StartCoroutine(ShowPhaseSimple("GO!", currentUI.greenLight, true));
 
-            // ==========================================
-            // 🆕 TRANSICIÓN SIMPLIFICADA
-            // ==========================================
-
-            Debug.Log("🎬 Iniciando transición...");
-
-            // 1. Bajar luz a 0 (oscuro)
-            if (globalLight != null)
+            // ESPERAR a que el fade de luz termine antes de continuar
+            if (lightFade != null)
             {
-                globalLight.intensity = 0f;
-                Debug.Log("💡 Luz apagada (oscuro)");
+                yield return lightFade;
             }
 
-            // 2. Pequeño delay
-            yield return new WaitForSeconds(0.1f);
-
-            // 3. Activar escenario y aplicar tema (invisible porque luz = 0)
-            RevealSceneryElements();
-
-            // 4. Desactivar overlay (invisible porque está oscuro)
-            if (blackOverlay != null)
-            {
-                blackOverlay.gameObject.SetActive(false);
-                Debug.Log("🖤 Overlay desactivado");
-            }
-
-            // 5. Subir luz gradualmente revelando el escenario
-            yield return StartCoroutine(FadeInGameLight());
-
-            // Esperar luces adicionales
+            // Esperar a que todas las luces adicionales terminen si están configuradas
             yield return StartCoroutine(WaitForAdditionalLights());
 
-            // Ocultar UI del countdown
+            // Ocultar UI
             currentUI.uiRoot.SetActive(false);
 
-            // Completar
+            // Completar e iniciar juego
             CompleteCountdown();
-        }
-
-        IEnumerator FadeInGameLight()
-        {
-            if (globalLight == null) yield break;
-
-            float elapsed = 0f;
-            float startIntensity = 0f;
-            float targetIntensity = gameLightIntensity;
-
-            Debug.Log($"💡 Fade in luz: 0 → {targetIntensity} en {transitionDuration}s");
-
-            while (elapsed < transitionDuration)
-            {
-                elapsed += Time.deltaTime;
-                float t = elapsed / transitionDuration;
-                globalLight.intensity = Mathf.Lerp(startIntensity, targetIntensity, t);
-
-                yield return null;
-            }
-
-            globalLight.intensity = targetIntensity;
-            Debug.Log($"✅ Luz final: {targetIntensity}");
         }
 
         IEnumerator ManageAdditionalLights()
@@ -454,11 +274,13 @@ namespace ShootingRange
             {
                 if (lightConfig.light2D == null) continue;
 
+                // Iniciar fade si está habilitado
                 if (lightConfig.enableFade)
                 {
                     StartCoroutine(FadeAdditionalLight(lightConfig));
                 }
 
+                // Iniciar toggle por tiempo si está habilitado
                 if (lightConfig.enableTimedToggle)
                 {
                     StartCoroutine(TimedToggleLight(lightConfig));
@@ -470,42 +292,57 @@ namespace ShootingRange
         {
             config.isProcessing = true;
 
+            // Esperar el delay inicial
             if (config.fadeStartDelay > 0)
             {
                 yield return new WaitForSeconds(config.fadeStartDelay);
             }
 
             float elapsed = 0f;
+            Debug.Log($"💡 Iniciando fade de '{config.lightName}': {config.startIntensity} → {config.targetIntensity}");
 
             while (elapsed < config.fadeDuration)
             {
                 elapsed += Time.deltaTime;
                 float t = elapsed / config.fadeDuration;
-                config.light2D.intensity = Mathf.Lerp(config.startIntensity, config.targetIntensity, t);
+
+                // Lerp suave con curva ease-in-out
+                float smoothT = Mathf.SmoothStep(0f, 1f, t);
+                config.light2D.intensity = Mathf.Lerp(config.startIntensity, config.targetIntensity, smoothT);
 
                 yield return null;
             }
 
+            // Asegurar valor final
             config.light2D.intensity = config.targetIntensity;
             config.isProcessing = false;
+
+            Debug.Log($"✅ Fade completo para '{config.lightName}'");
         }
 
         IEnumerator TimedToggleLight(AdditionalLightConfig config)
         {
             config.isProcessing = true;
 
-            if (config.turnOnTime > 0)
+            // Esperar hasta el tiempo de encendido
+            float timeToWait = config.turnOnTime;
+            if (timeToWait > 0)
             {
-                yield return new WaitForSeconds(config.turnOnTime);
+                yield return new WaitForSeconds(timeToWait);
             }
 
+            // Encender luz
             config.light2D.gameObject.SetActive(true);
+            Debug.Log($"🔆 Luz '{config.lightName}' ENCENDIDA en t={config.turnOnTime}s");
 
+            // Si hay tiempo de apagado configurado
             if (config.turnOffTime > config.turnOnTime && config.turnOffTime > 0)
             {
                 float offDelay = config.turnOffTime - config.turnOnTime;
                 yield return new WaitForSeconds(offDelay);
+
                 config.light2D.gameObject.SetActive(false);
+                Debug.Log($"🔴 Luz '{config.lightName}' APAGADA en t={config.turnOffTime}s");
             }
 
             config.isProcessing = false;
@@ -530,66 +367,100 @@ namespace ShootingRange
                 }
 
                 if (anyProcessing)
+                {
                     yield return null;
+                }
             }
+
+            Debug.Log("✅ Todas las luces adicionales completadas");
         }
 
         void SelectCurrentThemeUI()
         {
             currentUI = null;
 
-            string currentThemeName = GetCurrentThemeName();
+            // 🆕 Verificar si ThemeManager existe
+            if (themeManager == null)
+            {
+                Debug.LogWarning("⚠️ ThemeManager no encontrado - Buscando...");
+                themeManager = FindObjectOfType<ThemeManager>();
+            }
 
-            if (string.IsNullOrEmpty(currentThemeName))
+            if (themeManager == null || themeManager.CurrentTheme == null)
             {
                 if (countdownUIs.Length > 0)
                 {
                     currentUI = countdownUIs[0];
-                    Debug.LogWarning($"⚠️ Usando primer UI: {currentUI.themeName}");
+                    Debug.LogWarning($"⚠️ ThemeManager/Tema no disponible, usando primer UI: {currentUI.themeName}");
                 }
                 return;
             }
 
-            Debug.Log($"🔍 Buscando UI para: '{currentThemeName}'");
+            // 🆕 Obtener nombre del tema directamente del ScriptableObject
+            string currentThemeName = themeManager.CurrentTheme.themeName;
 
+            Debug.Log($"🔍 Buscando UI para tema: '{currentThemeName}'");
+
+            // 🆕 Buscar con comparación más flexible
             foreach (var ui in countdownUIs)
             {
+                // Comparación exacta (case-insensitive)
                 if (ui.themeName.Equals(currentThemeName, System.StringComparison.OrdinalIgnoreCase))
                 {
                     currentUI = ui;
-                    Debug.Log($"✅ UI encontrado: '{ui.themeName}'");
+                    Debug.Log($"✅ UI encontrado para tema: '{ui.themeName}'");
                     return;
                 }
             }
 
+            // 🆕 Si no encuentra, buscar por coincidencia parcial
+            foreach (var ui in countdownUIs)
+            {
+                if (ui.themeName.ToLower().Contains(currentThemeName.ToLower()) ||
+                    currentThemeName.ToLower().Contains(ui.themeName.ToLower()))
+                {
+                    currentUI = ui;
+                    Debug.LogWarning($"⚠️ Coincidencia parcial encontrada: '{ui.themeName}' para tema '{currentThemeName}'");
+                    return;
+                }
+            }
+
+            // Si no encuentra nada, usar fallback
             if (countdownUIs.Length > 0)
             {
                 currentUI = countdownUIs[0];
-                Debug.LogWarning($"⚠️ Usando fallback: '{currentUI.themeName}'");
+                Debug.LogWarning($"⚠️ No se encontró UI para '{currentThemeName}', usando fallback: '{currentUI.themeName}'");
+            }
+            else
+            {
+                Debug.LogError("❌ No hay ningún CountdownUI configurado!");
             }
         }
 
         string GetCurrentThemeName()
         {
-            if (canvasThemeManager != null && canvasThemeManager.CurrentTheme != null)
+            if (themeManager != null && themeManager.CurrentTheme != null)
             {
-                return canvasThemeManager.CurrentTheme.themeName;
-            }
-            else if (spriteThemeManager != null && spriteThemeManager.CurrentTheme != null)
-            {
-                return spriteThemeManager.CurrentTheme.themeName;
+                return themeManager.CurrentTheme.themeName;
             }
 
-            return "";
+            return "Default";
         }
 
         IEnumerator ShowPhaseSimple(string message, GameObject light, bool isGoPhase = false)
         {
+            Debug.Log($"🚦 Fase: {message} | Luz: {(light != null ? light.name : "NULL")}");
+
             SetMessage(message);
 
             if (light != null)
             {
                 light.SetActive(true);
+                Debug.Log($"✅ Luz {light.name} activada");
+            }
+            else
+            {
+                Debug.LogError($"❌ Luz es NULL para fase {message}");
             }
 
             PlaySound(isGoPhase ? goSound : readySetSound);
@@ -600,6 +471,7 @@ namespace ShootingRange
             if (light != null)
             {
                 light.SetActive(false);
+                Debug.Log($"🔴 Luz {light.name} desactivada");
             }
         }
 
@@ -648,6 +520,30 @@ namespace ShootingRange
             Debug.Log("✅ Countdown completado - Juego iniciado");
         }
 
+        IEnumerator FadeGlobalLight()
+        {
+            if (globalLight == null) yield break;
+
+            float elapsed = 0f;
+
+            Debug.Log($"💡 Iniciando fade global: {startLightIntensity} → {targetLightIntensity} en {lightFadeDuration}s");
+
+            while (elapsed < lightFadeDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / lightFadeDuration;
+
+                float smoothT = Mathf.SmoothStep(0f, 1f, t);
+                globalLight.intensity = Mathf.Lerp(startLightIntensity, targetLightIntensity, smoothT);
+
+                yield return null;
+            }
+
+            globalLight.intensity = targetLightIntensity;
+
+            Debug.Log($"💡 Global Light fade completo: {targetLightIntensity}");
+        }
+
         public bool IsCountdownActive() => isCountdownActive;
 
         public float GetCountdownElapsedTime()
@@ -655,30 +551,28 @@ namespace ShootingRange
             return isCountdownActive ? Time.time - countdownStartTime : 0f;
         }
 
-        [ContextMenu("🔍 Log System Info")]
+        // 🆕 MÉTODO DE DEBUG MEJORADO
+        [ContextMenu("🔍 Log Available Themes")]
         public void LogAvailableThemes()
         {
-            Debug.Log("=== 🎨 COUNTDOWN SYSTEM DEBUG ===");
+            Debug.Log("=== 🎨 COUNTDOWN THEMES DEBUG ===");
 
-            if (canvasThemeManager != null)
+            if (themeManager != null && themeManager.CurrentTheme != null)
             {
-                Debug.Log($"✅ Usando: CanvasThemeManager");
-                if (canvasThemeManager.CurrentTheme != null)
-                    Debug.Log($"📌 Tema: '{canvasThemeManager.CurrentTheme.themeName}'");
-            }
-            else if (spriteThemeManager != null)
-            {
-                Debug.Log($"✅ Usando: ThemeManager (SpriteRenderer)");
-                if (spriteThemeManager.CurrentTheme != null)
-                    Debug.Log($"📌 Tema: '{spriteThemeManager.CurrentTheme.themeName}'");
+                Debug.Log($"📌 Tema Actual en ThemeManager: '{themeManager.CurrentTheme.themeName}'");
             }
             else
             {
-                Debug.LogWarning("⚠️ No se detectó ThemeManager");
+                Debug.LogWarning("⚠️ ThemeManager o CurrentTheme es NULL");
             }
 
-            Debug.Log($"\n🖤 Overlay negro: {(blackOverlay != null ? "✅ Asignado (independiente del tema)" : "❌ NO asignado")}");
-            Debug.Log($"\n📋 Countdown UIs: {countdownUIs.Length}");
+            Debug.Log($"\n📋 Countdown UIs configurados ({countdownUIs.Length}):");
+            for (int i = 0; i < countdownUIs.Length; i++)
+            {
+                var ui = countdownUIs[i];
+                Debug.Log($"  [{i}] '{ui.themeName}' - UIRoot: {(ui.uiRoot != null ? "✅" : "❌")}");
+                Debug.Log($"      Red: {(ui.redLight != null ? "✅" : "❌")} | Yellow: {(ui.yellowLight != null ? "✅" : "❌")} | Green: {(ui.greenLight != null ? "✅" : "❌")}");
+            }
         }
 
         [ContextMenu("Test Countdown")]

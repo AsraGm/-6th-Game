@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebf5486f7890fe14a9cdb3a9bcc1a1fc, type: 3}
   m_Name: SCORES
   m_EditorClassIdentifier: 
-  staticScore: 1
-  normalScore: 3
-  zigZagEnemy: 7
-  hangedScore: 10
-  valuableScore: 12
+  staticScore: 5
+  normalScore: 7
+  zigZagEnemy: 10
+  hangedScore: 12
+  valuableScore: 25
   innocentPenalty: -25

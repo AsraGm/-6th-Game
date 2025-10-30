@@ -115,18 +115,18 @@ namespace ShootingRange
         void OnEnable()
         {
             // Registrar enemigo con ThemeManager para aplicar skin
-            if (CanvasThemeManager.Instance != null)
+            if (ThemeManager.Instance != null)
             {
-                CanvasThemeManager.Instance.RegisterEnemy(this);
+                ThemeManager.Instance.RegisterEnemy(this);
             }
         }
 
         void OnDisable()
         {
             // Desregistrar del ThemeManager
-            if (CanvasThemeManager.Instance != null)
+            if (ThemeManager.Instance != null)
             {
-                CanvasThemeManager.Instance.UnregisterEnemy(this);
+                ThemeManager.Instance.UnregisterEnemy(this);
             }
         }
         void CleanupEnemyState()

@@ -14,8 +14,8 @@ namespace ShootingRange
         [Tooltip("ARRASTRA AQUÍ tu MoneySystem")]
         public MoneySystem moneySystem;
 
-        [Tooltip("ARRASTRA AQUÍ tu CanvasThemeManager")] // ⬅️ CAMBIAR AQUÍ
-        public CanvasThemeManager themeManager;
+        [Tooltip("ARRASTRA AQUÍ tu ThemeManager")]
+        public ThemeManager themeManager;
 
         [Header("Configuración de Economía")]
         [Tooltip("Tema por defecto que está desbloqueado desde el inicio")]
@@ -78,7 +78,10 @@ namespace ShootingRange
 
             if (themeManager == null)
             {
-                themeManager = FindObjectOfType<CanvasThemeManager>(); // ⬅️ CAMBIAR AQUÍ
+                themeManager = FindObjectOfType<ThemeManager>();
+                if (themeManager == null)
+                {
+                }
             }
         }
 
