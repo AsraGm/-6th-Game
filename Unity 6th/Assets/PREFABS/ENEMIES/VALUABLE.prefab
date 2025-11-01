@@ -154,8 +154,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 4
   themeID: Valuable
-  hitParticles: {fileID: 3798935498174191687, guid: ee3be3a2feb2fe342b2af5b8232e27a0, type: 3}
+  hitParticlesPrefab: {fileID: 1322460393656026070, guid: ee3be3a2feb2fe342b2af5b8232e27a0, type: 3}
   hitSound: {fileID: 0}
+  soundVolume: 1
+  returnToPoolDelay: 0.3
+  particleLifetime: 2
 --- !u!114 &-8763723296083514941
 MonoBehaviour:
   m_ObjectHideFlags: 0
