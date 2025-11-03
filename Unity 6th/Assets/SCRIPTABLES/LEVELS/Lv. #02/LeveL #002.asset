@@ -22,3 +22,7 @@ MonoBehaviour:
   difficultyMultiplier: 1.5
   moneyMultiplier: 0.7
   scoreMultiplier: 1
+  starThresholds:
+    oneStar: 250
+    twoStars: 370
+    threeStars: 500

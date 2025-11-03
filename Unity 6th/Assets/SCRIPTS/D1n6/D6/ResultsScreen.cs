@@ -7,9 +7,9 @@ using System.Collections;
 namespace ShootingRange
 {
     /// <summary>
+    /// ResultsScreen.cs - MODIFICADO CON SISTEMA DE ESTRELLAS
     /// Sistema de pantalla de resultados (D6)
-    /// INTEGRADO con G2 (StatsTracker) y G1 (SaveSystem)
-    /// Muestra estadísticas del nivel completado
+    /// INTEGRADO con G2 (StatsTracker), G1 (SaveSystem) y NUEVO: Star Rating System
     /// </summary>
     public class ResultsScreen : MonoBehaviour
     {
@@ -34,6 +34,28 @@ namespace ShootingRange
 
         [Tooltip("(Opcional) Indicador de nuevo récord")]
         public GameObject newRecordIndicator;
+
+        [Header("⭐ NUEVO - Star Rating UI")]
+        [Tooltip("ARRASTRA AQUÍ los 3 GameObjects de las estrellas (Star1, Star2, Star3)")]
+        public GameObject[] starObjects = new GameObject[3];
+
+        [Tooltip("(Opcional) Si tus estrellas son Images, arrástralas aquí también")]
+        public Image[] starImages = new Image[3];
+
+        [Tooltip("ARRASTRA AQUÍ el texto que muestra '★★★ 3/3' o similar (opcional)")]
+        public TextMeshProUGUI starCountText;
+
+        [Header("⭐ NUEVO - Star Colors & Settings")]
+        [SerializeField] private Color activeStarColor = Color.yellow;
+        [SerializeField] private Color inactiveStarColor = new Color(0.3f, 0.3f, 0.3f, 1f);
+
+        [Tooltip("Delay entre cada estrella al animar")]
+        [Range(0.1f, 1f)]
+        public float delayBetweenStars = 0.3f;
+
+        [Tooltip("Duración de la animación de cada estrella")]
+        [Range(0.1f, 0.5f)]
+        public float starAnimationDuration = 0.3f;
 
         [Header("Referencias UI - Botones")]
         [Tooltip("ARRASTRA AQUÍ el botón para volver a Level Selection")]
@@ -66,6 +88,7 @@ namespace ShootingRange
 
         // Datos del nivel (ahora vienen de StatsTracker)
         private LevelStats currentLevelStats;
+        private int starsEarned = 0;
 
         void Start()
         {
@@ -97,13 +120,13 @@ namespace ShootingRange
                 retryButton.onClick.AddListener(RetryLevel);
             }
 
-            Debug.Log("✅ ResultsScreen inicializado");
+            Debug.Log("✅ ResultsScreen inicializado (CON ESTRELLAS)");
         }
 
         #region Show Results
 
         /// <summary>
-        /// MÉTODO PRINCIPAL: Mostrar resultados del nivel
+        /// MÉTODO PRINCIPAL: Mostrar resultados del nivel CON ESTRELLAS
         /// Usa StatsTracker (G2) para obtener y guardar datos
         /// </summary>
         public void ShowResults()
@@ -125,6 +148,9 @@ namespace ShootingRange
                 yield break;
             }
 
+            // ⭐ NUEVO: Calcular estrellas basado en dinero ganado
+            CalculateStars();
+
             // Mostrar panel
             if (resultsPanel != null)
             {
@@ -137,7 +163,136 @@ namespace ShootingRange
             // Animación de fade in
             yield return StartCoroutine(FadeInAnimation());
 
-            Debug.Log("📊 Resultados mostrados");
+            // ⭐ NUEVO: Animar estrellas después del fade in
+            yield return StartCoroutine(AnimateStars());
+
+            Debug.Log($"📊 Resultados mostrados - Estrellas: {starsEarned}/3");
+        }
+
+        #endregion
+
+        #region ⭐ NUEVO - Star Calculation & Animation
+
+        /// <summary>
+        /// Calcular estrellas según el dinero ganado
+        /// </summary>
+        void CalculateStars()
+        {
+            // Obtener datos del nivel actual
+            SOLevelData currentLevel = LevelHelper.CurrentLevel;
+
+            if (currentLevel == null || currentLevel.starThresholds == null)
+            {
+                Debug.LogWarning("No se puede calcular estrellas: LevelData o StarThresholds no disponibles");
+                starsEarned = 0;
+                return;
+            }
+
+            // Calcular estrellas basado en dinero de sesión
+            starsEarned = currentLevel.starThresholds.CalculateStars(currentLevelStats.moneyEarned);
+
+            // Guardar las estrellas en SaveSystem
+            SaveSystem.Instance.SaveLevelStars(currentLevelStats.levelID, starsEarned);
+
+            // Verificar si es nuevo récord de estrellas
+            int previousBestStars = SaveSystem.Instance.LoadLevelStars(currentLevelStats.levelID);
+            bool isNewStarRecord = starsEarned > previousBestStars;
+
+            Debug.Log($"⭐ Estrellas ganadas: {starsEarned}/3 (Dinero: ${currentLevelStats.moneyEarned})");
+            if (isNewStarRecord)
+            {
+                Debug.Log($"🌟 ¡NUEVO RÉCORD DE ESTRELLAS! Anterior: {previousBestStars}");
+            }
+        }
+
+        /// <summary>
+        /// Animar las estrellas una por una
+        /// </summary>
+        IEnumerator AnimateStars()
+        {
+            // Inicializar todas las estrellas como inactivas/apagadas
+            for (int i = 0; i < starObjects.Length; i++)
+            {
+                if (starObjects[i] != null)
+                {
+                    starObjects[i].transform.localScale = Vector3.zero;
+
+                    // Si tiene Image component, cambiar color
+                    if (starImages != null && i < starImages.Length && starImages[i] != null)
+                    {
+                        starImages[i].color = inactiveStarColor;
+                    }
+                }
+            }
+
+            // Animar cada estrella ganada
+            for (int i = 0; i < starsEarned && i < starObjects.Length; i++)
+            {
+                yield return new WaitForSeconds(delayBetweenStars);
+
+                if (starObjects[i] != null)
+                {
+                    // Cambiar color a activo
+                    if (starImages != null && i < starImages.Length && starImages[i] != null)
+                    {
+                        starImages[i].color = activeStarColor;
+                    }
+
+                    // Animar escala con efecto de "pop"
+                    StartCoroutine(AnimateSingleStar(starObjects[i].transform));
+
+                    // Vibración háptica (solo en móviles)
+                    if (Application.isMobilePlatform)
+                    {
+                        Handheld.Vibrate();
+                    }
+                }
+            }
+
+            // Actualizar texto de estrellas si existe
+            if (starCountText != null)
+            {
+                starCountText.text = $"{starsEarned}/3";
+            }
+        }
+
+        /// <summary>
+        /// Animar una sola estrella con efecto "pop"
+        /// </summary>
+        IEnumerator AnimateSingleStar(Transform star)
+        {
+            float elapsed = 0f;
+            float overshootScale = 1.3f;
+
+            // Scale up con overshoot
+            while (elapsed < starAnimationDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float t = elapsed / starAnimationDuration;
+
+                // Ease out back (efecto de rebote)
+                float scale = Mathf.Lerp(0f, overshootScale, t);
+                star.localScale = Vector3.one * scale;
+
+                yield return null;
+            }
+
+            // Volver a escala normal
+            elapsed = 0f;
+            float returnDuration = starAnimationDuration * 0.5f;
+
+            while (elapsed < returnDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float t = elapsed / returnDuration;
+
+                float scale = Mathf.Lerp(overshootScale, 1f, t);
+                star.localScale = Vector3.one * scale;
+
+                yield return null;
+            }
+
+            star.localScale = Vector3.one;
         }
 
         #endregion
@@ -155,7 +310,7 @@ namespace ShootingRange
             if (titleText != null)
             {
                 string title = currentLevelStats.isNewBestScore ?
-                    "¡NUEVO RÉCORD!" : "¡NIVEL COMPLETADO!";
+                    "¡NEW RECORD!" : "¡LEVEL COMPLETED!";
                 titleText.text = title;
 
                 if (currentLevelStats.isNewBestScore)
@@ -167,7 +322,7 @@ namespace ShootingRange
             // Dinero de sesión
             if (sessionMoneyText != null)
             {
-                sessionMoneyText.text = $"Dinero Ganado: ${currentLevelStats.moneyEarned}";
+                sessionMoneyText.text = $"Money Level: ${currentLevelStats.moneyEarned}";
                 sessionMoneyText.color = currentLevelStats.moneyEarned > 0 ? positiveColor : normalColor;
             }
 
@@ -175,26 +330,26 @@ namespace ShootingRange
             if (totalMoneyText != null)
             {
                 int totalMoney = StatsTracker.Instance.GetTotalMoney();
-                totalMoneyText.text = $"Dinero Total: ${totalMoney}";
+                totalMoneyText.text = $"Total Money: ${totalMoney}";
             }
 
             // Tiempo del nivel
             if (levelTimeText != null)
             {
-                levelTimeText.text = $"Tiempo: {FormatTime(currentLevelStats.timeSpent)}";
+                levelTimeText.text = $"Time: {FormatTime(currentLevelStats.timeSpent)}";
             }
 
             // Enemigos eliminados
             if (enemiesKilledText != null)
             {
-                enemiesKilledText.text = $"Enemigos Eliminados: {currentLevelStats.enemiesKilled}";
+                enemiesKilledText.text = $"Enemies Eliminated: {currentLevelStats.enemiesKilled}";
             }
 
             // Mejor puntaje (opcional)
             if (bestScoreText != null)
             {
                 int bestScore = StatsTracker.Instance.GetBestScore(currentLevelStats.levelID);
-                bestScoreText.text = $"Mejor Score: {bestScore}";
+                bestScoreText.text = $"High Score: {bestScore}";
             }
 
             // Indicador de nuevo récord (opcional)
@@ -284,18 +439,35 @@ namespace ShootingRange
         /// <summary>
         /// Método para testing - Mostrar resultados con datos de prueba
         /// </summary>
-        [ContextMenu("Test Show Results")]
-        public void TestShowResults()
+        [ContextMenu("Test Show Results - 3 Stars")]
+        public void TestShowResults3Stars()
         {
-            // Crear datos de prueba
+            // Crear datos de prueba para 3 estrellas
             currentLevelStats = new LevelStats
             {
                 levelID = "Level_Test",
-                moneyEarned = 250,
-                enemiesKilled = 15,
+                moneyEarned = 500, // Suficiente para 3 estrellas
+                enemiesKilled = 20,
                 timeSpent = 120f,
-                finalScore = 250,
+                finalScore = 500,
                 isNewBestScore = true
+            };
+
+            StartCoroutine(ShowResultsCoroutine());
+        }
+
+        [ContextMenu("Test Show Results - 1 Star")]
+        public void TestShowResults1Star()
+        {
+            // Crear datos de prueba para 1 estrella
+            currentLevelStats = new LevelStats
+            {
+                levelID = "Level_Test",
+                moneyEarned = 100, // Solo 1 estrella
+                enemiesKilled = 8,
+                timeSpent = 120f,
+                finalScore = 100,
+                isNewBestScore = false
             };
 
             StartCoroutine(ShowResultsCoroutine());

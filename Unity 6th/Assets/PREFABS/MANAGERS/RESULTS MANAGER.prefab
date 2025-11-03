@@ -51,6 +51,19 @@ MonoBehaviour:
   enemiesKilledText: {fileID: 0}
   bestScoreText: {fileID: 0}
   newRecordIndicator: {fileID: 0}
+  starObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  starImages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  starCountText: {fileID: 0}
+  activeStarColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  inactiveStarColor: {r: 0.3, g: 0.3, b: 0.3, a: 1}
+  delayBetweenStars: 0.3
+  starAnimationDuration: 0.3
   backToLevelSelectionButton: {fileID: 0}
   retryButton: {fileID: 0}
   resultsPanel: {fileID: 0}

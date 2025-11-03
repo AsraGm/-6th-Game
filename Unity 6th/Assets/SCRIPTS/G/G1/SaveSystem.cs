@@ -28,6 +28,8 @@ public class SaveSystem : MonoBehaviour
     private const string KEY_EQUIPPED_THEME = "EquippedTheme";
     private const string KEY_LEVEL_BEST_SCORE = "LevelBestScore_"; // + levelID
     private const string KEY_OWNED_THEMES = "OwnedThemes"; // Separados por coma
+    private const string KEY_LEVEL_BEST_STARS = "LevelBestStars_";
+
 
     private void Awake()
     {
@@ -257,4 +259,34 @@ public class SaveSystem : MonoBehaviour
     }
 
     #endregion
+
+    #region Star Rating Management
+
+    /// <summary>
+    /// Guarda las mejores estrellas de un nivel
+    /// </summary>
+    public void SaveLevelStars(string levelID, int stars)
+    {
+        string key = KEY_LEVEL_BEST_STARS + levelID;
+        int currentBest = PlayerPrefs.GetInt(key, 0);
+
+        if (stars > currentBest)
+        {
+            PlayerPrefs.SetInt(key, stars);
+            PlayerPrefs.Save();
+            Debug.Log($"[SaveSystem] New best stars for {levelID}: {stars}");
+        }
+    }
+
+    /// <summary>
+    /// Carga las mejores estrellas de un nivel
+    /// </summary>
+    public int LoadLevelStars(string levelID)
+    {
+        string key = KEY_LEVEL_BEST_STARS + levelID;
+        return PlayerPrefs.GetInt(key, 0);
+    }
+
+    #endregion
+
 }

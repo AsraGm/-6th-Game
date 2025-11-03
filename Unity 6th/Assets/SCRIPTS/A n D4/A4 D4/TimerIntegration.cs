@@ -251,25 +251,31 @@ namespace ShootingRange
 
         void CalculateLevelResults()
         {
-            if (moneySystem != null)
+            if (moneySystem == null) return;
+
+            // Obtener datos del nivel
+            int sessionEarnings = moneySystem.GetSessionEarnings();
+            int totalMoney = moneySystem.GetCurrentMoney();
+
+            // ✅ CORREGIDO: Usar LevelHelper en lugar de LevelManager.Instance
+            SOLevelData currentLevel = LevelHelper.CurrentLevel;
+            int starsEarned = 0;
+
+            if (currentLevel != null && currentLevel.starThresholds != null)
             {
-                int sessionEarnings = moneySystem.GetSessionEarnings();
-                int totalMoney = moneySystem.GetCurrentMoney();
+                starsEarned = currentLevel.starThresholds.CalculateStars(sessionEarnings);
+                Debug.Log($"⭐ Estrellas ganadas: {starsEarned} (Dinero: ${sessionEarnings})");
             }
 
+            // Obtener score si existe
             ScoreSystem scoreSystem = FindObjectOfType<ScoreSystem>();
-            if (scoreSystem != null)
-            {
-                int finalScore = scoreSystem.GetCurrentScore();
-                float accuracy = scoreSystem.GetAccuracy();
-            }
+            int finalScore = scoreSystem != null ? scoreSystem.GetCurrentScore() : sessionEarnings;
 
-            if (waveSystem != null)
+            // Guardar resultados con estrellas
+            if (currentLevel != null)
             {
-                int enemiesSpawned = waveSystem.GetTotalEnemiesSpawned();
-                int currentWave = waveSystem.CurrentWaveIndex + 1;
-                int totalWaves = waveSystem.TotalWaves;
-                int activeEnemies = waveSystem.GetActiveEnemyCount();
+                // Ya no necesitas SaveSystem aquí porque ResultsScreen lo maneja
+                Debug.Log($"Nivel {currentLevel.levelID} completado - Money: ${sessionEarnings}, Score: {finalScore}, Stars: {starsEarned}");
             }
         }
 

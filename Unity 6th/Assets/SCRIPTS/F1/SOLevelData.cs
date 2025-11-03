@@ -41,6 +41,15 @@ namespace ShootingRange
         [Range(0.5f, 3f)]
         public float scoreMultiplier = 1f;
 
+        [Header("Star Rating System")]
+        [Tooltip("Umbrales de dinero para conseguir estrellas")]
+        public StarThresholds starThresholds = new StarThresholds
+        {
+            oneStar = 100,
+            twoStars = 250,
+            threeStars = 400
+        };
+       
         // Método helper para generar levelID automáticamente si está vacío
         private void OnValidate()
         {
