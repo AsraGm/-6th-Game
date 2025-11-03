@@ -163,7 +163,7 @@
 				}
 			],
 			"type" : "STRING",
-			"value" : "Debug"
+			"value" : "RelWithDebInfo"
 		},
 		{
 			"name" : "CMAKE_CACHEFILE_DIR",
@@ -175,7 +175,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/Users/Asra/-6th-Game/Unity 6th/.utmp/Debug/6c1p5z6b/arm64-v8a"
+			"value" : "c:/Users/Asra/-6th-Game/Unity 6th/.utmp/RelWithDebInfo/3d6w283m/arm64-v8a"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -647,7 +647,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "C:\\Users\\Asra\\-6th-Game\\Unity 6th\\.utmp\\Debug\\6c1p5z6b\\prefab\\arm64-v8a\\prefab"
+			"value" : "C:\\Users\\Asra\\-6th-Game\\Unity 6th\\.utmp\\RelWithDebInfo\\3d6w283m\\prefab\\arm64-v8a\\prefab"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -743,7 +743,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "C:\\Users\\Asra\\-6th-Game\\Unity 6th\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\build\\intermediates\\cxx\\Debug\\6c1p5z6b\\obj\\arm64-v8a"
+			"value" : "C:\\Users\\Asra\\-6th-Game\\Unity 6th\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\build\\intermediates\\cxx\\RelWithDebInfo\\3d6w283m\\obj\\arm64-v8a"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -1015,7 +1015,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "C:\\Users\\Asra\\-6th-Game\\Unity 6th\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\build\\intermediates\\cxx\\Debug\\6c1p5z6b\\obj\\arm64-v8a"
+			"value" : "C:\\Users\\Asra\\-6th-Game\\Unity 6th\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\build\\intermediates\\cxx\\RelWithDebInfo\\3d6w283m\\obj\\arm64-v8a"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1287,7 +1287,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/Debug/6c1p5z6b/arm64-v8a"
+			"value" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/RelWithDebInfo/3d6w283m/arm64-v8a"
 		},
 		{
 			"name" : "Unity_IS_TOP_LEVEL",
@@ -1323,7 +1323,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/Debug/6c1p5z6b/prefab/arm64-v8a/prefab/lib/aarch64-linux-android/cmake/game-activity"
+			"value" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/RelWithDebInfo/3d6w283m/prefab/arm64-v8a/prefab/lib/aarch64-linux-android/cmake/game-activity"
 		},
 		{
 			"name" : "game_BINARY_DIR",
@@ -1335,7 +1335,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/Debug/6c1p5z6b/arm64-v8a/GameActivity"
+			"value" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/RelWithDebInfo/3d6w283m/arm64-v8a/GameActivity"
 		},
 		{
 			"name" : "game_IS_TOP_LEVEL",
@@ -1383,7 +1383,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/Debug/6c1p5z6b/prefab/arm64-v8a/prefab/lib/aarch64-linux-android/cmake/games-frame-pacing"
+			"value" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/RelWithDebInfo/3d6w283m/prefab/arm64-v8a/prefab/lib/aarch64-linux-android/cmake/games-frame-pacing"
 		},
 		{
 			"name" : "swappywrapper_BINARY_DIR",
@@ -1395,7 +1395,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/Debug/6c1p5z6b/arm64-v8a/FramePacing"
+			"value" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/RelWithDebInfo/3d6w283m/arm64-v8a/FramePacing"
 		},
 		{
 			"name" : "swappywrapper_IS_TOP_LEVEL",

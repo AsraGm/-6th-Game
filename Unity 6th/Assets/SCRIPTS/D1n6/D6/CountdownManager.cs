@@ -1,4 +1,4 @@
-using System.Collections;
+        using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -117,8 +117,34 @@ namespace ShootingRange
                 StartCountdown();
             }
         }
+        void InitializeCountdownLights()
+        {
+            foreach (var ui in countdownUIs)
+            {
+                // Asegurarse de que los GameObjects estén activos pero las luces apagadas
+                if (ui.redLight != null)
+                {
+                    ui.redLight.SetActive(true);
+                    var light = ui.redLight.GetComponent<UnityEngine.Rendering.Universal.Light2D>();
+                    if (light != null) light.enabled = false;
+                }
 
-        void Initialize()
+                if (ui.yellowLight != null)
+                {
+                    ui.yellowLight.SetActive(true);
+                    var light = ui.yellowLight.GetComponent<UnityEngine.Rendering.Universal.Light2D>();
+                    if (light != null) light.enabled = false;
+                }
+
+                if (ui.greenLight != null)
+                {
+                    ui.greenLight.SetActive(true);
+                    var light = ui.greenLight.GetComponent<UnityEngine.Rendering.Universal.Light2D>();
+                    if (light != null) light.enabled = false;
+                }
+            }
+        }
+            void Initialize()
         {
             // Buscar sistemas
             if (waveSystem == null)
@@ -447,20 +473,30 @@ namespace ShootingRange
             return "Default";
         }
 
-        IEnumerator ShowPhaseSimple(string message, GameObject light, bool isGoPhase = false)
+        IEnumerator ShowPhaseSimple(string message, GameObject lightObject, bool isGoPhase = false)
         {
-            Debug.Log($"🚦 Fase: {message} | Luz: {(light != null ? light.name : "NULL")}");
+            Debug.Log($"🚦 Fase: {message} | Luz: {(lightObject != null ? lightObject.name : "NULL")}");
 
             SetMessage(message);
 
-            if (light != null)
+            // ✅ FIX: Activar componente Light2D en lugar del GameObject
+            UnityEngine.Rendering.Universal.Light2D light2D = null;
+            if (lightObject != null)
             {
-                light.SetActive(true);
-                Debug.Log($"✅ Luz {light.name} activada");
+                light2D = lightObject.GetComponent<UnityEngine.Rendering.Universal.Light2D>();
+                if (light2D != null)
+                {
+                    light2D.enabled = true;
+                    Debug.Log($"✅ Light2D {lightObject.name} activada");
+                }
+                else
+                {
+                    Debug.LogError($"❌ No se encontró Light2D en {lightObject.name}");
+                }
             }
             else
             {
-                Debug.LogError($"❌ Luz es NULL para fase {message}");
+                Debug.LogError($"❌ GameObject es NULL para fase {message}");
             }
 
             PlaySound(isGoPhase ? goSound : readySetSound);
@@ -468,23 +504,31 @@ namespace ShootingRange
             float duration = isGoPhase ? goDuration : phaseDuration;
             yield return new WaitForSeconds(duration);
 
-            if (light != null)
+            // ✅ FIX: Desactivar componente Light2D
+            if (light2D != null)
             {
-                light.SetActive(false);
-                Debug.Log($"🔴 Luz {light.name} desactivada");
+                light2D.enabled = false;
+                Debug.Log($"🔴 Light2D {lightObject.name} desactivada");
             }
         }
 
+        // ✅ FIX: Método mejorado para apagar luces
         void TurnOffAllLights(CountdownUITheme ui)
         {
-            if (ui.redLight != null)
-                ui.redLight.SetActive(false);
-
-            if (ui.yellowLight != null)
-                ui.yellowLight.SetActive(false);
-
-            if (ui.greenLight != null)
-                ui.greenLight.SetActive(false);
+            TurnOffLight(ui.redLight);
+            TurnOffLight(ui.yellowLight);
+            TurnOffLight(ui.greenLight);
+        }
+        void TurnOffLight(GameObject lightObject)
+        {
+            if (lightObject != null)
+            {
+                var light2D = lightObject.GetComponent<UnityEngine.Rendering.Universal.Light2D>();
+                if (light2D != null)
+                {
+                    light2D.enabled = false;
+                }
+            }
         }
 
         void SetMessage(string message)

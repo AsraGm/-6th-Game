@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moneyConfig: {fileID: 11400000, guid: 6aa647372e5565144b88a912a06ca913, type: 2}
   moneyDisplay: {fileID: 0}
-  currentMoney: 100
-  sessionEarnings: 100
-  totalEarningsAllTime: 100
+  currentMoney: 0
+  sessionEarnings: 0
+  totalEarningsAllTime: 0
   totalSpent: 0

@@ -6,7 +6,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/Debug/6c1p5z6b/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeSystem.cmake"
+			"path" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/RelWithDebInfo/3d6w283m/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeSystem.cmake"
 		},
 		{
 			"isExternal" : true,
@@ -40,11 +40,11 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/Debug/6c1p5z6b/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCCompiler.cmake"
+			"path" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/RelWithDebInfo/3d6w283m/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCCompiler.cmake"
 		},
 		{
 			"isGenerated" : true,
-			"path" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/Debug/6c1p5z6b/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCXXCompiler.cmake"
+			"path" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/RelWithDebInfo/3d6w283m/arm64-v8a/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCXXCompiler.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -178,20 +178,20 @@
 		},
 		{
 			"isExternal" : true,
-			"path" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/Debug/6c1p5z6b/prefab/arm64-v8a/prefab/lib/aarch64-linux-android/cmake/game-activity/game-activityConfig.cmake"
+			"path" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/RelWithDebInfo/3d6w283m/prefab/arm64-v8a/prefab/lib/aarch64-linux-android/cmake/game-activity/game-activityConfig.cmake"
 		},
 		{
 			"path" : "FramePacing/CMakeLists.txt"
 		},
 		{
 			"isExternal" : true,
-			"path" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/Debug/6c1p5z6b/prefab/arm64-v8a/prefab/lib/aarch64-linux-android/cmake/games-frame-pacing/games-frame-pacingConfig.cmake"
+			"path" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/RelWithDebInfo/3d6w283m/prefab/arm64-v8a/prefab/lib/aarch64-linux-android/cmake/games-frame-pacing/games-frame-pacingConfig.cmake"
 		}
 	],
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/Debug/6c1p5z6b/arm64-v8a",
+		"build" : "C:/Users/Asra/-6th-Game/Unity 6th/.utmp/RelWithDebInfo/3d6w283m/arm64-v8a",
 		"source" : "C:/Users/Asra/-6th-Game/Unity 6th/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp"
 	},
 	"version" : 

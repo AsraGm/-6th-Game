@@ -146,6 +146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1520638340010689230}
   - component: {fileID: 1758952683580002219}
+  - component: {fileID: 2008363192643699065}
   m_Layer: 10
   m_Name: R TERROR
   m_TagString: Lights
@@ -191,7 +192,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -220,6 +221,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &2008363192643699065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422404920064432920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &490933267709335918
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,7 +244,7 @@ GameObject:
   - component: {fileID: 6790778230176315246}
   m_Layer: 0
   m_Name: POLICE
-  m_TagString: Untagged
+  m_TagString: Lights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -266,7 +279,7 @@ GameObject:
   - component: {fileID: 796775833253379728}
   m_Layer: 0
   m_Name: TERROR
-  m_TagString: Untagged
+  m_TagString: Lights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -572,6 +585,7 @@ GameObject:
   m_Component:
   - component: {fileID: 353069856197138086}
   - component: {fileID: 1298193088920511668}
+  - component: {fileID: 4154263842289240726}
   m_Layer: 10
   m_Name: Y ROBOTS
   m_TagString: Lights
@@ -617,7 +631,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -646,6 +660,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &4154263842289240726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2705828238178187312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &3327518063879214302
 GameObject:
   m_ObjectHideFlags: 0
@@ -657,7 +683,7 @@ GameObject:
   - component: {fileID: 2004435585442835703}
   m_Layer: 0
   m_Name: ROBOTS
-  m_TagString: Untagged
+  m_TagString: Lights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -912,7 +938,7 @@ GameObject:
   - component: {fileID: 4666873351292916256}
   m_Layer: 0
   m_Name: GameObject
-  m_TagString: Untagged
+  m_TagString: Lights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -947,7 +973,7 @@ GameObject:
   - component: {fileID: 3668060893805576177}
   m_Layer: 5
   m_Name: TITLES
-  m_TagString: Untagged
+  m_TagString: Lights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1080,6 +1106,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6363167621759449437}
   - component: {fileID: 3215525098923463827}
+  - component: {fileID: 7797043134767362702}
   m_Layer: 10
   m_Name: R POLICE
   m_TagString: Lights
@@ -1125,7 +1152,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -1154,6 +1181,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &7797043134767362702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4135162201210488247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &4138184775615263617
 GameObject:
   m_ObjectHideFlags: 0
@@ -1169,7 +1208,7 @@ GameObject:
   - component: {fileID: 5264574558866224548}
   m_Layer: 5
   m_Name: LIGHTS CANVAS
-  m_TagString: Untagged
+  m_TagString: Lights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1351,6 +1390,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1563542792870447598}
   - component: {fileID: 5313829371078183578}
+  - component: {fileID: 5608615169683294003}
   m_Layer: 10
   m_Name: Y SPACE
   m_TagString: Lights
@@ -1396,7 +1436,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -1425,6 +1465,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &5608615169683294003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4532288183686116473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &4573900634231725175
 GameObject:
   m_ObjectHideFlags: 0
@@ -1435,6 +1487,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9050255984191197969}
   - component: {fileID: 8721883225738347175}
+  - component: {fileID: 2570431365849552078}
   m_Layer: 10
   m_Name: Y TERROR
   m_TagString: Lights
@@ -1480,7 +1533,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -1509,6 +1562,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &2570431365849552078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4573900634231725175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &4582941750979901977
 GameObject:
   m_ObjectHideFlags: 0
@@ -1519,6 +1584,7 @@ GameObject:
   m_Component:
   - component: {fileID: 641988192368555137}
   - component: {fileID: 8971148703659796434}
+  - component: {fileID: 4492656862315377308}
   m_Layer: 10
   m_Name: G SPACE
   m_TagString: Lights
@@ -1564,7 +1630,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -1593,6 +1659,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &4492656862315377308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4582941750979901977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &4618087136340167419
 GameObject:
   m_ObjectHideFlags: 0
@@ -1604,7 +1682,7 @@ GameObject:
   - component: {fileID: 2342607188907532026}
   m_Layer: 0
   m_Name: CIRCUS
-  m_TagString: Untagged
+  m_TagString: Lights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1638,6 +1716,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8887611960129644340}
   - component: {fileID: 5323346229051496356}
+  - component: {fileID: 4947037705558607426}
   m_Layer: 10
   m_Name: R ROBOTS
   m_TagString: Lights
@@ -1683,7 +1762,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -1712,6 +1791,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &4947037705558607426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5104488834719605804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &5287378326296268024
 GameObject:
   m_ObjectHideFlags: 0
@@ -1722,6 +1813,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4215117336337201426}
   - component: {fileID: 3675245458369828881}
+  - component: {fileID: 3983663903732205811}
   m_Layer: 10
   m_Name: Y CIRCUS
   m_TagString: Lights
@@ -1759,7 +1851,7 @@ MonoBehaviour:
   m_ComponentVersion: 2
   m_LightType: 3
   m_BlendStyleIndex: 0
-  m_FalloffIntensity: 0.515
+  m_FalloffIntensity: 0.284
   m_Color: {r: 1, g: 0.9957261, b: 0, a: 1}
   m_Intensity: 1.73
   m_LightVolumeIntensity: 0.13
@@ -1767,7 +1859,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -1796,6 +1888,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &3983663903732205811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5287378326296268024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &5544010107104729743
 GameObject:
   m_ObjectHideFlags: 0
@@ -1806,6 +1910,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1966997631743899381}
   - component: {fileID: 7215086217153724358}
+  - component: {fileID: 3565267742844832420}
   m_Layer: 10
   m_Name: G ROBOTS
   m_TagString: Lights
@@ -1851,7 +1956,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -1880,6 +1985,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &3565267742844832420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5544010107104729743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &6581067681645435862
 GameObject:
   m_ObjectHideFlags: 0
@@ -1890,6 +2007,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7868418240181057162}
   - component: {fileID: 1741056158874192034}
+  - component: {fileID: 240852320231491428}
   m_Layer: 10
   m_Name: Y POLICE
   m_TagString: Lights
@@ -1935,7 +2053,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -1964,6 +2082,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &240852320231491428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6581067681645435862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &6990322202652256667
 GameObject:
   m_ObjectHideFlags: 0
@@ -1975,7 +2105,7 @@ GameObject:
   - component: {fileID: 5310393583587566954}
   m_Layer: 0
   m_Name: SPACE
-  m_TagString: Untagged
+  m_TagString: Lights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2009,6 +2139,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4852923485680970275}
   - component: {fileID: 7230191126593125239}
+  - component: {fileID: 8578405291222217412}
   m_Layer: 10
   m_Name: G POLICE
   m_TagString: Lights
@@ -2054,7 +2185,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -2083,6 +2214,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &8578405291222217412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7464919530308453596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &7498116437907695207
 GameObject:
   m_ObjectHideFlags: 0
@@ -2093,6 +2236,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5040732775103427171}
   - component: {fileID: 2193232061156328196}
+  - component: {fileID: 170161708760265879}
   m_Layer: 10
   m_Name: G TERROR
   m_TagString: Lights
@@ -2138,7 +2282,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -2167,6 +2311,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &170161708760265879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7498116437907695207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &7642899031313652487
 GameObject:
   m_ObjectHideFlags: 0
@@ -2177,6 +2333,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7165474552366286974}
   - component: {fileID: 9103731591837726664}
+  - component: {fileID: 979071569556584226}
   m_Layer: 10
   m_Name: R CIRCUS
   m_TagString: Lights
@@ -2222,7 +2379,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -2251,6 +2408,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &979071569556584226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7642899031313652487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &7664943045215609911
 GameObject:
   m_ObjectHideFlags: 0
@@ -2261,6 +2430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1347235136781372273}
   - component: {fileID: 2035684303860295541}
+  - component: {fileID: 6017768654489070249}
   m_Layer: 10
   m_Name: R SPACE
   m_TagString: Lights
@@ -2306,7 +2476,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -2335,6 +2505,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &6017768654489070249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7664943045215609911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &7668205100999207711
 GameObject:
   m_ObjectHideFlags: 0
@@ -2345,6 +2527,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7970688364484960196}
   - component: {fileID: 8781919237261006003}
+  - component: {fileID: 8163618887473302156}
   m_Layer: 10
   m_Name: G CIRCUS
   m_TagString: Lights
@@ -2390,7 +2573,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -2419,6 +2602,18 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &8163618887473302156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7668205100999207711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &7793105887306884839
 GameObject:
   m_ObjectHideFlags: 0
@@ -2429,9 +2624,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6602789880135309444}
   - component: {fileID: 7861517155168740073}
-  m_Layer: 0
+  - component: {fileID: 598041277710849293}
+  m_Layer: 10
   m_Name: R
-  m_TagString: Untagged
+  m_TagString: Lights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2446,7 +2642,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1055.4277, y: 470.82068, z: 0}
-  m_LocalScale: {x: -50, y: 51.25, z: 50}
+  m_LocalScale: {x: -50, y: 51.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4666873351292916256}
@@ -2474,7 +2670,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -2504,6 +2700,18 @@ MonoBehaviour:
   - {x: -1.64215, y: 1.9593307, z: 0}
   - {x: -6.0304203, y: 3.1684363, z: 0}
   - {x: -8.114535, y: -1.1014676, z: 0}
+--- !u!114 &598041277710849293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7793105887306884839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
 --- !u!1 &8462190611006666474
 GameObject:
   m_ObjectHideFlags: 0
@@ -2514,9 +2722,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1011711836806509516}
   - component: {fileID: 3450875769496866762}
-  m_Layer: 0
+  - component: {fileID: 7954897544268438093}
+  m_Layer: 10
   m_Name: L
-  m_TagString: Untagged
+  m_TagString: Lights
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2531,7 +2740,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 401.42767, y: 470.82068, z: 0}
-  m_LocalScale: {x: 50, y: 51.25, z: 50}
+  m_LocalScale: {x: 50, y: 51.25, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4666873351292916256}
@@ -2559,7 +2768,7 @@ MonoBehaviour:
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
+  m_LightOrder: 2
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
@@ -2589,3 +2798,15 @@ MonoBehaviour:
   - {x: -2.0211856, y: 2.0950613, z: 0}
   - {x: -5.653943, y: 3.1560442, z: 0}
   - {x: -6.4156766, y: 1.2604104, z: 0}
+--- !u!114 &7954897544268438093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8462190611006666474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b2515a25ad41146aa9e2c2c12b07f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForceLight2DRender
