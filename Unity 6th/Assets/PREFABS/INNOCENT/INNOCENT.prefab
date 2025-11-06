@@ -155,7 +155,7 @@ MonoBehaviour:
   enemyType: 5
   themeID: Innocent
   hitParticlesPrefab: {fileID: 4445680199159485711, guid: c31f376bbcd55a542b2f40efb99db3a9, type: 3}
-  hitSound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: e41c766be9a7ead4682a4cdd1c5b27aa, type: 3}
   soundVolume: 1
   returnToPoolDelay: 0.3
   particleLifetime: 2

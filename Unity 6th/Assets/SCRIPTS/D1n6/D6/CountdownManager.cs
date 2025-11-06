@@ -510,9 +510,11 @@ namespace ShootingRange
                 light2D.enabled = false;
                 Debug.Log($"🔴 Light2D {lightObject.name} desactivada");
             }
+
+            // 🆕 FIX: Limpiar el texto después de mostrar cada fase
+            SetMessage("");
         }
 
-        // ✅ FIX: Método mejorado para apagar luces
         void TurnOffAllLights(CountdownUITheme ui)
         {
             TurnOffLight(ui.redLight);

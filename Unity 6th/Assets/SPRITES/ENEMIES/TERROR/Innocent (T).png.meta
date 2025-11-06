@@ -99,15 +99,15 @@ TextureImporter:
   - serializedVersion: 4
     buildTarget: Android
     maxTextureSize: 1024
-    resizeAlgorithm: 0
-    textureFormat: 47
+    resizeAlgorithm: 1
+    textureFormat: 4
     textureCompression: 1
     compressionQuality: 100
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 1
     ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
+    androidETC2FallbackOverride: 2
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2

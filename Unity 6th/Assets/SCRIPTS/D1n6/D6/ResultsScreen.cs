@@ -7,9 +7,7 @@ using System.Collections;
 namespace ShootingRange
 {
     /// <summary>
-    /// ResultsScreen.cs - MODIFICADO CON SISTEMA DE ESTRELLAS
-    /// Sistema de pantalla de resultados (D6)
-    /// INTEGRADO con G2 (StatsTracker), G1 (SaveSystem) y NUEVO: Star Rating System
+    /// ResultsScreen.cs - CORREGIDO para guardar estrellas correctamente
     /// </summary>
     public class ResultsScreen : MonoBehaviour
     {
@@ -86,7 +84,7 @@ namespace ShootingRange
         public Color normalColor = Color.white;
         public Color newRecordColor = Color.yellow;
 
-        // Datos del nivel (ahora vienen de StatsTracker)
+        // Datos del nivel
         private LevelStats currentLevelStats;
         private int starsEarned = 0;
 
@@ -97,19 +95,16 @@ namespace ShootingRange
 
         void InitializeResultsScreen()
         {
-            // Ocultar panel al inicio
             if (resultsPanel != null)
             {
                 resultsPanel.SetActive(false);
             }
 
-            // Ocultar indicador de nuevo récord
             if (newRecordIndicator != null)
             {
                 newRecordIndicator.SetActive(false);
             }
 
-            // Conectar botones
             if (backToLevelSelectionButton != null)
             {
                 backToLevelSelectionButton.onClick.AddListener(BackToLevelSelection);
@@ -125,10 +120,6 @@ namespace ShootingRange
 
         #region Show Results
 
-        /// <summary>
-        /// MÉTODO PRINCIPAL: Mostrar resultados del nivel CON ESTRELLAS
-        /// Usa StatsTracker (G2) para obtener y guardar datos
-        /// </summary>
         public void ShowResults()
         {
             StartCoroutine(ShowResultsCoroutine());
@@ -136,34 +127,27 @@ namespace ShootingRange
 
         IEnumerator ShowResultsCoroutine()
         {
-            // Esperar el delay configurado
             yield return new WaitForSeconds(showDelay);
 
-            // CONEXIÓN G2: Completar nivel y obtener estadísticas
+            // OBTENER ESTADÍSTICAS DEL NIVEL
             currentLevelStats = StatsTracker.Instance.CompleteLevelAndSave();
 
             if (currentLevelStats == null)
             {
-                Debug.LogError("No se pudieron obtener estadísticas del nivel");
+                Debug.LogError("❌ No se pudieron obtener estadísticas del nivel");
                 yield break;
             }
 
-            // ⭐ NUEVO: Calcular estrellas basado en dinero ganado
-            CalculateStars();
+            // ⭐ CALCULAR Y GUARDAR ESTRELLAS
+            CalculateAndSaveStars();
 
-            // Mostrar panel
             if (resultsPanel != null)
             {
                 resultsPanel.SetActive(true);
             }
 
-            // Actualizar UI con los datos
             UpdateResultsUI();
-
-            // Animación de fade in
             yield return StartCoroutine(FadeInAnimation());
-
-            // ⭐ NUEVO: Animar estrellas después del fade in
             yield return StartCoroutine(AnimateStars());
 
             Debug.Log($"📊 Resultados mostrados - Estrellas: {starsEarned}/3");
@@ -171,53 +155,92 @@ namespace ShootingRange
 
         #endregion
 
-        #region ⭐ NUEVO - Star Calculation & Animation
+        #region ⭐ Star Calculation & Saving
 
         /// <summary>
-        /// Calcular estrellas según el dinero ganado
+        /// 🔥 MÉTODO CRÍTICO: Calcular y GUARDAR estrellas correctamente
         /// </summary>
-        void CalculateStars()
+        void CalculateAndSaveStars()
         {
-            // Obtener datos del nivel actual
+            // Obtener el nivel actual desde LevelHelper
             SOLevelData currentLevel = LevelHelper.CurrentLevel;
 
-            if (currentLevel == null || currentLevel.starThresholds == null)
+            if (currentLevel == null)
             {
-                Debug.LogWarning("No se puede calcular estrellas: LevelData o StarThresholds no disponibles");
+                Debug.LogError("❌ LevelHelper.CurrentLevel es NULL - No se pueden calcular estrellas");
                 starsEarned = 0;
                 return;
             }
 
-            // Calcular estrellas basado en dinero de sesión
+            if (currentLevel.starThresholds == null)
+            {
+                Debug.LogError("❌ StarThresholds no configurado en el LevelData");
+                starsEarned = 0;
+                return;
+            }
+
+            // 🔥 USAR EL levelID DEL SOLevelData (el mismo que usa LevelButton)
+            string levelID = currentLevel.levelID;
+
+            // Calcular estrellas según el dinero ganado
             starsEarned = currentLevel.starThresholds.CalculateStars(currentLevelStats.moneyEarned);
 
-            // Guardar las estrellas en SaveSystem
-            SaveSystem.Instance.SaveLevelStars(currentLevelStats.levelID, starsEarned);
+            Debug.Log($"💰 Dinero ganado: ${currentLevelStats.moneyEarned}");
+            Debug.Log($"⭐ Estrellas calculadas: {starsEarned}/3");
+            Debug.Log($"🆔 Guardando con levelID: '{levelID}'");
 
-            // Verificar si es nuevo récord de estrellas
-            int previousBestStars = SaveSystem.Instance.LoadLevelStars(currentLevelStats.levelID);
-            bool isNewStarRecord = starsEarned > previousBestStars;
+            // Obtener mejor puntuación anterior
+            int previousBestStars = SaveSystem.Instance.LoadLevelStars(levelID);
+            int previousBestMoney = SaveSystem.Instance.LoadLevelBestScore(levelID);
 
-            Debug.Log($"⭐ Estrellas ganadas: {starsEarned}/3 (Dinero: ${currentLevelStats.moneyEarned})");
-            if (isNewStarRecord)
+            Debug.Log($"📜 Mejor anterior - Estrellas: {previousBestStars}, Dinero: ${previousBestMoney}");
+
+            // 🔥 GUARDAR LAS ESTRELLAS
+            // Nota: SaveLevelStars solo guarda si es mejor que antes
+            SaveSystem.Instance.SaveLevelStars(levelID, starsEarned);
+
+            if (starsEarned > previousBestStars)
             {
-                Debug.Log($"🌟 ¡NUEVO RÉCORD DE ESTRELLAS! Anterior: {previousBestStars}");
+                Debug.Log($"🌟 ¡NUEVO RÉCORD DE ESTRELLAS! {starsEarned}/3 (Anterior: {previousBestStars})");
             }
+            else if (starsEarned == previousBestStars)
+            {
+                Debug.Log($"⭐ Estrellas mantenidas: {starsEarned}/3");
+            }
+            else
+            {
+                Debug.Log($"⭐ Estrellas obtenidas: {starsEarned}/3 (Mejor: {previousBestStars}/3)");
+            }
+
+            // 🔥 GUARDAR EL DINERO
+            // Nota: SaveLevelBestScore solo guarda si es mejor que antes
+            SaveSystem.Instance.SaveLevelBestScore(levelID, currentLevelStats.moneyEarned);
+
+            if (currentLevelStats.moneyEarned > previousBestMoney)
+            {
+                Debug.Log($"💰 ¡Nuevo récord de dinero! ${currentLevelStats.moneyEarned} (Anterior: ${previousBestMoney})");
+            }
+            else
+            {
+                Debug.Log($"💵 Dinero ganado: ${currentLevelStats.moneyEarned} (Mejor: ${previousBestMoney})");
+            }
+
+            Debug.Log("💾 ✅ Datos guardados automáticamente por SaveSystem");
         }
 
-        /// <summary>
-        /// Animar las estrellas una por una
-        /// </summary>
+        #endregion
+
+        #region ⭐ Star Animation
+
         IEnumerator AnimateStars()
         {
-            // Inicializar todas las estrellas como inactivas/apagadas
+            // Inicializar todas las estrellas como inactivas
             for (int i = 0; i < starObjects.Length; i++)
             {
                 if (starObjects[i] != null)
                 {
                     starObjects[i].transform.localScale = Vector3.zero;
 
-                    // Si tiene Image component, cambiar color
                     if (starImages != null && i < starImages.Length && starImages[i] != null)
                     {
                         starImages[i].color = inactiveStarColor;
@@ -232,33 +255,25 @@ namespace ShootingRange
 
                 if (starObjects[i] != null)
                 {
-                    // Cambiar color a activo
                     if (starImages != null && i < starImages.Length && starImages[i] != null)
                     {
                         starImages[i].color = activeStarColor;
                     }
 
-                    // Animar escala con efecto de "pop"
                     StartCoroutine(AnimateSingleStar(starObjects[i].transform));
 
-                    // Vibración háptica (solo en móviles)
-                    if (Application.isMobilePlatform)
-                    {
-                        Handheld.Vibrate();
-                    }
+                    // Vibración en móvil (opcional)
+                    TryVibrate();
                 }
             }
 
-            // Actualizar texto de estrellas si existe
+            // Actualizar texto de estrellas
             if (starCountText != null)
             {
                 starCountText.text = $"{starsEarned}/3";
             }
         }
 
-        /// <summary>
-        /// Animar una sola estrella con efecto "pop"
-        /// </summary>
         IEnumerator AnimateSingleStar(Transform star)
         {
             float elapsed = 0f;
@@ -269,11 +284,8 @@ namespace ShootingRange
             {
                 elapsed += Time.unscaledDeltaTime;
                 float t = elapsed / starAnimationDuration;
-
-                // Ease out back (efecto de rebote)
                 float scale = Mathf.Lerp(0f, overshootScale, t);
                 star.localScale = Vector3.one * scale;
-
                 yield return null;
             }
 
@@ -285,23 +297,40 @@ namespace ShootingRange
             {
                 elapsed += Time.unscaledDeltaTime;
                 float t = elapsed / returnDuration;
-
-                float scale = Mathf.Lerp(overshootScale, 1f, t);
+                float scale = Mathf.Lerp(overshootScale, 2f, t);
                 star.localScale = Vector3.one * scale;
-
                 yield return null;
             }
 
             star.localScale = Vector3.one;
         }
 
+        void TryVibrate()
+        {
+#if UNITY_ANDROID
+            if (Application.isMobilePlatform)
+            {
+                try
+                {
+                    using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+                    using (AndroidJavaObject currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity"))
+                    using (AndroidJavaObject vibrator = currentActivity.Call<AndroidJavaObject>("getSystemService", "vibrator"))
+                    {
+                        vibrator.Call("vibrate", 50L);
+                    }
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogWarning($"No se pudo vibrar: {e.Message}");
+                }
+            }
+#endif
+        }
+
         #endregion
 
         #region Update UI
 
-        /// <summary>
-        /// Actualizar UI con las estadísticas del nivel
-        /// </summary>
         void UpdateResultsUI()
         {
             if (currentLevelStats == null) return;
@@ -309,8 +338,7 @@ namespace ShootingRange
             // Título
             if (titleText != null)
             {
-                string title = currentLevelStats.isNewBestScore ?
-                    "¡NEW RECORD!" : "¡LEVEL COMPLETED!";
+                string title = currentLevelStats.isNewBestScore ? "¡NEW RECORD!" : "¡LEVEL COMPLETED!";
                 titleText.text = title;
 
                 if (currentLevelStats.isNewBestScore)
@@ -326,7 +354,7 @@ namespace ShootingRange
                 sessionMoneyText.color = currentLevelStats.moneyEarned > 0 ? positiveColor : normalColor;
             }
 
-            // Dinero total (CONEXIÓN G1 vía StatsTracker)
+            // Dinero total
             if (totalMoneyText != null)
             {
                 int totalMoney = StatsTracker.Instance.GetTotalMoney();
@@ -345,29 +373,24 @@ namespace ShootingRange
                 enemiesKilledText.text = $"Enemies Eliminated: {currentLevelStats.enemiesKilled}";
             }
 
-            // Mejor puntaje (opcional)
+            // Mejor puntaje
             if (bestScoreText != null)
             {
                 int bestScore = StatsTracker.Instance.GetBestScore(currentLevelStats.levelID);
                 bestScoreText.text = $"High Score: {bestScore}";
             }
 
-            // Indicador de nuevo récord (opcional)
+            // Indicador de nuevo récord
             if (newRecordIndicator != null)
             {
                 newRecordIndicator.SetActive(currentLevelStats.isNewBestScore);
             }
-
-            Debug.Log($"UI actualizada con stats: {currentLevelStats.ToString()}");
         }
 
         #endregion
 
         #region Utility Methods
 
-        /// <summary>
-        /// Formatear tiempo en formato MM:SS
-        /// </summary>
         string FormatTime(float seconds)
         {
             int minutes = Mathf.FloorToInt(seconds / 60f);
@@ -375,9 +398,6 @@ namespace ShootingRange
             return $"{minutes:00}:{secs:00}";
         }
 
-        /// <summary>
-        /// Animación simple de fade in
-        /// </summary>
         IEnumerator FadeInAnimation()
         {
             CanvasGroup canvasGroup = resultsPanel.GetComponent<CanvasGroup>();
@@ -404,31 +424,17 @@ namespace ShootingRange
 
         #region Button Callbacks
 
-        /// <summary>
-        /// BOTÓN: Volver a Level Selection
-        /// </summary>
         public void BackToLevelSelection()
         {
             Debug.Log($"🔙 Volviendo a {levelSelectionSceneName}");
-
-            // Asegurar que el tiempo esté corriendo
             Time.timeScale = 1f;
-
-            // Cargar escena de Level Selection
             SceneManager.LoadScene(levelSelectionSceneName);
         }
 
-        /// <summary>
-        /// BOTÓN: Reintentar nivel
-        /// </summary>
         public void RetryLevel()
         {
             Debug.Log("🔄 Reintentando nivel");
-
-            // Asegurar que el tiempo esté corriendo
             Time.timeScale = 1f;
-
-            // Recargar la escena actual
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
@@ -436,17 +442,13 @@ namespace ShootingRange
 
         #region Testing Methods
 
-        /// <summary>
-        /// Método para testing - Mostrar resultados con datos de prueba
-        /// </summary>
-        [ContextMenu("Test Show Results - 3 Stars")]
+        [ContextMenu("🧪 Test - 3 Estrellas")]
         public void TestShowResults3Stars()
         {
-            // Crear datos de prueba para 3 estrellas
             currentLevelStats = new LevelStats
             {
                 levelID = "Level_Test",
-                moneyEarned = 500, // Suficiente para 3 estrellas
+                moneyEarned = 500,
                 enemiesKilled = 20,
                 timeSpent = 120f,
                 finalScore = 500,
@@ -456,14 +458,13 @@ namespace ShootingRange
             StartCoroutine(ShowResultsCoroutine());
         }
 
-        [ContextMenu("Test Show Results - 1 Star")]
+        [ContextMenu("🧪 Test - 1 Estrella")]
         public void TestShowResults1Star()
         {
-            // Crear datos de prueba para 1 estrella
             currentLevelStats = new LevelStats
             {
                 levelID = "Level_Test",
-                moneyEarned = 100, // Solo 1 estrella
+                moneyEarned = 100,
                 enemiesKilled = 8,
                 timeSpent = 120f,
                 finalScore = 100,
@@ -477,7 +478,6 @@ namespace ShootingRange
 
         void OnDestroy()
         {
-            // Desconectar botones
             if (backToLevelSelectionButton != null)
             {
                 backToLevelSelectionButton.onClick.RemoveListener(BackToLevelSelection);
@@ -489,4 +489,4 @@ namespace ShootingRange
             }
         }
     }
-}
+}       
