@@ -184,8 +184,8 @@ MonoBehaviour:
   backgroundImage: {fileID: 0}
   progressBarImage: {fileID: 0}
   normalColor: {r: 0.32223096, g: 0.8584906, b: 0.24701849, a: 1}
-  warning30Color: {r: 0.85882354, g: 0.7810659, b: 0.24705881, a: 1}
-  warning10Color: {r: 0.85882354, g: 0.48816717, b: 0.24705881, a: 1}
+  warning30Color: {r: 0.9339623, g: 0.8364716, b: 0.18062477, a: 1}
+  warning10Color: {r: 0.9811321, g: 0.50009423, b: 0.18974723, a: 1}
   timeUpColor: {r: 1, g: 0, b: 0, a: 1}
   timeFormat: 0
   showDecimalsAtEnd: 1

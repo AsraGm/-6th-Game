@@ -16,23 +16,27 @@ MonoBehaviour:
   waveDuration: 10
   warningTime: 2
   enemiesToSpawn:
-  - enemyType: 3
+  - enemyType: 1
+    quantity: 3
+    spawnDelay: 0.2
+    rotationDelay: 1
+  - enemyType: 5
     quantity: 3
     spawnDelay: 0.1
     rotationDelay: 1
-  - enemyType: 1
+  - enemyType: 0
     quantity: 2
-    spawnDelay: 0.8
-    rotationDelay: 1
-  - enemyType: 5
-    quantity: 2
-    spawnDelay: 0.5
+    spawnDelay: 0.1
     rotationDelay: 1
   - enemyType: 2
     quantity: 2
-    spawnDelay: 0.3
+    spawnDelay: 0.5
+    rotationDelay: 1
+  - enemyType: 3
+    quantity: 3
+    spawnDelay: 0.7
     rotationDelay: 1
   initialDelay: 0.2
   spawnInRandomOrder: 0
-  totalEnemies: 9
-  estimatedSpawnTime: 3.6999998
+  totalEnemies: 13
+  estimatedSpawnTime: 4.4

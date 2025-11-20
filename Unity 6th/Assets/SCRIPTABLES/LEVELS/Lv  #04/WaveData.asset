@@ -17,22 +17,18 @@ MonoBehaviour:
   warningTime: 2
   enemiesToSpawn:
   - enemyType: 5
+    quantity: 3
+    spawnDelay: 0.2
+    rotationDelay: 1
+  - enemyType: 1
+    quantity: 3
+    spawnDelay: 0.1
+    rotationDelay: 1
+  - enemyType: 0
     quantity: 2
     spawnDelay: 0.1
     rotationDelay: 1
-  - enemyType: 5
-    quantity: 3
-    spawnDelay: 0.5
-    rotationDelay: 1
-  - enemyType: 3
-    quantity: 2
-    spawnDelay: 0.8
-    rotationDelay: 1
-  - enemyType: 1
-    quantity: 2
-    spawnDelay: 0.8
-    rotationDelay: 1
   initialDelay: 0.2
   spawnInRandomOrder: 0
-  totalEnemies: 9
-  estimatedSpawnTime: 5.1
+  totalEnemies: 8
+  estimatedSpawnTime: 1.3000001

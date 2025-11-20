@@ -1999,6 +1999,18 @@ PrefabInstance:
       propertyPath: progressBarImage
       value: 
       objectReference: {fileID: 454209798}
+    - target: {fileID: 7584056614194979112, guid: e470c15e18903f74d90481ae7cd472f8, type: 3}
+      propertyPath: warning10Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7584056614194979112, guid: e470c15e18903f74d90481ae7cd472f8, type: 3}
+      propertyPath: warning10Color.g
+      value: 0.3910256
+      objectReference: {fileID: 0}
+    - target: {fileID: 7584056614194979112, guid: e470c15e18903f74d90481ae7cd472f8, type: 3}
+      propertyPath: warning10Color.r
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
