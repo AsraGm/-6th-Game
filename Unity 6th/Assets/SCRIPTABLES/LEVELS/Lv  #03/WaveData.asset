@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.WaveData
   waveName: Lv.3 #0
   waveDuration: 10
-  warningTime: 2
+  warningTime: 1
   enemiesToSpawn:
   - enemyType: 5
     quantity: 2
