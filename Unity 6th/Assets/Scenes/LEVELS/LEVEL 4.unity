@@ -1941,7 +1941,7 @@ PrefabInstance:
       objectReference: {fileID: 1826340444}
     - target: {fileID: 5183552696726419372, guid: e470c15e18903f74d90481ae7cd472f8, type: 3}
       propertyPath: levelDuration
-      value: 60
+      value: 135
       objectReference: {fileID: 0}
     - target: {fileID: 5532393766864178600, guid: e470c15e18903f74d90481ae7cd472f8, type: 3}
       propertyPath: m_LocalPosition.x
