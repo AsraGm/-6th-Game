@@ -50,7 +50,7 @@ MonoBehaviour:
   escerasMenu:
   - MAIN MENU
   - LEVEL SELECTION
-  - LEVEL SELECTION
+  - CREDITS
   escenasJuego:
   - LEVEL 1
   - LEVEL 2

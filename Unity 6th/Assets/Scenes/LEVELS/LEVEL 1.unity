@@ -2934,6 +2934,12 @@ MonoBehaviour:
     yellowLight: {fileID: 2264071112972349447}
     greenLight: {fileID: 5196296240347810327}
     messageTextTMP: {fileID: 8550356592060979774}
+  - themeName: Momazos
+    uiRoot: {fileID: 3044711771810698061}
+    redLight: {fileID: 2724385043621427048}
+    yellowLight: {fileID: 2264071112972349447}
+    greenLight: {fileID: 5196296240347810327}
+    messageTextTMP: {fileID: 8550356592060979774}
 --- !u!1001 &7586285454933947948
 PrefabInstance:
   m_ObjectHideFlags: 0

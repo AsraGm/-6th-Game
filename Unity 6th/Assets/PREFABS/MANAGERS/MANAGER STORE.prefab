@@ -50,6 +50,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f9e58c8903bf4c543be8c6f54be79602, type: 2}
   - {fileID: 11400000, guid: 54049a8995cecdf4fa54d476de66d0fa, type: 2}
   - {fileID: 11400000, guid: 69ea70ffa95265d4fab4ca2152cc8997, type: 2}
+  - {fileID: 11400000, guid: 28aada01cf90d6b4a810b1e4dfa6c7d6, type: 2}
   moneySystem: {fileID: 0}
   themeManager: {fileID: 0}
   defaultTheme: {fileID: 11400000, guid: 93ee048c2e8b70844935ede8350bc9c1, type: 2}
