@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4efec368ae39b9b44adcf80be6440343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShootingRange.LevelTimer
-  levelDuration: 30
+  levelDuration: 55
   timerPrecision: 0.1
   timerDisplay: {fileID: 7584056614194979112}
   currentTime: 0
@@ -126,7 +126,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5874667900689027721}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.34779, y: 3.0079699, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -184,9 +184,9 @@ MonoBehaviour:
   backgroundImage: {fileID: 0}
   progressBarImage: {fileID: 0}
   normalColor: {r: 0.32223096, g: 0.8584906, b: 0.24701849, a: 1}
-  warning30Color: {r: 0.9339623, g: 0.8364716, b: 0.18062477, a: 1}
-  warning10Color: {r: 0.9811321, g: 0.50009423, b: 0.18974723, a: 1}
-  timeUpColor: {r: 1, g: 0, b: 0, a: 1}
+  warning30Color: {r: 0.93333334, g: 0.82884413, b: 0.13066666, a: 1}
+  warning10Color: {r: 0.86, g: 0.49730435, b: 0.25052175, a: 1}
+  timeUpColor: {r: 0.9098039, g: 0.12737253, b: 0.12737253, a: 1}
   timeFormat: 0
   showDecimalsAtEnd: 1
   warningTextScale: 1.2

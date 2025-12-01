@@ -277,7 +277,7 @@ namespace ShootingRange
         IEnumerator AnimateSingleStar(Transform star)
         {
             float elapsed = 0f;
-            float overshootScale = 1.3f;
+            float overshootScale = 2f;
 
             // Scale up con overshoot
             while (elapsed < starAnimationDuration)
@@ -302,7 +302,7 @@ namespace ShootingRange
                 yield return null;
             }
 
-            star.localScale = Vector3.one;
+            star.localScale = Vector3.one * 2f;
         }
 
         void TryVibrate()
@@ -413,7 +413,7 @@ namespace ShootingRange
             while (elapsed < fadeInDuration)
             {
                 elapsed += Time.unscaledDeltaTime;
-                canvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeInDuration);
+                canvasGroup.alpha = Mathf.Lerp(0f, 2f, elapsed / fadeInDuration);
                 yield return null;
             }
 

@@ -32,7 +32,9 @@ namespace ShootingRange
         // Cache de componentes para optimización móvil
         private Dictionary<GameObject, IShootable> shootableCache = new Dictionary<GameObject, IShootable>();
         private Dictionary<GameObject, EnemyType> enemyTypeCache = new Dictionary<GameObject, EnemyType>();
-        
+
+        [Tooltip("Sistema de feedback visual de dinero flotante")]
+        public FloatingMoneyFeedback floatingMoneyFeedback;
         // Estadísticas de detección
         [Header("Debug Info")]
         public int totalHits = 0;
@@ -68,42 +70,38 @@ namespace ShootingRange
             {
                 innocentFeedback = FindObjectOfType<InnocentPenaltyFeedback>();
             }
+            if (floatingMoneyFeedback == null)
+            {
+                floatingMoneyFeedback = FindObjectOfType<FloatingMoneyFeedback>();
+            }
         }
         
         // MÉTODO PRINCIPAL: Procesar hit de bala
         public void ProcessBulletHit(GameObject hitObject, Vector3 hitPoint)
         {
+
             if (hitObject == null) return;
-            
-            // Verificar si el objeto es un objetivo válido
-            if (!IsValidTarget(hitObject)) 
+
+            if (!IsValidTarget(hitObject))
             {
                 Debug.Log($"Objeto {hitObject.name} no es un objetivo válido");
                 return;
             }
-            
-            // Obtener componente IShootable (con cache)
+
             IShootable shootable = GetShootableComponent(hitObject);
-            if (shootable == null) 
+            if (shootable == null)
             {
                 Debug.LogWarning($"Objeto {hitObject.name} no tiene componente IShootable");
                 return;
             }
-            
-            // Obtener tipo de enemigo
+
             EnemyType enemyType = GetEnemyType(hitObject, shootable);
-            
-            // Calcular puntuación
             int scoreValue = scoreConfig.GetScoreForEnemyType(enemyType);
             ObjectType objectType = GetObjectType(enemyType);
-            
-            // Procesar el hit
+
             shootable.OnHit(objectType, scoreValue);
-            
-            // Actualizar estadísticas
             UpdateHitStatistics(objectType);
-            
-            // Notificar al sistema de puntuación
+
             if (scoreSystem != null)
             {
                 scoreSystem.AddScore(scoreValue, objectType, enemyType);
@@ -112,15 +110,25 @@ namespace ShootingRange
             MoneySystem moneySystem = FindObjectOfType<MoneySystem>();
             if (moneySystem != null)
             {
+                // Obtener dinero ganado
+                int moneyAmount = moneySystem.moneyConfig.GetMoneyForEnemyType(enemyType);
                 moneySystem.AddMoneyForEnemy(enemyType);
+
+                // *** NUEVO: Mostrar feedback visual en la posición del hit ***
+                if (floatingMoneyFeedback != null)
+                {
+                    bool isPositive = objectType == ObjectType.Enemy;
+                    floatingMoneyFeedback.ShowMoneyGain(hitPoint, Mathf.Abs(moneyAmount), isPositive);
+                }
             }
+
             if (objectType == ObjectType.Innocent)
             {
                 TriggerInnocentFeedback(scoreValue);
             }
-            // PLACEHOLDER: Conexión con sistema de temas (Lista C2)
+
             ProcessThemeEffects(hitObject, shootable.GetThemeID(), enemyType);
-            
+
             Debug.Log($"Hit procesado: {enemyType} = {scoreValue} puntos");
         }
         void TriggerInnocentFeedback(int penaltyAmount)
