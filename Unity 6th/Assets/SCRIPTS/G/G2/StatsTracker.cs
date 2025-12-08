@@ -253,6 +253,37 @@ namespace ShootingRange
         }
 
         #endregion
+
+        public void ResetLevel()
+        {
+            currentLevelID = "";
+            sessionMoneyEarned = 0;
+            sessionEnemiesKilled = 0;
+            sessionTimeSpent = 0f;
+            isTrackingSession = false;
+
+            Debug.Log("[StatsTracker] ✅ Nivel reseteado completamente");
+        }
+
+        private void OnEnable()
+        {
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDisable()
+        {
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+        {
+            // Si se recarga la misma escena (restart), resetear
+            if (isTrackingSession)
+            {
+                Debug.Log("[StatsTracker] 🔄 Escena recargada - Reseteando nivel");
+                ResetLevel();
+            }
+        }
     }
 
     /// <summary>

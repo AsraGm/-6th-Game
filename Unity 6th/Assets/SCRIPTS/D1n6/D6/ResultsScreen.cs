@@ -433,9 +433,20 @@ namespace ShootingRange
 
         public void RetryLevel()
         {
-            Debug.Log("🔄 Reintentando nivel");
+            Debug.Log("🔄 Botón Retry presionado");
             Time.timeScale = 1f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+            // 🔥 USAR EL LEVELRESTARTER
+            if (LevelRestarter.Instance != null)
+            {
+                LevelRestarter.Instance.RestartLevel();
+            }
+            else
+            {
+                // Fallback si no existe LevelRestarter
+                Debug.LogWarning("⚠️ LevelRestarter no encontrado, usando método básico");
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
         }
 
         #endregion

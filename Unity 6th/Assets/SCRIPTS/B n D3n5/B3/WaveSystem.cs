@@ -71,8 +71,10 @@ namespace ShootingRange
         [Tooltip("Puntos de spawn por tipo de enemigo - arrastra GameObjects de la escena")]
         public EnemySpawnPointMapping[] enemySpawnPoints;
 
+
         void Start()
         {
+            Debug.Log("⭐ WaveSystem.Start() LLAMADO");
             InitializeWaveSystem();
         }
 
@@ -105,6 +107,7 @@ namespace ShootingRange
 
         public void StartWaveSystem()
         {
+            Debug.Log($"🎬 StartWaveSystem() LLAMADO - isRunning: {isRunning}");
             if (levelConfig == null)
             {
                 Debug.LogError("No LevelConfiguration asignada al WaveSystem");
@@ -657,8 +660,19 @@ namespace ShootingRange
             DebugLogWaveInfo();
         }
 
+        void OnEnable()
+        {
+            Debug.Log("🟢 WaveSystem.OnEnable() - El WaveSystem se habilitó");
+        }
+
+        void OnDisable()
+        {
+            Debug.Log("🔴 WaveSystem.OnDisable() - El WaveSystem se deshabilitó");
+        }
+
         void OnDestroy()
         {
+            Debug.Log("💀 WaveSystem.OnDestroy() - El WaveSystem se destruyó");
             StopWaveSystem();
             CleanupActiveEnemies();
         }
